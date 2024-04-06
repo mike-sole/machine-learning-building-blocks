@@ -1,5 +1,3 @@
----
-title: Welcome to my blog
----
 
-Test page
+
+Test index page
