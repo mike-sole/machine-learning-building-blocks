@@ -16,7 +16,7 @@
   Review what we learned, ask for feedback, provide next steps.
 -->
 
-View the blog [here](https://mikesole.github.io/machine-learning-building-blocks/)
+View the blog [here](https://mike-sole.github.io/machine-learning-building-blocks/)
 
 <footer>
 
