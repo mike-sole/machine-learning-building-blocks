@@ -1,1 +1,40 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-04-07T12:44:39+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Machine Learning Building Blocks</title><author><name>Mike Sole</name></author><entry><title type="html">Test</title><link href="http://localhost:4000/2024/04/06/test.html" rel="alternate" type="text/html" title="Test" /><published>2024-04-06T00:00:00+01:00</published><updated>2024-04-06T00:00:00+01:00</updated><id>http://localhost:4000/2024/04/06/test</id><content type="html" xml:base="http://localhost:4000/2024/04/06/test.html"><![CDATA[<p>Test blog post</p>]]></content><author><name>Mike Sole</name></author><summary type="html"><![CDATA[Test blog post]]></summary></entry></feed>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-04-07T15:36:48+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Machine Learning Building Blocks</title><subtitle>A blog about Machine Learning building blocks for developers who aren&apos;t mathematicians!</subtitle><author><name>Mike Sole</name></author><entry><title type="html">Weighted Sum</title><link href="http://localhost:4000/2024/04/06/test.html" rel="alternate" type="text/html" title="Weighted Sum" /><published>2024-04-06T00:00:00+01:00</published><updated>2024-04-06T00:00:00+01:00</updated><id>http://localhost:4000/2024/04/06/test</id><content type="html" xml:base="http://localhost:4000/2024/04/06/test.html"><![CDATA[<p>At the heart of machine learning, data science, signal processing and beyond lies the <strong>weighted sum</strong>.</p>
+
+<p>A normal sum: 
+\(10 + 5 + 3 = 18\)</p>
+
+<p>A weighted sum for $10 + 5 + 3$ given weights $(1, 4, 10)$:</p>
+
+\[(10 * 1) + (5 * 4) + (3 * 10) = 10 + 20 + 30 = 70\]
+
+<p>Before adding numbers together, each number is scaled with respect to its corresponding weight. As a result, weights control the overall contribution of each number.</p>
+
+<h2 id="code">Code</h2>
+
+<p>Without a library:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+</code></pre></div></div>
+
+<p>With the numpy library:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+
+<span class="n">feature</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">weights</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1.0
+</code></pre></div></div>
+
+<p>also highlight multi case … to then talk about matrix by vector after</p>
+
+<h2 id="maths">Maths</h2>
+
+<p>Linear algebra defines the weighted sum as the dot product (aka inner product) operation. The following notation is used to represent the dot product between $a$ and $b$</p>
+
+\[a \cdot b\]
+
+<h2 id="basic-example-application">Basic example application</h2>]]></content><author><name>Mike Sole</name></author><summary type="html"><![CDATA[At the heart of machine learning, data science, signal processing and beyond lies the weighted sum.]]></summary></entry></feed>
