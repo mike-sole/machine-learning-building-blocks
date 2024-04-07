@@ -20,18 +20,18 @@
 
 title: Machine Learning Building Blocks
 author: Mike Sole
-description: >- # this means to ignore newlines until "baseurl:"
-  A blog about Machine Learning building blocks for developers who aren't mathematicians!
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: jekyllrb
-github_username:  jekyll
-linkedin_username: msole
+# description: >- # this means to ignore newlines until "baseurl:"
+#   A blog about Machine Learning building blocks for developers who aren't mathematicians!
+# baseurl: "" # the subpath of your site, e.g. /blog
+# url: "" # the base hostname & protocol for your site, e.g. http://example.com
+# twitter_username: jekyllrb
+# github_username:  jekyll
+# linkedin_username: msole
 
 # Build settings
 theme: minima
-plugins:
-  - jekyll-feed
+# plugins:
+#   - jekyll-feed
 
 # Exclude from processing.
 # The following items will not be processed, by default.
