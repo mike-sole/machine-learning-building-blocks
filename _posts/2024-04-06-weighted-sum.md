@@ -87,4 +87,4 @@ $$
   (10 + 5 + 3) \cdot (1, 4, 10) = 60
 $$
 
-A subsequent matrix multiplication post will cover the $a^\mathsf{T}b$ dot production notation. 
+A subsequent matrix multiplication post will cover the $a^\mathsf{T}b$ dot product notation. 
