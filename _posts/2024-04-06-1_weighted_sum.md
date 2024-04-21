@@ -1,7 +1,7 @@
 ---
 title: "Weighted Sum"
-date: 2024-04-06
-image: /assets/images/weighted-sum.svg
+date: "2024-04-06"
+image: "/assets/images/weighted-sum.svg"
 ---
 
 At the heart of machine learning, data science, signal processing and beyond lies the **weighted sum**.  
@@ -39,7 +39,7 @@ The movie with the highest weighted sum is movie A with 195, therefore it has a 
 
 ## Code
 
-Weighted sum without a library:
+Weighted sum without using a library:
 
 
 ```python
@@ -54,7 +54,7 @@ print('Weighted sum is: ', weighted_sum)
 ```
 
     Weighted sum is:  60
-    
+
 
 Weighted sum using the NumPy library:
 
@@ -71,7 +71,7 @@ print('Weighted sum is: ', weighted_sum)
 ```
 
     Weighted sum is:  60
-    
+
 
 ## Maths Notations
 

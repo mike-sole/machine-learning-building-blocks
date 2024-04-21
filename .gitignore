@@ -41,3 +41,5 @@ _site
 
 venv
 
+/notebooks/*.md
+
