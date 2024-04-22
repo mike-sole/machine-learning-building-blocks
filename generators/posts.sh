@@ -36,7 +36,7 @@ createPost "${postTitle}" "${postDate}" "${postImage}" "${notebookName}"
 
 postDate='2024-04-21'
 postTitle='Matrix Multiplication'
-postImage='/assets/images/weighted-sum.svg'
+postImage='/assets/images/matrix-multiplication.svg'
 notebookName='2_matrix_multiplication'
 
 createPost "${postTitle}" "${postDate}" "${postImage}" "${notebookName}"

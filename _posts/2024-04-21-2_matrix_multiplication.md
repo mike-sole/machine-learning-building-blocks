@@ -1,30 +1,72 @@
 ---
 title: "Matrix Multiplication"
 date: "2024-04-21"
-image: "/assets/images/weighted-sum.svg"
+image: "/assets/images/matrix-multiplication.svg"
 ---
 
 Matrix multiplication builds upon the [weighted sum](https://mike-sole.github.io/machine-learning-building-blocks/2024/04/06/weighted-sum.html) operation which was explored in the [previous blog post](https://mike-sole.github.io/machine-learning-building-blocks/2024/04/06/weighted-sum.html).
 
 Matrix multiplication can be described as a collection of weighted sums. 
 
-Here is a matrix multiplication between a vector $({\color{red} 1}, {\color{red} 4}, {\color{red}{10}})$ and a matrix $\begin{bmatrix}10 & 1 \\ 5 & 1 \\ 3 & 1\end{bmatrix}$:
+Here is a matrix multiplication between a vector 
 
-$$\begin{bmatrix}(1 * \textcolor{blue}{10}) + (4 * 5) + (10 * 3) & (1 * 1) + (4 * 1) + (10 * 1) \end{bmatrix} = \begin{bmatrix}60 & 18 \end{bmatrix}$$ 
+$$\begin{bmatrix}{\color{red}{1}} & {\color{red}{4}} & {\color{red}{10}}\end{bmatrix}$$ 
+
+and a matrix 
+
+$$\begin{bmatrix} {\color{green}{10}} & {\color{blue}{1}} \\ {\color{green}{5}} & {\color{blue}{1}}  \\ {\color{green}{3}} & {\color{blue}{1}} \end{bmatrix}$$
+
+calculated as
+
+$$
+\begin{bmatrix}
+    ({\color{red}{1}} * {\color{green}{10}}) + ({\color{red}{4}} * {\color{green}{5}}) + ({\color{red}{10}} * {\color{green}{3}}) & 
+    
+    ({\color{red}{1}} * {\color{blue}{1}}) + ({\color{red} 4} * {\color{blue}{1}}) + ({\color{red}{10}} * {\color{blue}{1}}) 
+\end{bmatrix} 
+= \begin{bmatrix}60 & 18 \end{bmatrix}
+$$ 
 
 You can see two weighted sums have been calculated to achieve this matrix multiplication operation:
-1. **Weighted sum** between the vector and the **first column of the matrix**
-2. **Weighted sum** between the vector and the **second column of the matrix**
+1. **Weighted sum** between the **<span style="color: red;">vector</span>** and the **<span style="color: green;">first column of the matrix</span>**
+2. **Weighted sum** between the **<span style="color: red;">vector</span>** and the **<span style="color: blue;">second column of the matrix</span>**
 
-Here is a matrix multiplication between a matrix $\begin{bmatrix}1 & 4 & 10 \\ 5 &  1 & 3 \end{bmatrix}$ and a matrix $\begin{bmatrix}10 & 1 \\ 5 & 1 \\ 3 & 1\end{bmatrix}$:
+Here is a matrix multiplication between a matrix 
 
-$$\begin{bmatrix}(1 * 10) + (4 * 5) + (10 * 3) & (1 * 1) + (4 * 1) + (10 * 1) \\ (5 * 10) + (1 * 5) + (3 * 3) & (5 * 1) + (1 * 1) + (3 * 1)\end{bmatrix} = \begin{bmatrix}60 & 18 \\ xxx & yyy \end{bmatrix}$$ 
+$$\begin{bmatrix}{\color{red}{1}} & {\color{red}{4}} & {\color{red}{10}} \\ {\color{purple}{5}} & {\color{purple}{1}} & {\color{purple}{3}} \end{bmatrix}$$ 
+
+and another matrix
+
+$$\begin{bmatrix} {\color{green}{10}} & {\color{blue}{1}} \\ {\color{green}{5}} & {\color{blue}{1}}  \\ {\color{green}{3}} & {\color{blue}{1}} \end{bmatrix}$$
+
+calculated as
+
+$$\begin{bmatrix}
+
+({\color{red}{1}} * {\color{green}{10}}) + ({\color{red}{4}} * {\color{green}{5}}) + ({\color{red}{10}} *  {\color{green}{3}}) 
+
+& 
+
+({\color{red}{1}} * {\color{blue}{1}}) + ({\color{red}{4}} * {\color{blue}{1}}) + ({\color{red}{10}} * {\color{blue}{1}}) 
+
+\\ 
+
+({\color{purple}{5}} *  {\color{green}{10}}) + ({\color{purple}{1}} *  {\color{green}{5}}) + ({\color{purple}{3}} *  {\color{green}{3}}) 
+
+& 
+
+( {\color{purple}{5}} * {\color{blue}{1}}) + ( {\color{purple}{1}} * {\color{blue}{1}}) + ( {\color{purple}{3}} * {\color{blue}{1}})
+
+\end{bmatrix} 
+= 
+\begin{bmatrix}60 & 18 \\ xxx & yyy 
+\end{bmatrix}$$ 
 
 You can see four weighted sums have been calculated to achieve this matrix multiplication operation:
-1. **Weighted sum** between the **first row of the first matrix** and the **first column of the second matrix**
-2. **Weighted sum** between the **first row of the first matrix** and the **second column of the second matrix**
-3. **Weighted sum** between the **second row of the first matrix** and the **first column of the second matrix**
-5. **Weighted sum** between the **second row of the first matrix** and the **second column of the second matrix**
+1. **Weighted sum** between the **<span style="color: red;">first row of the first matrix</span>** and the **<span style="color: green;">first column of the second matrix</span>**
+2. **Weighted sum** between the **<span style="color: red;">first row of the first matrix</span>** and the **<span style="color: blue;">second column of the second matrix</span>**
+3. **Weighted sum** between the **<span style="color: purple;">second row of the first matrix</span>** and the **<span style="color: green;">first column of the second matrix</span>**
+5. **Weighted sum** between the **<span style="color: purple;">second row of the first matrix</span>** and the **<span style="color: blue;">second column of the second matrix</span>**
 
 
 
