@@ -59,7 +59,7 @@ $$\begin{bmatrix}
 
 \end{bmatrix} 
 = 
-\begin{bmatrix}60 & 18 \\ xxx & yyy 
+\begin{bmatrix}60 & 15 \\ 64 & 9 
 \end{bmatrix}$$ 
 
 You can see four weighted sums have been calculated to achieve this matrix multiplication operation:
@@ -78,51 +78,112 @@ You can see four weighted sums have been calculated to achieve this matrix multi
 
 ## Code
 
-Weighted sum without using a library:
+Matrix multiplication without using a library:
 
 
 ```python
-numbers = [10, 5, 3]
-weights = [1, 4, 10]
+# helper functions
 
-weighted_sum = 0
-for index in range(len(numbers)):
-    weighted_sum += numbers[index] * weights[index]
+def weighted_sum(array_1, array_2):
+    return sum([array_1[idx] * array_2[idx] for idx in range(len(array_1))])
 
-print('Weighted sum is: ', weighted_sum)
+def get_column_from_matrix(matrix, column_index):
+    return [row[column_index] for row in matrix]
+
+def get_columns_from_matrix(matrix):
+    num_columns = len(matrix[0])
+    return [get_column_from_matrix(matrix, column_index) for column_index in range(num_columns)]
+
+def print_matrix(matrix):
+    print('\n'.join([str(row) for row in matrix]))
+
+
+matrix_1 = [[1., 4., 10.],
+            [5., 1., 3.]]
+
+matrix_2 = [[10., 1.], 
+            [5.,  1.], 
+            [3.,  1.]]
+
+matrix_2_columns = get_columns_from_matrix(matrix_2)
+
+matrix_product = []
+for matrix_1_row in matrix_1:
+    matrix_product_row = []
+    for matrix_2_column in matrix_2_columns:
+        matrix_product_row.append(weighted_sum(matrix_1_row, matrix_2_column))
+    matrix_product.append(matrix_product_row)
+
+
+print('matrix 1:')
+print_matrix(matrix_1)
+print('')
+
+print('matrix 2:')
+print_matrix(matrix_2)
+print('')
+
+print('matrix 1 multiplied by matrix 2:')
+print_matrix(matrix_product)
 ```
 
-    Weighted sum is:  60
+    matrix 1:
+    [1.0, 4.0, 10.0]
+    [5.0, 1.0, 3.0]
+    
+    matrix 2:
+    [10.0, 1.0]
+    [5.0, 1.0]
+    [3.0, 1.0]
+    
+    matrix 1 multiplied by matrix 2:
+    [60.0, 15.0]
+    [64.0, 9.0]
 
 
-Weighted sum using the NumPy library:
+Matrix multiplication using the NumPy library:
 
 
 ```python
 import numpy as np
 
-weights = np.array([[1, 2], 
-                    [4, 1], 
-                    [10, 1]])
+matrix_1 = np.array([[1., 4., 10.],
+                     [5., 1., 3.]])
 
-numbers = np.array([[10, 5, 3],
-                     [1, 1, 1]])
+matrix_2 = np.array([[10., 1.], 
+                     [5.,  1.], 
+                     [3.,  1.]])
 
-print(numbers)
-print(weights)
+matrix_product = np.matmul(matrix_1, matrix_2)
 
-weighted_sum = np.matmul(numbers, weights)
+print('matrix 1:')
+print(matrix_1)
+print('')
 
-print('Weighted sum is: ', weighted_sum)
+print('matrix 2:')
+print(matrix_2)
+print('')
+
+print('matrix 1 multiplied by matrix 2:')
+print(matrix_product)
+
+# other ways to achieve matrix multiplication with NumPy
+assert np.array_equal(matrix_product, np.dot(matrix_1, matrix_2))
+assert np.array_equal(matrix_product, matrix_1 @ matrix_2)
 ```
 
-    [[10  5  3]
-     [ 1  1  1]]
-    [[ 1  2]
-     [ 4  1]
-     [10  1]]
-    Weighted sum is:  [[60 28]
-     [15  4]]
+    matrix 1:
+    [[ 1.  4. 10.]
+     [ 5.  1.  3.]]
+    
+    matrix 2:
+    [[10.  1.]
+     [ 5.  1.]
+     [ 3.  1.]]
+    
+    matrix 1 multiplied by matrix 2:
+    [[60. 15.]
+     [64.  9.]]
 
 
 ## Maths Notations
