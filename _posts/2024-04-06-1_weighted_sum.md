@@ -24,8 +24,8 @@ The weighted sum can be used to determine the strength of correlation between li
 These ratings can be represented as weights $(10, 5, 7)$. 
 
 Mike wanted to find a movie to watch, he has the choice between movie A and movie B which have the following categorisations: 
-- Movie A (action: 10 / 10, sci-fi: 5 / 10, comedy 10 / 10)
-- Movie B (action: 1 / 10, sci-fi: 5 / 10, comedy 10 / 10)
+- Movie A (action: 10 / 10, sci-fi: 5 / 10, comedy: 10 / 10)
+- Movie B (action: 1 / 10, sci-fi: 5 / 10, comedy: 10 / 10)
 
 Weighted sum for movie A:
 
