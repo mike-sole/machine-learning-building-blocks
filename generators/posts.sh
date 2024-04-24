@@ -34,7 +34,7 @@ createPost "${postTitle}" "${postDate}" "${postImage}" "${notebookName}"
 # 2 - matrix multiplication 
 ############################################################
 
-postDate='2024-04-21'
+postDate='2024-04-24'
 postTitle='Matrix Multiplication'
 postImage='/assets/images/matrix-multiplication.svg'
 notebookName='2_matrix_multiplication'

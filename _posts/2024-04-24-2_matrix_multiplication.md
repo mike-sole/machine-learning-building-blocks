@@ -1,6 +1,6 @@
 ---
 title: "Matrix Multiplication"
-date: "2024-04-21"
+date: "2024-04-24"
 image: "/assets/images/matrix-multiplication.svg"
 ---
 
@@ -68,11 +68,11 @@ You can see four weighted sums have been calculated to achieve this matrix multi
 3. **Weighted sum** between the **<span style="color: purple;">second row of the first matrix</span>** and the **<span style="color: green;">first column of the second matrix</span>**
 5. **Weighted sum** between the **<span style="color: purple;">second row of the first matrix</span>** and the **<span style="color: blue;">second column of the second matrix</span>**
 
-
+Since matrix multiplication calculates the weighted sum between every row of the first matrix with every column of the second matrix, for a valid matrix multiplication, the number of columns in the first matrix must be equal to the number of rows in the second matrix. 
 
 # Interpretation
 
-Matrix multiplication is a collection of weighted sums. A weighted sum is calculated between each row of one matrix and each column of another matrix. The output is a matrix of these of weighted sums as illustrated by the blog post header image. 
+Matrix multiplication is a collection of weighted sums. A weighted sum is calculated between each row of the first matrix and each column of the second matrix. The output is a matrix of the weighted sums as illustrated by the blog post header image. 
 
 Following the movie recommendation example introduced in the interpretation section of the [previous weighted sum blog post](https://mike-sole.github.io/machine-learning-building-blocks/2024/04/06/weighted-sum.html). Movies and their categorisations can be represented as one matrix and user preferences can be represented as another matrix: 
 
@@ -80,7 +80,7 @@ As an example, Mike and Sienna rated their movie category preferences as follows
 - <span style="color: red;">Mike</span>: (action: 9 / 10, sci-fi: 5 / 10, comedy: 2 / 10)
 - <span style="color: purple;">Sienna</span>: (action: 1 / 10, sci-fi: 6 / 10, comedy: 10 / 10)
 
-Mike and Sienna want movie recommendations, there is a library of movies A, B and C with the  following categorisations: 
+Mike and Sienna want some movie recommendations from a library of movies which contains movies A, B and C with the following categorisations: 
 - <span style="color: green;">Movie A</span> (action: 10 / 10, sci-fi: 5 / 10, comedy: 0 / 10)
 - <span style="color: blue;">Movie B</span> (action: 2 / 10, sci-fi: 5 / 10, comedy: 10 / 10)
 - <span style="color: orange;">Movie C</span> (action: 2 / 10, sci-fi: 7 / 10, comedy: 1 / 10)
@@ -104,7 +104,7 @@ $$\begin{bmatrix}
 40 & 132 & 54
  \end{bmatrix}$$ 
 
-Adding row and column labels help with interpreting the movie rating results. We can see that the most recommended film for Mike is Movie A and the most recommended movie for Sienna is movie B:
+Adding row and column labels help with interpreting the movie rating results. We can see that the most recommended movie for Mike is Movie A and the most recommended movie for Sienna is movie B:
 
 |        | Movie A | Movie B | Movie C |
 |--------|---------|---------|---------|
@@ -226,16 +226,20 @@ assert np.array_equal(matrix_product, matrix_1 @ matrix_2)
 
 ## Maths Notations
 
-Linear algebra defines the weighted sum as the dot product operation. The following notation is used to represent the dot product between $a$ and $b$
+Linear algebra defines matrix multiplication as the dot product operation. The following notation is used to represent the dot product between $A$ and $B$
 
 $$
-  a \cdot b
+ A \cdot B
 $$
 
-Here is an example of the dot product applied to the vectors $(10 + 5 + 3)$ and $(1, 4, 10)$:
+Alternatively the following notation can be used to represent matrix multiplication:
 
 $$
-  (10 + 5 + 3) \cdot (1, 4, 10) = 60
+  AB
 $$
 
-A subsequent matrix multiplication post will cover the $a^\mathsf{T}b$ dot production notation. 
+For a valid matrix multiplication, we previously highlighted that the number of columns in the first matrix must be equal to the number of rows in the second matrix. To satisfy this, sometimes the transpose of a matrix might need to be applied, it is common to see the following notation which transposes matrix $A$ before multiplying it with matrix $B$.
+
+$$
+  A^\mathsf{T}B
+$$

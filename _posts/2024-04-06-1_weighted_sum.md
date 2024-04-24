@@ -16,7 +16,7 @@ Before adding numbers together, each number is scaled with respect to its corres
 
 # Interpretation
 
-The weighted sum can be used to determine the strength of correlation between lists of numbers (vectors). As an example, Mike rated his movie category preferences as follows:
+The weighted sum can be used to determine the similarity between lists of numbers (vectors). As an example, Mike rated his movie category preferences as follows:
 - Action: 10 / 10
 - Sci-fi: 5 / 10
 - Comedy: 7 / 10
@@ -35,7 +35,7 @@ Weighted sum for movie B:
 
 $$(1 * 10) + (5 * 5) + (10 * 7) = 10 + 25 + 70 = 105$$
 
-The movie with the highest weighted sum is movie A with 195, therefore it has a higher correlation with Mike's preferences.
+The movie with the highest weighted sum is movie A with 195, therefore it has a higher similarity with Mike's preferences.
 
 ## Code
 
@@ -87,4 +87,3 @@ $$
   (10 + 5 + 3) \cdot (1, 4, 10) = 60
 $$
 
-A subsequent matrix multiplication post will cover the $a^\mathsf{T}b$ dot product notation. 
