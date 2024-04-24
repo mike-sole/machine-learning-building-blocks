@@ -26,7 +26,7 @@ function createPost ()
 postDate='2024-04-06'
 postTitle='Weighted Sum'
 postImage='/assets/images/weighted-sum.svg'
-notebookName='weighted_sum'
+notebookName='weighted-sum'
 
 createPost "${postTitle}" "${postDate}" "${postImage}" "${notebookName}"
 
@@ -37,7 +37,7 @@ createPost "${postTitle}" "${postDate}" "${postImage}" "${notebookName}"
 postDate='2024-04-24'
 postTitle='Matrix Multiplication'
 postImage='/assets/images/matrix-multiplication.svg'
-notebookName='matrix_multiplication'
+notebookName='matrix-multiplication'
 
 createPost "${postTitle}" "${postDate}" "${postImage}" "${notebookName}"
 
