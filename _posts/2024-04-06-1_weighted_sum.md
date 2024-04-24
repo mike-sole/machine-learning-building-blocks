@@ -1,7 +1,7 @@
 ---
 title: "Weighted Sum"
-date: 2024-04-06
-image: /assets/images/weighted-sum.svg
+date: "2024-04-06"
+image: "/assets/images/weighted-sum.svg"
 ---
 
 At the heart of machine learning, data science, signal processing and beyond lies the **weighted sum**.  
@@ -16,7 +16,7 @@ Before adding numbers together, each number is scaled with respect to its corres
 
 # Interpretation
 
-The weighted sum can be used to determine the strength of correlation between lists of numbers (vectors). As an example, Mike rated his movie category preferences as follows:
+The weighted sum can be used to determine the similarity between lists of numbers (vectors). As an example, Mike rated his movie category preferences as follows:
 - Action: 10 / 10
 - Sci-fi: 5 / 10
 - Comedy: 7 / 10
@@ -24,8 +24,8 @@ The weighted sum can be used to determine the strength of correlation between li
 These ratings can be represented as weights $(10, 5, 7)$. 
 
 Mike wanted to find a movie to watch, he has the choice between movie A and movie B which have the following categorisations: 
-- Movie A (action: 10 / 10, sci-fi: 5 / 10, comedy 10 / 10)
-- Movie B (action: 1 / 10, sci-fi: 5 / 10, comedy 10 / 10)
+- Movie A (action: 10 / 10, sci-fi: 5 / 10, comedy: 10 / 10)
+- Movie B (action: 1 / 10, sci-fi: 5 / 10, comedy: 10 / 10)
 
 Weighted sum for movie A:
 
@@ -35,11 +35,11 @@ Weighted sum for movie B:
 
 $$(1 * 10) + (5 * 5) + (10 * 7) = 10 + 25 + 70 = 105$$
 
-The movie with the highest weighted sum is movie A with 195, therefore it has a higher correlation with Mike's preferences.
+The movie with the highest weighted sum is movie A with 195, therefore it has a higher similarity with Mike's preferences.
 
 ## Code
 
-Weighted sum without a library:
+Weighted sum without using a library:
 
 
 ```python
@@ -54,7 +54,7 @@ print('Weighted sum is: ', weighted_sum)
 ```
 
     Weighted sum is:  60
-    
+
 
 Weighted sum using the NumPy library:
 
@@ -71,7 +71,7 @@ print('Weighted sum is: ', weighted_sum)
 ```
 
     Weighted sum is:  60
-    
+
 
 ## Maths Notations
 
@@ -87,4 +87,3 @@ $$
   (10 + 5 + 3) \cdot (1, 4, 10) = 60
 $$
 
-A subsequent matrix multiplication post will cover the $a^\mathsf{T}b$ dot production notation. 
