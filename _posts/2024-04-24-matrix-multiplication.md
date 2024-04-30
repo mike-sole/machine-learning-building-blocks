@@ -24,7 +24,7 @@ $$
     
     ({\color{red}{1}} * {\color{blue}{1}}) + ({\color{red} 4} * {\color{blue}{1}}) + ({\color{red}{10}} * {\color{blue}{1}}) 
 \end{bmatrix} 
-= \begin{bmatrix}60 & 18 \end{bmatrix}
+= \begin{bmatrix}60 & 15 \end{bmatrix}
 $$ 
 
 You can see two weighted sums have been calculated to achieve this matrix multiplication operation:
