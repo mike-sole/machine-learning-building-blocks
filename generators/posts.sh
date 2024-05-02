@@ -43,6 +43,18 @@ createPost "${postTitle}" "${postDate}" "${postImage}" "${notebookName}"
 
 
 ############################################################
+# 3 - vector similarity measures 
+############################################################
+
+postDate='2024-05-02'
+postTitle='Vector Similarity Measures'
+postImage='/assets/images/matrix-multiplication.svg'
+notebookName='vector-similarity-measures'
+
+createPost "${postTitle}" "${postDate}" "${postImage}" "${notebookName}"
+
+
+############################################################
 # clean up 
 ############################################################
 
