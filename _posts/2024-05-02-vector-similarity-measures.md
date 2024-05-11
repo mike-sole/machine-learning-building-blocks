@@ -56,11 +56,12 @@ Each vector similarity measure described above is illustrated by the following i
 
 A previous blog post introduced the [weighted sum](https://mike-sole.github.io/machine-learning-building-blocks/2024/04/06/weighted-sum.html) (also known as the **dot product**). We have just seen the geometric representation of the **dot product** as opposed to the algebraic representation:
 * Geometric representation: 
-  * length of vector $\vec{a}$ * length of vector $\vec{b}$ * cosine of angle between vector $\vec{a}$ and $\vec{b}$
+  * $\vec{a} \cdot \vec{b}$ = (length of vector $\vec{a}$) * (length of vector $\vec{b}$) * (cosine of angle between vector $\vec{a}$ and $\vec{b}$)
 * Algebraic representation: 
+  * $\vec{a} \cdot \vec{b}$ = $\vec{a}_0 * \vec{b}_0 + \vec{a}_1 * \vec{b}_1 + ... + \vec{a}_n * \vec{b}_n$
 
-Note that when vectors are normalised (their magnitude / length are scaled to equal 1), then the **dot product** represents the cosine between two vectors e.g. 
-  * 1 * 1 * cosine of angle between vector $\vec{a}$ and $\vec{b}$
+Note that when vectors are normalised (their magnitude / length are scaled to equal 1), then the **dot product** represents the cosine between two vectors (resulting in the **Cosine similarity** measure) e.g. 
+  * 1 * 1 * (cosine of angle between vector $\vec{a}$ and $\vec{b}$)
 
 # Interpretation
 
