@@ -1,6 +1,7 @@
 
 const SIMPLE_LBL_NONE = 0;
 const SIMPLE_LBL_BASIC = 1;
+const SIMPLE_LBL_BASIC_MULTI_DOT_PRODUCT_REPRESENTATIONS = 2;
 
 class Chart {
   constructor(name, showLabelOption) {
@@ -120,16 +121,17 @@ class Chart {
             2
           )}}}`;
 
-          const vectorALine = `\\( \\vec{a} = \\left(\\begin{matrix} ${vectorAXColorValue} & ${vectorAYColorValue} \\end{matrix}\\right) \\)`;
-          const vectorBLine = `\\( \\vec{b} = \\left(\\begin{matrix} ${vectorBXColorValue} & ${vectorBYColorValue} \\end{matrix}\\right) \\)`;
+          const vectorALine = `$ \\vec{a} = \\left(\\begin{matrix} ${vectorAXColorValue} & ${vectorAYColorValue} \\end{matrix}\\right) $`;
+          const vectorBLine = `$ \\vec{b} = \\left(\\begin{matrix} ${vectorBXColorValue} & ${vectorBYColorValue} \\end{matrix}\\right) $`;
 
           const dotProductCalculation = `${vectorAMagnitudeColorValue} * ${vectorBMagnitudeColorValue} * ${cosineValueColorValue}`;
 
           /*
           const vectorAMagnitudeLine = `\\( \\vert\\vert \\vec{a} \\vert\\vert = ${vectorAMagnitudeColorValue} = \\sqrt{${vectorAXColorValue}^2 + ${vectorAYColorValue}^2} \\)`;
           const vectorBMagnitudeLine = `\\( \\vert\\vert \\vec{b} \\vert\\vert = ${vectorBMagnitudeColorValue} = \\sqrt{${vectorBXColorValue}^2 + ${vectorBYColorValue}^2} \\)`;
-
-          const dotProductLineCalc1 = `\\( \\vec{a} \\cdot \\vec{b} = ${dotProductColorValue} = ${vectorAXColorValue} * ${vectorBXColorValue} +  ${vectorAYColorValue} * ${vectorBYColorValue} \\)`;
+          */
+          const dotProductLineCalc1 = `$ \\vec{a} \\cdot \\vec{b} = ${dotProductColorValue} = ${vectorAXColorValue} * ${vectorBXColorValue} +  ${vectorAYColorValue} * ${vectorBYColorValue} $)`;
+          /*
           const dotProductLineCalc2 = `\\( \\vec{a} \\cdot \\vec{b} = ${dotProductColorValue} = \\vert\\vert \\vec{a} \\vert\\vert \\: \\vert\\vert \\vec{b} \\vert\\vert \\cos\\theta = ${dotProductCalculation} \\) `;
 
           const cosineFormulae = `\\cos \\theta = ${cosineValueColorValue} = \\dfrac{ \\vec{a} \\cdot \\vec{b}  }{  \\vert\\vert \\vec{a} \\vert\\vert \\: \\vert\\vert \\vec{b} \\vert\\vert }`;
@@ -145,12 +147,16 @@ class Chart {
             this.vectorA.Y() - this.vectorB.Y()
           );
 
-          if (this.showLabelOption == SIMPLE_LBL_BASIC) {
-            const lblText = `Euclidian Distance = ${l2.toFixed(
-              2
-            )} <br><br> Cosine Similarity = $${cosineValueColorValue}$ <br><br> Dot Product = $${dotProductColorValue} = ${dotProductCalculation}$`;
+          const cosineFromDegrees = `$ \\cos ${this.angleAB.Value('degrees').toFixed(1)}$°`
 
-            return lblText;
+          if (this.showLabelOption == SIMPLE_LBL_BASIC) {
+            return `$\\vec{a}$ length = $${vectorAMagnitudeColorValue}$ <br><br> $\\vec{b}$ length = $${vectorBMagnitudeColorValue}$ <br><br> Euclidian Distance = ${l2.toFixed(
+              2
+            )} <br><br> Cosine Similarity = $${cosineValueColorValue}$ = ${cosineFromDegrees} <br><br> Dot Product = $${dotProductColorValue} = ${dotProductCalculation}$`;
+          }
+
+          if (this.showLabelOption == SIMPLE_LBL_BASIC_MULTI_DOT_PRODUCT_REPRESENTATIONS) {
+            return `${vectorALine} <br><br> ${vectorBLine} <br><br> $\\vec{a}$ length = $${vectorAMagnitudeColorValue}$ <br><br> $\\vec{b}$ length = $${vectorBMagnitudeColorValue}$ <br><br> Cosine = $${cosineValueColorValue}$ = ${cosineFromDegrees} <br><br> $ \\vec{a} \\cdot \\vec{b} = ${dotProductColorValue} = ${dotProductCalculation}$ <br><br> ${dotProductLineCalc1}`;
           }
 
           return ``;

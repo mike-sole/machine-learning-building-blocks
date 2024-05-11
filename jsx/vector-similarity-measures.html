@@ -35,6 +35,12 @@
       href="https://cdn.jsdelivr.net/npm/jsxgraph/distrib/jsxgraph.css"
     />
 
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../_includes/vector-similarity-measures/styles.css"
+    />
+
   </head>
 
   <body>
@@ -43,19 +49,29 @@
       <script src="../_includes/vector-similarity-measures/utils.js"></script>
 
       <div
-        id="jxgbox-basic"
-        class="jxgbox-basic"
-        style="width: 100%; aspect-ratio: 1 / 1"
-      ></div>
+      id="jxgbox-basic-multi"
+      class="jxgbox-basic-multi"
+      style="width: 100%; aspect-ratio: 1 / 1"
+    ></div>
 
-      <!--
+    <div
+    id="jxgbox-basic"
+    class="jxgbox-basic"
+    style="width: 100%; aspect-ratio: 1 / 1"
+  ></div>
+
       <div id="jxgbox" class="jxgbox" style="width: 100%; aspect-ratio : 1 / 1;"></div>
       
 
+  
     <script src="../_includes/vector-similarity-measures/graph.js"></script>
-    -->
+  
 
       <script src="../_includes/vector-similarity-measures/basic.js"></script>
+      <script>
+        new Chart("jxgbox-basic-multi", SIMPLE_LBL_BASIC_MULTI_DOT_PRODUCT_REPRESENTATIONS);
+      </script>
+
       <script>
         new Chart("jxgbox-basic", SIMPLE_LBL_BASIC);
       </script>

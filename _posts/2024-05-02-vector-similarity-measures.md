@@ -54,14 +54,25 @@ Each vector similarity measure described above is illustrated by the following i
   <br>
 </div>
 
-A previous blog post introduced the [weighted sum](https://mike-sole.github.io/machine-learning-building-blocks/2024/04/06/weighted-sum.html) (also known as the **dot product**). We have just seen the geometric representation of the **dot product** as opposed to the algebraic representation:
-* Geometric representation: 
-  * $\vec{a} \cdot \vec{b}$ = (length of vector $\vec{a}$) * (length of vector $\vec{b}$) * (cosine of angle between vector $\vec{a}$ and $\vec{b}$)
+A previous blog post introduced the [weighted sum](https://mike-sole.github.io/machine-learning-building-blocks/2024/04/06/weighted-sum.html) (also known as the **dot product**) using the algebraic representation of multiplying corresponding elements between vectors before adding them together. We have just seen the geometric representation of the **dot product** as opposed to the algebraic representation:
 * Algebraic representation: 
   * $\vec{a} \cdot \vec{b}$ = $\vec{a}_0 * \vec{b}_0 + \vec{a}_1 * \vec{b}_1 + ... + \vec{a}_n * \vec{b}_n$
+* Geometric representation: 
+  * $\vec{a} \cdot \vec{b}$ = (length of vector $\vec{a}$) * (length of vector $\vec{b}$) * (cosine of angle between vector $\vec{a}$ and $\vec{b}$)
+  * Note that when vectors are normalised (their magnitude / length are scaled to equal 1), then the **dot product** represents the cosine between two vectors (resulting in the **Cosine similarity** measure) e.g: 
+    * **Cosine similarity** = 1 * 1 * (cosine of angle between vector $\vec{a}$ and $\vec{b}$)
 
-Note that when vectors are normalised (their magnitude / length are scaled to equal 1), then the **dot product** represents the cosine between two vectors (resulting in the **Cosine similarity** measure) e.g. 
-  * 1 * 1 * (cosine of angle between vector $\vec{a}$ and $\vec{b}$)
+The following interactive chart allows both dot product calculations to be inspected:
+
+<div id="html" markdown="0">
+
+  <div id="jxgbox-basic-multi" class="jxgbox-basic-multi" style="width: 100%; aspect-ratio : 1 / 1;"></div>
+
+  <script>
+    new Chart("jxgbox-basic-multi", SIMPLE_LBL_BASIC_MULTI_DOT_PRODUCT_REPRESENTATIONS);
+  </script>
+  <br>
+</div>
 
 # Interpretation
 
