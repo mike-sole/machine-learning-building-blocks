@@ -150,7 +150,7 @@ class Chart {
             const lblText = `Euclidian Distance = ${l2.toFixed(
               2
             )} <br><br> Cosine Similarity = $${cosineValueColorValue}$ <br><br> Dot Product = $${dotProductColorValue} = ${dotProductCalculation}$`;
-            console.log(lblText);
+
             return lblText;
           }
 

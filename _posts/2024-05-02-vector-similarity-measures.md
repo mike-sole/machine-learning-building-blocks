@@ -6,7 +6,7 @@ image: "/assets/images/matrix-multiplication.svg"
 
 Vector similarity measures are a key Machine Learning building block. In this context, a vector encodes properties (features) of an entity, known as a **feature vector**. 
 
-A $\vec{a}$ vector represents a point (coordinate) in space along with a magnitude (length) and direction. These properties are illustrated in the following interactive graph where:
+A vector represents a point (coordinate) in space along with a magnitude (length) and direction. These properties are illustrated in the following interactive graph where:
 * $\vec{a}$ and $\vec{b}$ are vectors
   * $\vec{a}$ and $\vec{b}$ start at the origin and end at the arrow tip where the vector coordinate point can be found (the interactive chart allows the point to be dragged around)
   * Vector magnitude (length) is shown by the intersecting labels
@@ -26,7 +26,7 @@ A $\vec{a}$ vector represents a point (coordinate) in space along with a magnitu
 
     {% include vector-similarity-measures/basic.js %}
 
-    //new Chart("jxgbox-basic");
+    new Chart("jxgbox-basic");
   </script>
   <br>
 </div>
