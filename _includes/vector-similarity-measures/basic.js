@@ -1,4 +1,3 @@
-JXG.Options.text.useMathJax = true;
 
 const SIMPLE_LBL_NONE = 0;
 const SIMPLE_LBL_BASIC = 1;
