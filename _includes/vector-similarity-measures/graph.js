@@ -1,32 +1,4 @@
-class Point {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-  }
 
-  X() {
-    return this.x;
-  }
-
-  Y() {
-    return this.y;
-  }
-}
-
-function getMagnitude(point) {
-  return JXG.Math.Geometry.distance([0, 0], [point.X(), point.Y()]);
-}
-
-function getDotProduct(a, b) {
-  return a.X() * b.X() + a.Y() * b.Y();
-}
-
-function getUnitVector(v) {
-  const magnitude = getMagnitude(v);
-  return new Point(v.X() / magnitude, v.Y() / magnitude);
-}
-
-JXG.Options.text.useMathJax = true;
 var board = JXG.JSXGraph.initBoard("jxgbox", {
   boundingbox: [-5, 5, 5, -5],
   axis: true,
@@ -61,7 +33,7 @@ board.create(
   "text",
   [
     -4.5,
-    2,
+    3,
     function () {
       const dotProduct = getDotProduct(vectorA, vectorB);
 
@@ -76,6 +48,10 @@ board.create(
       const vectorAYColorValue = `{\\color{green}{${vectorA.Y().toFixed(2)}}}`;
       const vectorBXColorValue = `{\\color{blue}{${vectorB.X().toFixed(2)}}}`;
       const vectorBYColorValue = `{\\color{purple}{${vectorB.Y().toFixed(2)}}}`;
+
+
+      const l2 = Math.hypot(vectorA.X() - vectorB.X(), vectorA.Y() - vectorB.Y())
+      const euclidianDistnce = `\\( x = ${l2.toFixed(2)} = \\sqrt {(${vectorAXColorValue} - ${vectorBXColorValue} )^2 + (${vectorAYColorValue} - ${vectorBYColorValue}) ^2 } \\)`
 
       /*
       const unitVectorAXColorValue = `{\\color{navy}{${unitVectorA
@@ -118,7 +94,7 @@ board.create(
       const cosineFormulaeWithVariables = `\\dfrac{ ${dotProductColorValue} }{ ${vectorAMagnitudeColorValue} * ${vectorBMagnitudeColorValue} } `;
       const cosTheta = `\\( ${cosineFormulae} = ${cosineFormulaeWithVariables} \\)`;
 
-      return `${vectorALine} <br><br> ${vectorBLine} <br><br> ${vectorAMagnitudeLine} <br><br> ${vectorBMagnitudeLine} <br><br> ${dotProductLineCalc1} <br><br> ${cosTheta} <br><br> ${dotProductLineCalc2}`;
+      return `${vectorALine} <br><br> ${vectorBLine} <br><br> ${euclidianDistnce} <br><br> ${vectorAMagnitudeLine} <br><br> ${vectorBMagnitudeLine} <br><br> ${dotProductLineCalc1} <br><br> ${dotProductLineCalc2} <br><br> ${cosTheta}`;
     },
   ],
   { fixed: true }
