@@ -145,7 +145,6 @@ class Chart {
             this.vectorA.Y() - this.vectorB.Y()
           );
 
-          console.log("creating label");
           if (this.showLabelOption == SIMPLE_LBL_BASIC) {
             const lblText = `Euclidian Distance = ${l2.toFixed(
               2
@@ -159,6 +158,12 @@ class Chart {
       ],
       { fixed: true }
     );
+
+    this.board.on('update', () => {
+      MathJax.startup.promise = MathJax.startup.promise
+      .then(() => MathJax.typesetPromise())
+      .catch((err) => console.log('Typeset failed: ' + err.message));
+    });
 
     this.board.unsuspendUpdate();
   }
