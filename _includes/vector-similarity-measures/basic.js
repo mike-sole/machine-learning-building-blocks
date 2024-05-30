@@ -41,9 +41,16 @@ class Chart {
       cssClass: "smart-label-pure smart-label-circle-vector-b",
     });
 
+    this.origin = this.board.create("point", [0, 0], {
+      face: "o",
+      size: 0,
+      fixed: true,
+      name: ""
+    });
+
     this.angleAB = this.board.create(
       "angle",
-      [this.vectorA, [0, 0], this.vectorB],
+      [this.vectorA, this.origin, this.vectorB],
       {
         radius: 1,
         fixed: true,

@@ -1,7 +1,7 @@
 ---
 title: "Vector Similarity Measures"
 date: "2024-05-02"
-image: "/assets/images/matrix-multiplication.svg"
+image: "/assets/images/vector-similarity-measures.svg"
 ---
 
 Vector similarity measures are a key Machine Learning building block. In this context, a vector encodes properties (features) of an entity, known as a **feature vector**. 
@@ -80,6 +80,33 @@ Geometric interpretations of the three vector similarity measures will be presen
 
 Given feature vector A and B ... 
 
+<div id="html" markdown="0">
+
+
+
+
+
+
+<div style="width: 100%; display: table;">
+    <div style="display: table-row">
+        <div style="width: 50%; display: table-cell;"> 
+          <div id="box" class="box" style="width: 100%; aspect-ratio : 1 / 1;"></div>
+        </div>
+        <div style="width: 50% display: table-cell;">
+        
+  <div id="box2" class="box2" style="width: 100%; aspect-ratio : 1 / 1;"></div>
+         </div>
+    </div>
+</div>
+
+  <script>
+
+    {% include vector-similarity-measures/test.js %}
+
+    new Chart("jxgbox-basic");
+  </script>
+  <br>
+</div>
 
 
 

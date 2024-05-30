@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <title>JSXGraph template</title>
+
+    <script src="http://cdn.jsdelivr.net/g/filesaver.js"></script>
 
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
@@ -45,6 +45,18 @@
 
   <body>
     
+    <script>
+      function saveToSvg() {
+        console.log(board.renderer.type);
+        var svg = new XMLSerializer().serializeToString(multiChart.renderer.svgRoot);
+
+
+
+      }
+    </script>
+
+    <input id="save" type="button" value="save" onclick="saveToSvg();" />
+
     <div id="html">
       <script src="../_includes/vector-similarity-measures/utils.js"></script>
 
@@ -69,7 +81,7 @@
 
       <script src="../_includes/vector-similarity-measures/basic.js"></script>
       <script>
-        new Chart("jxgbox-basic-multi", SIMPLE_LBL_BASIC_MULTI_DOT_PRODUCT_REPRESENTATIONS);
+        let multiChart = new Chart("jxgbox-basic-multi", SIMPLE_LBL_BASIC_MULTI_DOT_PRODUCT_REPRESENTATIONS);
       </script>
 
       <script>
