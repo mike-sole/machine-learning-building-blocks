@@ -90,20 +90,20 @@ Given feature vector A and B ...
 <div style="width: 100%; display: table;">
     <div style="display: table-row">
         <div style="width: 50%; display: table-cell;"> 
-          <div id="box" class="box" style="width: 100%; aspect-ratio : 1 / 1;"></div>
+          <div id="testUnitCircle" class="testUnitCircle" style="width: 100%; aspect-ratio : 1 / 1;"></div>
         </div>
         <div style="width: 50% display: table-cell;">
         
-  <div id="box2" class="box2" style="width: 100%; aspect-ratio : 1 / 1;"></div>
+  <div id="testMetrics" class="testMetrics" style="width: 100%; aspect-ratio : 1 / 1;"></div>
          </div>
     </div>
 </div>
 
   <script>
 
-    {% include vector-similarity-measures/test.js %}
+    {% include vector-similarity-measures/unit_circle_charts.js %}
 
-    new Chart("jxgbox-basic");
+    new UnitCircleChart('test');
   </script>
   <br>
 </div>
