@@ -1,34 +1,50 @@
 
+
+function createCosineGraph(name) {
+  
+  const board = JXG.JSXGraph.initBoard(name, {
+    boundingBox: [-1, 2.5, 7, -2.5],
+    axis: true,
+    showCopyright: false,
+    defaultAxes: {
+      x: {
+        ticks: {
+          scale: Math.PI,
+          scaleSymbol: "°",
+          ticksDistance: 0.5,
+
+          insertTicks: false,
+          minorTicks: 0,
+        },
+      },
+      y: {},
+    },
+  });
+
+  board.create("functiongraph", [
+    function (x) {
+      return Math.cos(x);
+    },
+    0,
+    Math.PI * 2,
+  ]);
+
+  board.defaultAxes.x.ticks[0].generateLabelText = function (tick, zero) {
+    var tickValue = (180 / Math.PI) * tick.usrCoords[1];
+    return this.formatLabelText(tickValue.toFixed(1));
+  };
+
+  return board;
+
+}
+
 class UnitCircleSimilarityMeasuresChart {
 
   constructor(name, parentBoard, unitCirclePoint) {
 
-    const board = JXG.JSXGraph.initBoard(name + "Metrics", {
-      boundingBox: [-1, 2.5, 7, -2.5],
-      axis: true,
-      defaultAxes: {
-        x: {
-          ticks: {
-            scale: Math.PI,
-            scaleSymbol: "°",
-            ticksDistance: 0.5,
-
-            insertTicks: false,
-            minorTicks: 0,
-          },
-        },
-        y: {},
-      },
-    });
-
-    board.defaultAxes.x.ticks[0].generateLabelText = function (tick, zero) {
-      var tickValue = (180 / Math.PI) * tick.usrCoords[1];
-      return this.formatLabelText(tickValue.toFixed(1));
-    };
+    const board = createCosineGraph(name + "Metrics");
 
     board.suspendUpdate();
-
-    // cosine:
 
     board.create(
       "point",
@@ -61,22 +77,6 @@ class UnitCircleSimilarityMeasuresChart {
       { fixed: true, color: "#ff33ff", name: "X" }
     );
 
-    board.create("functiongraph", [
-      function (x) {
-        return Math.cos(x);
-      },
-      0,
-      Math.PI * 2,
-    ]);
-
-    /*
-    board.create("functiongraph", [
-      function (x) {
-        return Math.sin(x);
-      },
-    ]);
-    */
-
     board.create(
       "functiongraph",
       [
@@ -105,6 +105,7 @@ class UnitCircleChart {
     var board = JXG.JSXGraph.initBoard(name + "UnitCircle", {
       boundingbox: [-1.4, 1.4, 1.4, -1.4],
       axis: true,
+      showCopyright: false,
     });
 
     board.suspendUpdate();

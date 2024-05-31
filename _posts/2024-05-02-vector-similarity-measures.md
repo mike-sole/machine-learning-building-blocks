@@ -36,11 +36,26 @@ Vector similarity measures take one or more vector properties (coordinate, magni
 * Distance between vector points (coordinates)
   * Known as the **Euclidean distance** 
 * Difference between vector directions
-  * Calculated using the cosine of the angle between two vectors. The cosine function returns the value of 1 when two vectors point in the same direction and -1 when two vectors point in the opposite direction. Therefore the cosine function maps both 0 - 180 degrees and 360 - 180 degrees to the range of 1 to -1. 
   * Known as the **Cosine similarity** 
+  * Calculated using the cosine of the angle between two vectors. The cosine function returns the value of 1 when two vectors point in the same direction and -1 when two vectors point in the opposite direction. The following graph visualises this function:
+
+<div id="html" markdown="0">
+
+  <div id="cosineGraph" class="cosineGraph" style="margin-left: auto;
+  margin-right: auto; width: 50%; aspect-ratio : 1 / 1;"></div>
+  
+  <script>
+
+    {% include vector-similarity-measures/unit_circle_charts.js %}
+
+    createCosineGraph('cosineGraph');
+  </script>
+  <br>
+</div>
+
 * Difference between vector directions combined with magnitudes (lengths)
+  * Known as the **Dot Product similarity**
   * Extends **Cosine similarity** by multiplying it with vector magnitudes (lengths)
-  * Known as the **Dot Product similarity**  
 
 Each vector similarity measure described above is illustrated by the following interactive chart:
 
@@ -59,10 +74,8 @@ A previous blog post introduced the [weighted sum](https://mike-sole.github.io/m
   * $\vec{a} \cdot \vec{b}$ = $\vec{a}_0 * \vec{b}_0 + \vec{a}_1 * \vec{b}_1 + ... + \vec{a}_n * \vec{b}_n$
 * Geometric representation: 
   * $\vec{a} \cdot \vec{b}$ = (length of vector $\vec{a}$) * (length of vector $\vec{b}$) * (cosine of angle between vector $\vec{a}$ and $\vec{b}$)
-  * Note that when vectors are normalised (their magnitude / length are scaled to equal 1), then the **dot product** represents the cosine between two vectors (resulting in the **Cosine similarity** measure) e.g: 
-    * **Cosine similarity** = 1 * 1 * (cosine of angle between vector $\vec{a}$ and $\vec{b}$)
 
-The following interactive chart allows both dot product calculations to be inspected:
+The following interactive chart allows both dot product calculations to be inspected (drag the vector coordinates around):
 
 <div id="html" markdown="0">
 
@@ -74,18 +87,16 @@ The following interactive chart allows both dot product calculations to be inspe
   <br>
 </div>
 
-# Interpretation
 
-Geometric interpretations of the three vector similarity measures will be presented in this section. 
 
-Given feature vector A and B ... 
+
+ When vectors are normalised (their magnitude / length are scaled to equal 1), then the **dot product** represents the cosine between two vectors (resulting in the **Cosine similarity** measure) e.g: 
+  * **Dot product** = (length of vector $\vec{a}$) * (length of vector $\vec{b}$) * (cosine of angle between vector $\vec{a}$ and $\vec{b}$)
+  * **Cosine similarity** = 1 * 1 * (cosine of angle between vector $\vec{a}$ and $\vec{b}$)
+
+The following interactive chart allows the cosine similarity to be inspected (drag the vector coordinates around):
 
 <div id="html" markdown="0">
-
-
-
-
-
 
 <div style="width: 100%; display: table;">
     <div style="display: table-row">
@@ -100,13 +111,16 @@ Given feature vector A and B ...
 </div>
 
   <script>
-
-    {% include vector-similarity-measures/unit_circle_charts.js %}
-
     new UnitCircleChart('test');
   </script>
   <br>
 </div>
+
+
+# Interpretation
+
+Given feature vector A and B ... 
+
 
 
 
