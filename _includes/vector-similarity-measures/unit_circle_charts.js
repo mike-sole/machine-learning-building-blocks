@@ -2,7 +2,7 @@
 
 function createCosineGraph(name) {
   
-  const board = JXG.JSXGraph.initBoard(name, {
+  this.board = JXG.JSXGraph.initBoard(name, {
     boundingBox: [-1, 2.5, 7, -2.5],
     axis: true,
     showCopyright: false,
@@ -21,7 +21,7 @@ function createCosineGraph(name) {
     },
   });
 
-  board.create("functiongraph", [
+  this.board.create("functiongraph", [
     function (x) {
       return Math.cos(x);
     },
@@ -29,12 +29,12 @@ function createCosineGraph(name) {
     Math.PI * 2,
   ]);
 
-  board.defaultAxes.x.ticks[0].generateLabelText = function (tick, zero) {
+  this.board.defaultAxes.x.ticks[0].generateLabelText = function (tick, zero) {
     var tickValue = (180 / Math.PI) * tick.usrCoords[1];
     return this.formatLabelText(tickValue.toFixed(1));
   };
 
-  return board;
+  return this.board;
 
 }
 
@@ -42,11 +42,11 @@ class UnitCircleSimilarityMeasuresChart {
 
   constructor(name, parentBoard, unitCirclePoint) {
 
-    const board = createCosineGraph(name + "Metrics");
+    this.board = createCosineGraph(name + "Metrics");
 
-    board.suspendUpdate();
+    this.board.suspendUpdate();
 
-    board.create(
+    this.board.create(
       "point",
       [
         function () {
@@ -59,7 +59,18 @@ class UnitCircleSimilarityMeasuresChart {
       { fixed: true, color: "#0000ff", name: "C" }
     );
 
-    board.create(
+
+
+
+    this.board.unsuspendUpdate();
+
+    parentBoard.addChild(this.board);
+
+  }
+
+  withEuclidianDistanceMetric() {
+
+    this.board.create(
       "point",
       [
         function () {
@@ -77,7 +88,8 @@ class UnitCircleSimilarityMeasuresChart {
       { fixed: true, color: "#ff33ff", name: "X" }
     );
 
-    board.create(
+
+    this.board.create(
       "functiongraph",
       [
         function (x) {
@@ -91,10 +103,6 @@ class UnitCircleSimilarityMeasuresChart {
       { strokeColor: "red" }
     );
 
-    board.unsuspendUpdate();
-
-    parentBoard.addChild(board);
-
   }
 
 }
@@ -102,15 +110,15 @@ class UnitCircleSimilarityMeasuresChart {
 class UnitCircleChart {
   constructor(name, showLabelOption) {
 
-    var board = JXG.JSXGraph.initBoard(name + "UnitCircle", {
+    this.board = JXG.JSXGraph.initBoard(name + "UnitCircle", {
       boundingbox: [-1.4, 1.4, 1.4, -1.4],
       axis: true,
       showCopyright: false,
     });
 
-    board.suspendUpdate();
+    this.board.suspendUpdate();
 
-    var b1c1 = board.create(
+    var b1c1 = this.board.create(
       "circle",
       [
         [0, 0],
@@ -119,53 +127,53 @@ class UnitCircleChart {
       { dash: 2, fixed: true }
     );
 
-    var unitCirclePoint = board.create("point", [2, 1], {
+    var unitCirclePoint = this.board.create("point", [2, 1], {
       slideObject: b1c1,
       name: "\\[ \\vec{a} \\]",
     });
 
-    board.create(
+    this.board.create(
       "perpendicular",
-      [board.defaultAxes.x, unitCirclePoint],
+      [this.board.defaultAxes.x, unitCirclePoint],
       [{ strokeColor: "#ff0000", visible: true }, { visible: false }]
     );
 
-    board.create(
+    this.board.create(
       "perpendicular",
-      [board.defaultAxes.y, unitCirclePoint],
+      [this.board.defaultAxes.y, unitCirclePoint],
       [{ strokeColor: "#0000ff", visible: true }, { visible: false }]
     );
 
-    const arrowA = board.create("arrow", [[0, 0], unitCirclePoint], {
+    const arrowA = this.board.create("arrow", [[0, 0], unitCirclePoint], {
       fixed: true,
     });
-    board.create("smartlabel", [arrowA], {
+    this.board.create("smartlabel", [arrowA], {
       measure: "length",
       cssClass: "smart-label-pure smart-label-circle-vector-a",
     });
 
-    const vectorB = board.create("point", [1, 0], {
+    const vectorB = this.board.create("point", [1, 0], {
       face: "o",
       size: 0,
       name: "\\[ \\vec{b} \\]",
       fixed: true,
     });
 
-    const origin = board.create("point", [0, 0], {
+    const origin = this.board.create("point", [0, 0], {
       face: "o",
       size: 0,
       fixed: true,
     });
 
-    const arrowB = board.create("arrow", [[0, 0], vectorB], {
+    const arrowB = this.board.create("arrow", [[0, 0], vectorB], {
       fixed: true,
     });
-    board.create("smartlabel", [arrowB], {
+    this.board.create("smartlabel", [arrowB], {
       measure: "length",
       cssClass: "smart-label-pure smart-label-circle-vector-b",
     });
 
-    const angleAB = board.create("angle", [vectorB, origin, unitCirclePoint], {
+    const angleAB = this.board.create("angle", [vectorB, origin, unitCirclePoint], {
       radius: 1,
       fixed: true,
       name: () => {
@@ -175,21 +183,21 @@ class UnitCircleChart {
       },
     });
 
-    const distAB = board.create("line", [unitCirclePoint, vectorB], {
+    const distAB = this.board.create("line", [unitCirclePoint, vectorB], {
       strokeWidth: 2,
       dash: 2,
       straightFirst: false,
       straightLast: false,
       fixed: true,
     });
-    board.create("smartlabel", [distAB], {
+    this.board.create("smartlabel", [distAB], {
       measure: "length",
       cssClass: "smart-label-pure smart-label-circle-vector-ab",
     });
 
-    board.unsuspendUpdate();
+    this.board.unsuspendUpdate();
 
-    this.similarityMetricsChart = new UnitCircleSimilarityMeasuresChart(name, board, unitCirclePoint);
+    this.similarityMetricsChart = new UnitCircleSimilarityMeasuresChart(name, this.board, unitCirclePoint);
 
   }
 }
