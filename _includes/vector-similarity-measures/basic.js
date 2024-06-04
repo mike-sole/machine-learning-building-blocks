@@ -109,7 +109,7 @@ class Chart {
             vectorA.X() - vectorB.X(),
             vectorA.Y() - vectorB.Y()
           );
-          const euclidianDistnce = `\\( x = ${l2.toFixed(
+          const EuclideanDistnce = `\\( x = ${l2.toFixed(
             2
           )} = \\sqrt {(${vectorAXColorValue} - ${vectorBXColorValue} )^2 + (${vectorAYColorValue} - ${vectorBYColorValue}) ^2 } \\)`;
      */
@@ -145,7 +145,7 @@ class Chart {
           const cosineFormulaeWithVariables = `\\dfrac{ ${dotProductColorValue} }{ ${vectorAMagnitudeColorValue} * ${vectorBMagnitudeColorValue} } `;
           const cosTheta = `\\( ${cosineFormulae} = ${cosineFormulaeWithVariables} \\)`;
 
-          return `${vectorALine} <br><br> ${vectorBLine} <br><br> ${euclidianDistnce} <br><br> ${vectorAMagnitudeLine} <br><br> ${vectorBMagnitudeLine} <br><br> ${dotProductLineCalc1} <br><br> ${dotProductLineCalc2} <br><br> ${cosTheta}`;
+          return `${vectorALine} <br><br> ${vectorBLine} <br><br> ${EuclideanDistnce} <br><br> ${vectorAMagnitudeLine} <br><br> ${vectorBMagnitudeLine} <br><br> ${dotProductLineCalc1} <br><br> ${dotProductLineCalc2} <br><br> ${cosTheta}`;
           */
           //return `${vectorALine} <br><br> ${vectorBLine} <br><br>`;
 
@@ -157,7 +157,7 @@ class Chart {
           const cosineFromDegrees = `$ \\cos ${this.angleAB.Value('degrees').toFixed(1)}$°`
 
           if (this.showLabelOption == SIMPLE_LBL_BASIC) {
-            return `$\\vec{a}$ length = $${vectorAMagnitudeColorValue}$ <br><br> $\\vec{b}$ length = $${vectorBMagnitudeColorValue}$ <br><br> Euclidian Distance = ${l2.toFixed(
+            return `$\\vec{a}$ length = $${vectorAMagnitudeColorValue}$ <br><br> $\\vec{b}$ length = $${vectorBMagnitudeColorValue}$ <br><br> Euclidean Distance = ${l2.toFixed(
               2
             )} <br><br> Cosine Similarity = $${cosineValueColorValue}$ = ${cosineFromDegrees} <br><br> Dot Product = $${dotProductColorValue} = ${dotProductCalculation}$`;
           }

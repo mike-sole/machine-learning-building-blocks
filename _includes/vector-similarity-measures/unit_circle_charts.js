@@ -1,115 +1,148 @@
+/*
+ * Create a board where the x-axis has Math.PI scale.
+ * x-axis ticks are labelled as degrees from 0 to 360.
+ */
+class AngleDegreesMetricsGraph {
+  constructor(name) {
+    this.board = JXG.JSXGraph.initBoard(name, {
+      boundingBox: [-1, 2.5, 7, -2.5],
+      axis: true,
+      showCopyright: false,
+      defaultAxes: {
+        x: {
+          ticks: {
+            scale: Math.PI,
+            scaleSymbol: "°",
+            ticksDistance: 0.5,
 
-
-function createCosineGraph(name) {
-  
-  this.board = JXG.JSXGraph.initBoard(name, {
-    boundingBox: [-1, 2.5, 7, -2.5],
-    axis: true,
-    showCopyright: false,
-    defaultAxes: {
-      x: {
-        ticks: {
-          scale: Math.PI,
-          scaleSymbol: "°",
-          ticksDistance: 0.5,
-
-          insertTicks: false,
-          minorTicks: 0,
+            insertTicks: false,
+            minorTicks: 0,
+          },
         },
+        y: {},
       },
-      y: {},
-    },
-  });
+    });
 
-  this.board.create("functiongraph", [
-    function (x) {
-      return Math.cos(x);
-    },
-    0,
-    Math.PI * 2,
-  ]);
+    this.board.defaultAxes.x.ticks[0].generateLabelText = function (tick, zero) {
+      var tickValue = (180 / Math.PI) * tick.usrCoords[1];
+      return this.formatLabelText(tickValue.toFixed(1));
+    };
 
-  this.board.defaultAxes.x.ticks[0].generateLabelText = function (tick, zero) {
-    var tickValue = (180 / Math.PI) * tick.usrCoords[1];
-    return this.formatLabelText(tickValue.toFixed(1));
-  };
+  }
 
-  return this.board;
+  getBoard() {
+    return this.board;
+  }
+
+  withCosineSimilarityMeasure(invert) {
+
+    // cosine function graph
+    const minValue = 0;
+    const maxValue = Math.PI * 2;
+    this.board.create("functiongraph", [
+      function (x) {
+        const value = Math.cos(x);
+        return invert ? 1 - value : value;
+      },
+      minValue,
+      maxValue,
+    ]);
+
+    return this;
+  }
+
+  withEuclideanDistanceMetric() {
+
+    // euclidean distance function graph
+    const minAngleValue = 0;
+    const maxAngleValue = Math.PI * 2;
+    this.board.create(
+      "functiongraph",
+      [
+        (x) => {
+          const cx = Math.cos(x);
+          const cy = Math.sin(x);
+          return JXG.Math.Geometry.distance([1, 0], [cx, cy]);
+        },
+        minAngleValue,
+        maxAngleValue,
+      ],
+      { strokeColor: "red" }
+    );
+
+    return this;
+  }
 
 }
 
 class UnitCircleSimilarityMeasuresChart {
+  constructor(name, unitCirclePoint) {
 
-  constructor(name, parentBoard, unitCirclePoint) {
+    this.unitCirclePoint = unitCirclePoint;
 
-    this.board = createCosineGraph(name + "Metrics");
+    this.graph = new AngleDegreesMetricsGraph(name);
+    
+    this.board = this.graph.getBoard();
+  }
 
-    this.board.suspendUpdate();
+  getBoard() {
+    return this.board;
+  }
 
+  withCosineSimilarityMeasure(invert) {
+
+    // cosine function graph
+    this.graph.withCosineSimilarityMeasure(invert);
+
+    // point on the cosine function graph that corresponds to the point on the unit circle
     this.board.create(
       "point",
       [
-        function () {
-          return JXG.Math.Geometry.rad([1, 0], [0, 0], unitCirclePoint);
+        () => {
+          return JXG.Math.Geometry.rad([1, 0], [0, 0], this.unitCirclePoint);
         },
-        function () {
-          return unitCirclePoint.X();
+        () => {
+          const value = this.unitCirclePoint.X();
+          return invert ? 1 - value : value;
         },
       ],
       { fixed: true, color: "#0000ff", name: "C" }
     );
 
-
-
-
-    this.board.unsuspendUpdate();
-
-    parentBoard.addChild(this.board);
-
+    return this;
   }
 
-  withEuclidianDistanceMetric() {
+  withEuclideanDistanceMetric() {
 
+    // euclidean distance function graph
+    this.graph.withEuclideanDistanceMetric();
+
+    // point on the distance function graph that corresponds to the point on the unit circle
     this.board.create(
       "point",
       [
-        function () {
-          return JXG.Math.Geometry.rad([1, 0], [0, 0], unitCirclePoint);
+        () => {
+          return JXG.Math.Geometry.rad([1, 0], [0, 0], this.unitCirclePoint);
         },
-        function () {
-          const xvalue = JXG.Math.Geometry.distance(
+        () => {
+          const distance = JXG.Math.Geometry.distance(
             [1, 0],
-            [unitCirclePoint.X(), unitCirclePoint.Y()]
+            [this.unitCirclePoint.X(), this.unitCirclePoint.Y()]
           );
-          console.log(xvalue);
-          return xvalue;
+
+          return distance;
         },
       ],
       { fixed: true, color: "#ff33ff", name: "X" }
     );
 
-
-    this.board.create(
-      "functiongraph",
-      [
-        function (x) {
-          const cx = Math.cos(x);
-          const cy = Math.sin(x);
-          return JXG.Math.Geometry.distance([1, 0], [cx, cy]);
-        },
-        0,
-        Math.PI * 2,
-      ],
-      { strokeColor: "red" }
-    );
-
+    return this;
   }
 
 }
 
 class UnitCircleChart {
-  constructor(name, showLabelOption) {
-
+  constructor(name) {
     this.board = JXG.JSXGraph.initBoard(name + "UnitCircle", {
       boundingbox: [-1.4, 1.4, 1.4, -1.4],
       axis: true,
@@ -118,7 +151,7 @@ class UnitCircleChart {
 
     this.board.suspendUpdate();
 
-    var b1c1 = this.board.create(
+    const unitCircle = this.board.create(
       "circle",
       [
         [0, 0],
@@ -127,8 +160,9 @@ class UnitCircleChart {
       { dash: 2, fixed: true }
     );
 
-    var unitCirclePoint = this.board.create("point", [2, 1], {
-      slideObject: b1c1,
+    // pont on the unit circle which can be dragged around the radius
+    const unitCirclePoint = this.board.create("point", [2, 1], {
+      slideObject: unitCircle,
       name: "\\[ \\vec{a} \\]",
     });
 
@@ -173,13 +207,15 @@ class UnitCircleChart {
       cssClass: "smart-label-pure smart-label-circle-vector-b",
     });
 
-    const angleAB = this.board.create("angle", [vectorB, origin, unitCirclePoint], {
+    this.board.create("angle", [vectorB, origin, unitCirclePoint], {
       radius: 1,
       fixed: true,
       name: () => {
-        return `${JXG.Math.Geometry.trueAngle(vectorB, [0, 0], unitCirclePoint).toFixed(
-          1
-        )}°`;
+        return `${JXG.Math.Geometry.trueAngle(
+          vectorB,
+          [0, 0],
+          unitCirclePoint
+        ).toFixed(1)}°`;
       },
     });
 
@@ -195,9 +231,24 @@ class UnitCircleChart {
       cssClass: "smart-label-pure smart-label-circle-vector-ab",
     });
 
+    this.similarityMetricsChart = new UnitCircleSimilarityMeasuresChart(
+      name + "Metrics",
+      unitCirclePoint
+    );
+
+    this.board.addChild(this.similarityMetricsChart.getBoard());
+
     this.board.unsuspendUpdate();
-
-    this.similarityMetricsChart = new UnitCircleSimilarityMeasuresChart(name, this.board, unitCirclePoint);
-
   }
+
+  withCosineSimilarityMeasure(invert) {
+    this.similarityMetricsChart.withCosineSimilarityMeasure(invert);
+    return this;
+  }
+
+  withEuclideanDistanceMetric() {
+    this.similarityMetricsChart.withEuclideanDistanceMetric();
+    return this;
+  }
+
 }

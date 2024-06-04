@@ -51,7 +51,7 @@ board.create(
 
 
       const l2 = Math.hypot(vectorA.X() - vectorB.X(), vectorA.Y() - vectorB.Y())
-      const euclidianDistnce = `\\( x = ${l2.toFixed(2)} = \\sqrt {(${vectorAXColorValue} - ${vectorBXColorValue} )^2 + (${vectorAYColorValue} - ${vectorBYColorValue}) ^2 } \\)`
+      const EuclideanDistnce = `\\( x = ${l2.toFixed(2)} = \\sqrt {(${vectorAXColorValue} - ${vectorBXColorValue} )^2 + (${vectorAYColorValue} - ${vectorBYColorValue}) ^2 } \\)`
 
       /*
       const unitVectorAXColorValue = `{\\color{navy}{${unitVectorA
@@ -94,7 +94,7 @@ board.create(
       const cosineFormulaeWithVariables = `\\dfrac{ ${dotProductColorValue} }{ ${vectorAMagnitudeColorValue} * ${vectorBMagnitudeColorValue} } `;
       const cosTheta = `\\( ${cosineFormulae} = ${cosineFormulaeWithVariables} \\)`;
 
-      return `${vectorALine} <br><br> ${vectorBLine} <br><br> ${euclidianDistnce} <br><br> ${vectorAMagnitudeLine} <br><br> ${vectorBMagnitudeLine} <br><br> ${dotProductLineCalc1} <br><br> ${dotProductLineCalc2} <br><br> ${cosTheta}`;
+      return `${vectorALine} <br><br> ${vectorBLine} <br><br> ${EuclideanDistnce} <br><br> ${vectorAMagnitudeLine} <br><br> ${vectorBMagnitudeLine} <br><br> ${dotProductLineCalc1} <br><br> ${dotProductLineCalc2} <br><br> ${cosTheta}`;
     },
   ],
   { fixed: true }

@@ -127,7 +127,7 @@ def weighted_sum(array_1, array_2):
 def get_column_from_matrix(matrix, column_index):
     return [row[column_index] for row in matrix]
 
-def get_columns_from_matrix(matrix):
+def get_all_columns_from_matrix(matrix):
     num_columns = len(matrix[0])
     return [get_column_from_matrix(matrix, column_index) for column_index in range(num_columns)]
 
@@ -142,7 +142,7 @@ matrix_2 = [[10., 1.],
             [5.,  1.], 
             [3.,  1.]]
 
-matrix_2_columns = get_columns_from_matrix(matrix_2)
+matrix_2_columns = get_all_columns_from_matrix(matrix_2)
 
 matrix_product = []
 for matrix_1_row in matrix_1:

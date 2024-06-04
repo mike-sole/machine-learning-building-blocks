@@ -48,7 +48,7 @@ Vector similarity measures take one or more vector properties (coordinate, magni
 
     {% include vector-similarity-measures/unit_circle_charts.js %}
 
-    createCosineGraph('cosineGraph');
+    new AngleDegreesMetricsGraph('cosineGraph').withCosineSimilarityMeasure(false);
   </script>
   <br>
 </div>
@@ -98,24 +98,68 @@ The following interactive chart allows the cosine similarity to be inspected (dr
 
 <div id="html" markdown="0">
 
-<div style="width: 100%; display: table;">
-    <div style="display: table-row">
-        <div style="width: 50%; display: table-cell;"> 
-          <div id="testUnitCircle" class="testUnitCircle" style="width: 100%; aspect-ratio : 1 / 1;"></div>
-        </div>
-        <div style="width: 50% display: table-cell;">
-        
-  <div id="testMetrics" class="testMetrics" style="width: 100%; aspect-ratio : 1 / 1;"></div>
-         </div>
-    </div>
-</div>
+  <div style="width: 100%; display: table;">
+      <div style="display: table-row">
+          <div style="width: 50%; display: table-cell;"> 
+            <div id="testUnitCircle" class="testUnitCircle" style="width: 100%; aspect-ratio : 1 / 1;"></div>
+          </div>
+          <div style="width: 50% display: table-cell;">
+            <div id="testMetrics" class="testMetrics" style="width: 100%; aspect-ratio : 1 / 1;"></div>
+          </div>
+      </div>
+  </div>
 
   <script>
-    new UnitCircleChart('test');
+    new UnitCircleChart('test')
+          .withCosineSimilarityMeasure(false);
   </script>
   <br>
 </div>
 
+Subtracting the cosine similarity from 1 inverts ... which allows us to compare it against the euclidean distance .......... when the vectors are normalised, we can see that these similarity measures are very similar 
+
+<div id="html" markdown="0">
+
+  <div style="width: 100%; display: table;">
+      <div style="display: table-row">
+          <div style="width: 50%; display: table-cell;"> 
+            <div id="cosineSimilarityInvertedUnitCircle" class="cosineSimilarityInvertedUnitCircle" style="width: 100%; aspect-ratio : 1 / 1;"></div>
+          </div>
+          <div style="width: 50% display: table-cell;">
+            <div id="cosineSimilarityInvertedMetrics" class="cosineSimilarityInvertedMetrics" style="width: 100%; aspect-ratio : 1 / 1;"></div>
+          </div>
+      </div>
+  </div>
+
+  <script>
+    new UnitCircleChart('cosineSimilarityInverted')
+          .withCosineSimilarityMeasure(true);
+  </script>
+  <br>
+</div>
+
+Cosine and euclidian 
+
+<div id="html" markdown="0">
+
+  <div style="width: 100%; display: table;">
+      <div style="display: table-row">
+          <div style="width: 50%; display: table-cell;"> 
+            <div id="cosineAndEuclideanUnitCircle" class="cosineAndEuclideanUnitCircle" style="width: 100%; aspect-ratio : 1 / 1;"></div>
+          </div>
+          <div style="width: 50% display: table-cell;">
+            <div id="cosineAndEuclideanMetrics" class="cosineAndEuclideanMetrics" style="width: 100%; aspect-ratio : 1 / 1;"></div>
+          </div>
+      </div>
+  </div>
+
+  <script>
+    new UnitCircleChart('cosineAndEuclidean')
+          .withCosineSimilarityMeasure(true)
+          .withEuclideanDistanceMetric();
+  </script>
+  <br>
+</div>
 
 # Interpretation
 
