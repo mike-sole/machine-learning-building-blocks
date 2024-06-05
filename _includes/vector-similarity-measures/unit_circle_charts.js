@@ -161,24 +161,24 @@ class UnitCircleChart {
     );
 
     // pont on the unit circle which can be dragged around the radius
-    const unitCirclePoint = this.board.create("point", [2, 1], {
+    this.unitCirclePoint = this.board.create("point", [2, 1], {
       slideObject: unitCircle,
       name: "\\[ \\vec{a} \\]",
     });
 
     this.board.create(
       "perpendicular",
-      [this.board.defaultAxes.x, unitCirclePoint],
+      [this.board.defaultAxes.x, this.unitCirclePoint],
       [{ strokeColor: "#ff0000", visible: true }, { visible: false }]
     );
 
     this.board.create(
       "perpendicular",
-      [this.board.defaultAxes.y, unitCirclePoint],
+      [this.board.defaultAxes.y, this.unitCirclePoint],
       [{ strokeColor: "#0000ff", visible: true }, { visible: false }]
     );
 
-    const arrowA = this.board.create("arrow", [[0, 0], unitCirclePoint], {
+    const arrowA = this.board.create("arrow", [[0, 0], this.unitCirclePoint], {
       fixed: true,
     });
     this.board.create("smartlabel", [arrowA], {
@@ -186,7 +186,7 @@ class UnitCircleChart {
       cssClass: "smart-label-pure smart-label-circle-vector-a",
     });
 
-    const vectorB = this.board.create("point", [1, 0], {
+    this.vectorB = this.board.create("point", [1, 0], {
       face: "o",
       size: 0,
       name: "\\[ \\vec{b} \\]",
@@ -199,7 +199,7 @@ class UnitCircleChart {
       fixed: true,
     });
 
-    const arrowB = this.board.create("arrow", [[0, 0], vectorB], {
+    const arrowB = this.board.create("arrow", [[0, 0], this.vectorB], {
       fixed: true,
     });
     this.board.create("smartlabel", [arrowB], {
@@ -207,33 +207,21 @@ class UnitCircleChart {
       cssClass: "smart-label-pure smart-label-circle-vector-b",
     });
 
-    this.board.create("angle", [vectorB, origin, unitCirclePoint], {
+    this.board.create("angle", [this.vectorB, origin, this.unitCirclePoint], {
       radius: 1,
       fixed: true,
       name: () => {
         return `${JXG.Math.Geometry.trueAngle(
-          vectorB,
+          this.vectorB,
           [0, 0],
-          unitCirclePoint
+          this.unitCirclePoint
         ).toFixed(1)}°`;
       },
     });
 
-    const distAB = this.board.create("line", [unitCirclePoint, vectorB], {
-      strokeWidth: 2,
-      dash: 2,
-      straightFirst: false,
-      straightLast: false,
-      fixed: true,
-    });
-    this.board.create("smartlabel", [distAB], {
-      measure: "length",
-      cssClass: "smart-label-pure smart-label-circle-vector-ab",
-    });
-
     this.similarityMetricsChart = new UnitCircleSimilarityMeasuresChart(
       name + "Metrics",
-      unitCirclePoint
+      this.unitCirclePoint
     );
 
     this.board.addChild(this.similarityMetricsChart.getBoard());
@@ -247,7 +235,22 @@ class UnitCircleChart {
   }
 
   withEuclideanDistanceMetric() {
+
+    this.distAB = this.board.create("line", [this.unitCirclePoint, this.vectorB], {
+      strokeWidth: 2,
+      dash: 2,
+      straightFirst: false,
+      straightLast: false,
+      fixed: true,
+    });
+
+    this.board.create("smartlabel", [this.distAB], {
+      measure: "length",
+      cssClass: "smart-label-pure smart-label-circle-vector-ab",
+    });
+
     this.similarityMetricsChart.withEuclideanDistanceMetric();
+
     return this;
   }
 

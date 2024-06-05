@@ -6,12 +6,14 @@ image: "/assets/images/vector-similarity-measures.svg"
 
 Vector similarity measures are a key Machine Learning building block. In this context, a vector encodes properties (features) of an entity, known as a **feature vector**. 
 
-A vector represents a point (coordinate) in space along with a magnitude (length) and direction. These properties are illustrated in the following interactive graph where:
+A vector represents a point (coordinate) in space relative to another point in space. As a result, a vector has both **magnitude (length)** and **direction**  properties. These properties are illustrated in the following interactive graph for two vectors along with intuitive measures between the vectors:
 * $\vec{a}$ and $\vec{b}$ are vectors
-  * $\vec{a}$ and $\vec{b}$ start at the origin and end at the arrow tip where the vector coordinate point can be found (the interactive chart allows the point to be dragged around)
+  * $\vec{a}$ and $\vec{b}$ both start at the origin (they are relative to the origin) and end at the arrow tip where the vector coordinate point can be found (the interactive chart allows the points to be dragged around)
   * Vector magnitude (length) is shown by the intersecting labels
-* Angle between the directions of $\vec{a}$ and $\vec{b}$
-* Distance between $\vec{a}$ and $\vec{b}$ coordinates is shown by the dashed line
+* Intuitive measures between $\vec{a}$ and $\vec{b}$
+  * Distance between $\vec{a}$ and $\vec{b}$ coordinates is shown by the dashed line
+  * Angle between the directions of $\vec{a}$ and $\vec{b}$
+
 
 <div id="html" markdown="0">
 
@@ -31,7 +33,7 @@ A vector represents a point (coordinate) in space along with a magnitude (length
   <br>
 </div>
 
-Vector similarity measures take one or more vector properties (coordinate, magnitude, direction) into consideration. Three common similarity measures are defined as:  
+Vector similarity measures take one or more vector properties into consideration. Three common similarity measures are defined as:  
 
 * Distance between vector points (coordinates)
   * Known as the **Euclidean distance** 
@@ -90,11 +92,13 @@ The following interactive chart allows both dot product calculations to be inspe
 
 
 
- When vectors are normalised (their magnitude / length are scaled to equal 1), then the **dot product** represents the cosine between two vectors (resulting in the **Cosine similarity** measure) e.g: 
+ When vectors are normalised - their magnitude (length) is scaled to equal 1 -  then the **dot product** represents the cosine between two vectors (resulting in the **Cosine similarity** measure) e.g: 
   * **Dot product** = (length of vector $\vec{a}$) * (length of vector $\vec{b}$) * (cosine of angle between vector $\vec{a}$ and $\vec{b}$)
-  * **Cosine similarity** = 1 * 1 * (cosine of angle between vector $\vec{a}$ and $\vec{b}$)
+  * **Cosine similarity** (normalised vectors) = 1 * 1 * (cosine of angle between vector $\vec{a}$ and $\vec{b}$)
 
-The following interactive chart allows the cosine similarity to be inspected (drag the vector coordinates around):
+The following interactive chart allows the cosine to be inspected between two normalised vectors:
+  * The dashed circle has a radius of 1 - because normalised vectors have a magnitude (length) of 1
+  * Vector $\vec{b}$ has a fixed position at coordinate $(1, 0)$ - vector $\vec{a}$ can be dragged around the circle to see the corresponding cosine value between the two vectors
 
 <div id="html" markdown="0">
 
