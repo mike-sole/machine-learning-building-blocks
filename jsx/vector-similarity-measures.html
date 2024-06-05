@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <script src="http://cdn.jsdelivr.net/g/filesaver.js"></script>
+
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [
+            ["$", "$"],
+            ["\\(", "\\)"],
+          ],
+        },
+      };
+    </script>
+  
+    <script
+      type="text/javascript"
+      id="MathJax-script"
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"
+    ></script>
+  
+    <script
+      type="text/javascript"
+      charset="UTF-8"
+      src="https://cdn.jsdelivr.net/npm/jsxgraph/distrib/jsxgraphcore.js"
+    ></script>
+  
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/jsxgraph/distrib/jsxgraph.css"
+    />
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../_includes/vector-similarity-measures/styles.css"
+    />
+
+  </head>
+
+  <body>
+    
+    <script>
+      function saveToSvg() {
+        console.log(board.renderer.type);
+        var svg = new XMLSerializer().serializeToString(multiChart.renderer.svgRoot);
+
+
+
+      }
+    </script>
+
+    <input id="save" type="button" value="save" onclick="saveToSvg();" />
+
+    <div id="html">
+      <script src="../_includes/vector-similarity-measures/utils.js"></script>
+
+      <div
+      id="jxgbox-basic-multi"
+      class="jxgbox-basic-multi"
+      style="width: 100%; aspect-ratio: 1 / 1"
+    ></div>
+
+    <div
+    id="jxgbox-basic"
+    class="jxgbox-basic"
+    style="width: 100%; aspect-ratio: 1 / 1"
+  ></div>
+
+      <div id="jxgbox" class="jxgbox" style="width: 100%; aspect-ratio : 1 / 1;"></div>
+      
+
+  
+    <script src="../_includes/vector-similarity-measures/graph.js"></script>
+  
+
+      <script src="../_includes/vector-similarity-measures/basic.js"></script>
+      <script>
+        let multiChart = new Chart("jxgbox-basic-multi", SIMPLE_LBL_BASIC_MULTI_DOT_PRODUCT_REPRESENTATIONS);
+      </script>
+
+      <script>
+        new Chart("jxgbox-basic", SIMPLE_LBL_BASIC);
+      </script>
+    </div>
+
+    $\vec{x}$
+  </body>
+</html>
