@@ -1,6 +1,6 @@
 ---
-title: "Vector Similarity Measures"
-date: "2024-05-02"
+title: "DRAFT: Vector Similarity Measures"
+date: "2024-06-05"
 image: "/assets/images/vector-similarity-measures.svg"
 ---
 
@@ -36,9 +36,9 @@ A vector represents a point (coordinate) in space relative to another point in s
 Vector similarity measures take one or more vector properties into consideration. Three common similarity measures are defined as:  
 
 * Distance between vector points (coordinates)
-  * Known as the **Euclidean distance** 
+  * Known as the **Euclidean Distance** 
 * Difference between vector directions
-  * Known as the **Cosine similarity** 
+  * Known as the **Cosine Similarity** 
   * Calculated using the cosine of the angle between two vectors. The cosine function returns the value of 1 when two vectors point in the same direction and -1 when two vectors point in the opposite direction. The following graph visualises this function:
 
 <div id="html" markdown="0">
@@ -56,8 +56,8 @@ Vector similarity measures take one or more vector properties into consideration
 </div>
 
 * Difference between vector directions combined with magnitudes (lengths)
-  * Known as the **Dot Product similarity**
-  * Extends **Cosine similarity** by multiplying it with vector magnitudes (lengths)
+  * Known as the **Dot Product Similarity**
+  * Extends **Cosine Similarity** by multiplying it with vector magnitudes (lengths)
 
 Each vector similarity measure described above is illustrated by the following interactive chart:
 
@@ -92,13 +92,13 @@ The following interactive chart allows both dot product calculations to be inspe
 
 
 
- When vectors are normalised - their magnitude (length) is scaled to equal 1 -  then the **dot product** represents the cosine between two vectors (resulting in the **Cosine similarity** measure) e.g: 
+ When vectors are **normalised** - their magnitude (length) is scaled to equal 1 -  then the **dot product** represents the cosine between two vectors (resulting in the **Cosine Similarity** measure) e.g: 
   * **Dot product** = (length of vector $\vec{a}$) * (length of vector $\vec{b}$) * (cosine of angle between vector $\vec{a}$ and $\vec{b}$)
-  * **Cosine similarity** (normalised vectors) = 1 * 1 * (cosine of angle between vector $\vec{a}$ and $\vec{b}$)
+  * **Cosine Similarity** with normalised vectors = 1 * 1 * (cosine of angle between vector $\vec{a}$ and $\vec{b}$)
 
 The following interactive chart allows the cosine to be inspected between two normalised vectors:
-  * The dashed circle has a radius of 1 - because normalised vectors have a magnitude (length) of 1
-  * Vector $\vec{b}$ has a fixed position at coordinate $(1, 0)$ - vector $\vec{a}$ can be dragged around the circle to see the corresponding cosine value between the two vectors
+  * The dashed circle has a radius of 1, because normalised vectors have a magnitude (length) of 1
+  * Vector $\vec{b}$ has a fixed position at coordinate $(1, 0)$,  vector $\vec{a}$ can be dragged around the circle to see the corresponding cosine value between the two vectors
 
 <div id="html" markdown="0">
 
@@ -120,7 +120,7 @@ The following interactive chart allows the cosine to be inspected between two no
   <br>
 </div>
 
-Subtracting the cosine similarity from 1 inverts ... which allows us to compare it against the euclidean distance .......... when the vectors are normalised, we can see that these similarity measures are very similar 
+Subtracting the **Cosine Similarity** from 1 results in a distance measure (**Cosine Distance**) as shown by the following interactive chart:
 
 <div id="html" markdown="0">
 
@@ -142,7 +142,7 @@ Subtracting the cosine similarity from 1 inverts ... which allows us to compare 
   <br>
 </div>
 
-Cosine and euclidian 
+The following chart allows us to compare the **Cosine Distance** against the **Euclidean distance** for **normliased vectors**:
 
 <div id="html" markdown="0">
 

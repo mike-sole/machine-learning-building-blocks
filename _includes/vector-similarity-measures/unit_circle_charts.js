@@ -94,6 +94,8 @@ class UnitCircleSimilarityMeasuresChart {
     // cosine function graph
     this.graph.withCosineSimilarityMeasure(invert);
 
+    const similarityName = invert ? '1 - Cosine Similarity' : 'Cosine Similarity';
+
     // point on the cosine function graph that corresponds to the point on the unit circle
     this.board.create(
       "point",
@@ -106,7 +108,11 @@ class UnitCircleSimilarityMeasuresChart {
           return invert ? 1 - value : value;
         },
       ],
-      { fixed: true, color: "#0000ff", name: "C" }
+      {
+        fixed: true,
+        color: "#0000ff",
+        name: similarityName
+      }
     );
 
     return this;
@@ -133,7 +139,11 @@ class UnitCircleSimilarityMeasuresChart {
           return distance;
         },
       ],
-      { fixed: true, color: "#ff33ff", name: "X" }
+      {
+        fixed: true,
+        color: "#ff33ff",
+        name: "Euclidean Distance"
+      }
     );
 
     return this;
@@ -196,6 +206,7 @@ class UnitCircleChart {
     const origin = this.board.create("point", [0, 0], {
       face: "o",
       size: 0,
+      name: "",
       fixed: true,
     });
 
