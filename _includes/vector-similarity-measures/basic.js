@@ -8,7 +8,7 @@ class Chart {
     this.showLabelOption = showLabelOption;
 
     this.board = JXG.JSXGraph.initBoard(name, {
-      boundingbox: [-5, 5, 5, -5],
+      boundingbox: [-6, 6, 6, -6],
       axis: true,
       showCopyright: false,
     });
@@ -80,8 +80,8 @@ class Chart {
     this.board.create(
       "text",
       [
-        -4.5,
-        3,
+        -5.5,
+        4,
         () => {
           const dotProduct = getDotProduct(this.vectorA, this.vectorB);
 
