@@ -178,18 +178,108 @@ Without using a library:
 
 
 ```python
-# helper functions
+import math
+
+def weighted_sum(array_1, array_2):
+    return sum([array_1[idx] * array_2[idx] for idx in range(len(array_1))])
+
+def magnitude(array):
+    return math.sqrt(sum([x * x for x in array]))
+
+def normalise(array):
+    vector_magnitude = magnitude(array)
+    return [x / vector_magnitude for x in array]
+
+def cosine(array_1, array_2):
+    return weighted_sum(normalise(array_1), normalise(array_2))
+
+def cosine_distance(array_1, array_2):
+    return 1 - cosine(array_1, array_2)
+
+def euclidean_distance(array_1, array_2):
+    diffs = [array_1[idx] - array_2[idx] for idx in range(len(array_1))]
+    diffs_squared = [diff * diff for diff in diffs]
+    return math.sqrt(sum(diffs_squared))
 
 
+vector_a = [3.5, 1.]
+vector_b = [2., 4.]
+
+print(f'Vector a = {vector_a}')
+print(f'Vector b = {vector_b}')
+
+# vector magnitudes (lengths)
+print(f'\nVector a magnitude (length) = {magnitude(vector_a):.2f}')
+print(f'Vector b magnitude (length) = {magnitude(vector_b):.2f}')
+
+# normalised vectors
+print(f'\nVector a normalised = {[round(x, 2) for x in normalise(vector_a)]}')
+print(f'Vector b normalised = {[round(x, 2) for x in normalise(vector_b)]}')
+
+# similarity measures
+print(f'\nDot Product between vector a and b: {weighted_sum(vector_a, vector_b):.2f}')
+print(f'Cosine Distance between vector a and b: {cosine_distance(vector_a, vector_b):.2f}')
+print(f'Euclidean Distance between vector a and b: {euclidean_distance(vector_a, vector_b):.2f}')
 
 ```
 
-Using the NumPy library:
+    Vector a = [3.5, 1.0]
+    Vector b = [2.0, 4.0]
+    
+    Vector a magnitude (length) = 3.64
+    Vector b magnitude (length) = 4.47
+    
+    Vector a normalised = [0.96, 0.27]
+    Vector b normalised = [0.45, 0.89]
+    
+    Dot Product between vector a and b: 11.00
+    Cosine Distance between vector a and b: 0.32
+    Euclidean Distance between vector a and b: 3.35
+
+
+Using the NumPy and SciPy libraries:
 
 
 ```python
+import numpy as np
+import scipy
+
+np.set_printoptions(precision=2)
+
+vector_a = np.array([3.5, 1.])
+vector_b = np.array([2., 4.])
+
+print(f'Vector a = {vector_a}')
+print(f'Vector b = {vector_b}')
+
+# vector magnitudes (lengths)
+print(f'\nVector a magnitude (length) = {np.linalg.norm(vector_a):.2f}')
+print(f'Vector b magnitude (length) = {np.linalg.norm(vector_b):.2f}')
+
+# normalised vectors
+print(f'\nVector a normalised = {vector_a / np.linalg.norm(vector_a)}')
+print(f'Vector b normalised = {vector_b / np.linalg.norm(vector_b)}')
+
+# similarity measures
+print(f'\nDot Product between vector a and b: {np.dot(vector_a, vector_b):.2f}')
+print(f'Cosine Distance between vector a and b: {scipy.spatial.distance.cosine(vector_a, vector_b):.2f}')
+print(f'Euclidean Distance between vector a and b: {scipy.spatial.distance.euclidean(vector_a, vector_b):.2f}')
 
 ```
+
+    Vector a = [3.5 1. ]
+    Vector b = [2. 4.]
+    
+    Vector a magnitude (length) = 3.64
+    Vector b magnitude (length) = 4.47
+    
+    Vector a normalised = [0.96 0.27]
+    Vector b normalised = [0.45 0.89]
+    
+    Dot Product between vector a and b: 11.00
+    Cosine Distance between vector a and b: 0.32
+    Euclidean Distance between vector a and b: 3.35
+
 
 ## Maths Notations
 
