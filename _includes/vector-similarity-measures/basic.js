@@ -80,7 +80,7 @@ class Chart {
     this.board.create(
       "text",
       [
-        -4.5,
+        -5,
         3,
         () => {
           const dotProduct = getDotProduct(this.vectorA, this.vectorB);
