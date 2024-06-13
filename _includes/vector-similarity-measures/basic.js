@@ -11,7 +11,7 @@ class Chart {
     this.showLabelOption = showLabelOption;
 
     this.board = JXG.JSXGraph.initBoard(name, {
-      boundingbox: [-5, 5, 5, -5],
+      boundingbox: [-6, 6, 6, -6],
       axis: true,
       showCopyright: false,
     });
@@ -83,8 +83,8 @@ class Chart {
     this.board.create(
       "text",
       [
-        -5,
-        2.75,
+        -6,
+        3,
         () => {
           const dotProduct = getDotProduct(this.vectorA, this.vectorB);
 
@@ -173,7 +173,7 @@ class Chart {
       {
         fixed: true,
         fontUnit: 'vmin',
-        fontSize: 2.5,
+        fontSize: 2.25,
         mathJax: true
        }
     );
