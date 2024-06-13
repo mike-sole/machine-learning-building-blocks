@@ -173,7 +173,7 @@ class Chart {
       {
         fixed: true,
         fontUnit: 'vmin',
-        fontSize: 1.75,
+        fontSize: 1.5,
         mathJax: true
        }
     );
