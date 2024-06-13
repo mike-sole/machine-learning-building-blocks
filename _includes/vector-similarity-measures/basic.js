@@ -2,6 +2,9 @@
 const SIMPLE_LBL_NONE = 0;
 const SIMPLE_LBL_BASIC = 1;
 const SIMPLE_LBL_BASIC_MULTI_DOT_PRODUCT_REPRESENTATIONS = 2;
+const MATHS_EQUATIONS = 3;
+
+JXG.Options.text.useMathJax = true;
 
 class Chart {
   constructor(name, showLabelOption) {
@@ -81,7 +84,7 @@ class Chart {
       "text",
       [
         -5,
-        3,
+        2.75,
         () => {
           const dotProduct = getDotProduct(this.vectorA, this.vectorB);
 
@@ -104,15 +107,7 @@ class Chart {
           const vectorBYColorValue = `{\\color{purple}{${this.vectorB
             .Y()
             .toFixed(2)}}}`;
-          /*  
-          const l2 = Math.hypot(
-            vectorA.X() - vectorB.X(),
-            vectorA.Y() - vectorB.Y()
-          );
-          const EuclideanDistnce = `\\( x = ${l2.toFixed(
-            2
-          )} = \\sqrt {(${vectorAXColorValue} - ${vectorBXColorValue} )^2 + (${vectorAYColorValue} - ${vectorBYColorValue}) ^2 } \\)`;
-     */
+          
           const dotProductColorValue = `{\\color{teal}{${dotProduct.toFixed(
             2
           )}}}`;
@@ -133,26 +128,17 @@ class Chart {
 
           const dotProductCalculation = `${vectorAMagnitudeColorValue} * ${vectorBMagnitudeColorValue} * ${cosineValueColorValue}`;
 
-          /*
-          const vectorAMagnitudeLine = `\\( \\vert\\vert \\vec{a} \\vert\\vert = ${vectorAMagnitudeColorValue} = \\sqrt{${vectorAXColorValue}^2 + ${vectorAYColorValue}^2} \\)`;
-          const vectorBMagnitudeLine = `\\( \\vert\\vert \\vec{b} \\vert\\vert = ${vectorBMagnitudeColorValue} = \\sqrt{${vectorBXColorValue}^2 + ${vectorBYColorValue}^2} \\)`;
-          */
           const dotProductLineCalc1 = `$ \\vec{a} \\cdot \\vec{b} = ${dotProductColorValue} = ${vectorAXColorValue} * ${vectorBXColorValue} +  ${vectorAYColorValue} * ${vectorBYColorValue} $`;
-          /*
-          const dotProductLineCalc2 = `\\( \\vec{a} \\cdot \\vec{b} = ${dotProductColorValue} = \\vert\\vert \\vec{a} \\vert\\vert \\: \\vert\\vert \\vec{b} \\vert\\vert \\cos\\theta = ${dotProductCalculation} \\) `;
-
-          const cosineFormulae = `\\cos \\theta = ${cosineValueColorValue} = \\dfrac{ \\vec{a} \\cdot \\vec{b}  }{  \\vert\\vert \\vec{a} \\vert\\vert \\: \\vert\\vert \\vec{b} \\vert\\vert }`;
-          const cosineFormulaeWithVariables = `\\dfrac{ ${dotProductColorValue} }{ ${vectorAMagnitudeColorValue} * ${vectorBMagnitudeColorValue} } `;
-          const cosTheta = `\\( ${cosineFormulae} = ${cosineFormulaeWithVariables} \\)`;
-
-          return `${vectorALine} <br><br> ${vectorBLine} <br><br> ${EuclideanDistnce} <br><br> ${vectorAMagnitudeLine} <br><br> ${vectorBMagnitudeLine} <br><br> ${dotProductLineCalc1} <br><br> ${dotProductLineCalc2} <br><br> ${cosTheta}`;
-          */
-          //return `${vectorALine} <br><br> ${vectorBLine} <br><br>`;
 
           const l2 = Math.hypot(
             this.vectorA.X() - this.vectorB.X(),
             this.vectorA.Y() - this.vectorB.Y()
           );
+
+          const EuclideanDistnce = `$ x = ${l2.toFixed(
+            2
+          )} = \\sqrt{(${vectorAXColorValue} - ${vectorBXColorValue})^2 + (${vectorAYColorValue} - ${vectorBYColorValue})^2 }$`;
+     
 
           const cosineFromDegrees = `$ \\cos ${this.angleAB.Value('degrees').toFixed(1)}$°`
 
@@ -166,19 +152,44 @@ class Chart {
             return `${vectorALine} <br><br> ${vectorBLine} <br><br> $\\vec{a}$ length = $${vectorAMagnitudeColorValue}$ <br><br> $\\vec{b}$ length = $${vectorBMagnitudeColorValue}$ <br><br> Cosine = $${cosineValueColorValue}$ = ${cosineFromDegrees} <br><br> $ \\vec{a} \\cdot \\vec{b} = ${dotProductColorValue} = ${dotProductCalculation}$ <br><br> ${dotProductLineCalc1}`;
           }
 
+          if (this.showLabelOption == MATHS_EQUATIONS) {
+
+            const vectorAMagnitudeLine = `$ \\vert\\vert \\vec{a} \\vert\\vert = ${vectorAMagnitudeColorValue} = \\sqrt{${vectorAXColorValue}^{2} + ${vectorAYColorValue}^2} $`;
+            const vectorBMagnitudeLine = `$ \\vert\\vert \\vec{b} \\vert\\vert = ${vectorBMagnitudeColorValue} = \\sqrt{${vectorBXColorValue}^2 + ${vectorBYColorValue}^2} $`;
+      
+            const dotProductLineCalc1 = `$ \\vec{a} \\cdot \\vec{b} = ${dotProductColorValue} = ${vectorAXColorValue} * ${vectorBXColorValue} +  ${vectorAYColorValue} * ${vectorBYColorValue} $`;
+            const dotProductLineCalc2 = `$ \\vec{a} \\cdot \\vec{b} = ${dotProductColorValue} = \\vert\\vert \\vec{a} \\vert\\vert \\: \\vert\\vert \\vec{b} \\vert\\vert \\cos\\theta = ${vectorAMagnitudeColorValue} * ${vectorBMagnitudeColorValue} * ${cosineValueColorValue} $ `;
+      
+            const cosineFormulae = `\\cos \\theta = ${cosineValueColorValue} = \\dfrac{ \\vec{a} \\cdot \\vec{b}  }{  \\vert\\vert \\vec{a} \\vert\\vert \\: \\vert\\vert \\vec{b} \\vert\\vert }`;
+            const cosineFormulaeWithVariables = `\\dfrac{ ${dotProductColorValue} }{ ${vectorAMagnitudeColorValue} * ${vectorBMagnitudeColorValue} } `;
+            const cosTheta = `$ ${cosineFormulae} = ${cosineFormulaeWithVariables} $`;
+      
+            return `${vectorALine} <br><br> ${vectorBLine} <br><br> ${EuclideanDistnce} <br><br> ${vectorAMagnitudeLine} <br><br> ${vectorBMagnitudeLine} <br><br> ${dotProductLineCalc1} <br><br> ${dotProductLineCalc2} <br><br> ${cosTheta}`;
+          }
+
           return ``;
         },
       ],
-      { fixed: false,
-        fontSize: 8
+      {
+        fixed: true,
+        fontUnit: 'vmin',
+        fontSize: 2.5,
+        mathJax: true
        }
     );
 
+    /*
     this.board.on('update', () => {
+      /console.log('UPDATE');
+      
       MathJax.startup.promise = MathJax.startup.promise
       .then(() => MathJax.typesetPromise())
       .catch((err) => console.log('Typeset failed: ' + err.message));
+      
+      //console.log('typeset promise');
+      //MathJax.typesetPromise();
     });
+    */
 
     this.board.unsuspendUpdate();
   }

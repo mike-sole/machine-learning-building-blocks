@@ -14,7 +14,7 @@ function createPost ()
     header=${header}'---\n'
 
     echo "${header}" > ${outputFilePath}
-    jupyter nbconvert --to markdown ./notebooks/${notebookName}.ipynb
+    jupyter nbconvert --to markdown ./notebooks/${notebookName}.ipynb  --TagRemovePreprocessor.remove_input_tags='{"hide"}'
     tail -n +3 ./notebooks/${notebookName}.md >> ${outputFilePath}
 
 }
