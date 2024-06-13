@@ -415,4 +415,16 @@ print(f'Euclidean Distance between vector a and b: {scipy.spatial.distance.eucli
 
 
 
+
+
+<div id="html" markdown="0">
+
+  <div id="jxgbox-maths-notation" class="jxgbox-maths-notation" style="width: 100%; aspect-ratio : 1 / 1;"></div>
+
+  <script>
+    new Chart("jxgbox-maths-notation", MATHS_EQUATIONS);
+  </script>
+  <br>
+</div>
+
 ## References 
