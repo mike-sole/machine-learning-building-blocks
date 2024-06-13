@@ -2,8 +2,6 @@
 <html lang="en">
   <head>
 
-    <script src="http://cdn.jsdelivr.net/g/filesaver.js"></script>
-
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
     <script>
@@ -14,12 +12,20 @@
             ["\\(", "\\)"],
           ],
         },
+        startup: {
+          pageReady: () => {
+            return MathJax.startup.defaultPageReady().then(() => {
+              console.log('MathJax initial typesetting complete');
+            });
+          }
+        }
       };
     </script>
   
   <script
   type="text/javascript"
   id="MathJax-script"
+  defer 
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"
 >
 
@@ -47,9 +53,6 @@
 
   <body>
     
-
-
-
     <div id="html">
       <script src="../_includes/vector-similarity-measures/utils.js"></script>
 
@@ -65,19 +68,19 @@
     style="width: 100%; aspect-ratio: 1 / 1"
   ></div>
 
-      <script src="../_includes/vector-similarity-measures/basic.js"></script>
-      <script>
-        JXG.Options.text.useMathJax = true;
-        let multiChart = new Chart("jxgbox-basic-multi", SIMPLE_LBL_BASIC_MULTI_DOT_PRODUCT_REPRESENTATIONS);
+      <script src="../_includes/vector-similarity-measures/basic.js">
       </script>
 
-      <script>
-        new Chart("jxgbox-basic", SIMPLE_LBL_BASIC);
+      <script> 
+
+          let multiChart = new Chart("jxgbox-basic-multi", SIMPLE_LBL_BASIC_MULTI_DOT_PRODUCT_REPRESENTATIONS);
+
+          new Chart("jxgbox-basic", SIMPLE_LBL_BASIC);
+
+          new Chart("jxgbox-basic", MATHS_EQUATIONS);
+
       </script>
 
-      <script>
-        new Chart("jxgbox-basic", MATHS_EQUATIONS);
-      </script>
     </div>
 
     $\vec{x}$

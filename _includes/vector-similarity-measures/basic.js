@@ -4,6 +4,8 @@ const SIMPLE_LBL_BASIC = 1;
 const SIMPLE_LBL_BASIC_MULTI_DOT_PRODUCT_REPRESENTATIONS = 2;
 const MATHS_EQUATIONS = 3;
 
+JXG.Options.text.useMathJax = true;
+
 class Chart {
   constructor(name, showLabelOption) {
     this.showLabelOption = showLabelOption;
@@ -176,11 +178,18 @@ class Chart {
        }
     );
 
+    /*
     this.board.on('update', () => {
+      /console.log('UPDATE');
+      
       MathJax.startup.promise = MathJax.startup.promise
       .then(() => MathJax.typesetPromise())
       .catch((err) => console.log('Typeset failed: ' + err.message));
+      
+      //console.log('typeset promise');
+      //MathJax.typesetPromise();
     });
+    */
 
     this.board.unsuspendUpdate();
   }
