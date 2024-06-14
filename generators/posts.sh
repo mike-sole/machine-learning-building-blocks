@@ -46,8 +46,8 @@ createPost "${postTitle}" "${postDate}" "${postImage}" "${notebookName}"
 # 3 - vector similarity measures 
 ############################################################
 
-postDate='2024-06-05'
-postTitle='DRAFT: Vector Similarity Measures'
+postDate='2024-06-14'
+postTitle='Vector Similarity Measures'
 postImage='/assets/images/vector-similarity-measures.svg'
 notebookName='vector-similarity-measures'
 
