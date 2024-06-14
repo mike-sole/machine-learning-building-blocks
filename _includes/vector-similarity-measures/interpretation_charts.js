@@ -25,47 +25,11 @@ class InterpretationUnitCircle {
       { dash: 2, fixed: true }
     );
 
-    this.vectorB = this.board.create("point", [this.unitVectorB.X(), this.unitVectorB.Y()], {
-      face: "o",
-      size: 0,
-      name: "\\[ \\vec{b} \\]",
-      fixed: true,
-    });
-    const arrowB = this.board.create("arrow", [[0, 0], this.vectorB], {
-      fixed: true,
-    });
-    this.board.create("smartlabel", [arrowB], {
-      measure: "length",
-      cssClass: "smart-label-pure smart-label-circle-vector-b",
-    });
+    this.vectorA = createFixedVector(this.board, [this.unitVectorA.X(), this.unitVectorA.Y()], 'a', 'smart-label-circle-vector-a');
 
-    this.vectorA = this.board.create("point", [this.unitVectorA.X(), this.unitVectorA.Y()], {
-      face: "o",
-      size: 0,
-      name: "\\[ \\vec{a} \\]",
-      fixed: true,
-    });
-    const arrowA = this.board.create("arrow", [[0, 0], [this.unitVectorA.X(), this.unitVectorA.Y()]], {
-      fixed: true,
-    });
-    this.board.create("smartlabel", [arrowA], {
-      measure: "length",
-      cssClass: "smart-label-pure smart-label-circle-vector-a",
-    });
+    this.vectorB = createFixedVector(this.board, [this.unitVectorB.X(), this.unitVectorB.Y()], 'b', 'smart-label-circle-vector-b');
 
-    this.vectorC = this.board.create("point", [this.unitVectorC.X(), this.unitVectorC.Y()], {
-      face: "o",
-      size: 0,
-      name: "\\[ \\vec{c} \\]",
-      fixed: true,
-    });
-    const arrowC = this.board.create("arrow", [[0, 0], this.vectorC], {
-      fixed: true,
-    });
-    this.board.create("smartlabel", [arrowC], {
-      measure: "length",
-      cssClass: "smart-label-pure smart-label-circle-vector-b",
-    });
+    this.vectorC = createFixedVector(this.board, [this.unitVectorC.X(), this.unitVectorC.Y()], 'c', 'smart-label-circle-vector-c');
 
     const origin = this.board.create("point", [0, 0], {
       face: "o",

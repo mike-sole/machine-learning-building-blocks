@@ -6,9 +6,9 @@ image: "/assets/images/vector-similarity-measures.svg"
 
 Vector similarity measures are a key Machine Learning building block. In this context, a vector encodes properties (features) of an entity, known as a **feature vector**. 
 
-A vector represents a point (coordinate) in space relative to another point in space. As a result, a vector has both **magnitude (length)** and **direction**  properties. These properties are illustrated in the following interactive graph for two vectors along with intuitive measures between the vectors:
+A vector represents a point (coordinate) in space. As a result, a vector has both **magnitude (length)** and **direction**  properties. These properties are illustrated in the following interactive graph for two vectors along with intuitive measures between the vectors:
 * $\vec{a}$ and $\vec{b}$ are vectors
-  * $\vec{a}$ and $\vec{b}$ both start at the origin (they are relative to the origin) and end at the arrow tip where the vector coordinate point can be found (the interactive chart allows the points to be dragged around)
+  * $\vec{a}$ and $\vec{b}$ both start at the origin and end at the arrow tip where the vector coordinate point can be found (the interactive chart allows the points to be dragged around)
   * Vector magnitude (length) is shown by the intersecting labels
 * Intuitive measures between $\vec{a}$ and $\vec{b}$
   * Distance between $\vec{a}$ and $\vec{b}$ coordinates is shown by the dashed line
@@ -26,7 +26,7 @@ A vector represents a point (coordinate) in space relative to another point in s
   <script>
     {% include vector-similarity-measures/utils.js %}
 
-    {% include vector-similarity-measures/basic.js %}
+    {% include vector-similarity-measures/similarity_measure_comparison_charts.js %}
 
     new Chart("jxgbox-basic");
   </script>
@@ -36,9 +36,9 @@ A vector represents a point (coordinate) in space relative to another point in s
 Vector similarity measures take one or more vector properties into consideration. Three common similarity measures are defined as:  
 
 * Distance between vector points (coordinates)
-  * Known as the **Euclidean Distance** 
+  * Known as the **Euclidean distance** 
 * Difference between vector directions
-  * Known as the **Cosine Similarity** 
+  * Known as the **cosine similarity** 
   * Calculated using the cosine of the angle between two vectors. The cosine function returns the value of 1 when two vectors point in the same direction and -1 when two vectors point in the opposite direction. The following graph visualises this function:
 
 <div id="html" markdown="0">
@@ -56,8 +56,8 @@ Vector similarity measures take one or more vector properties into consideration
 </div>
 
 * Difference between vector directions combined with magnitudes (lengths)
-  * Known as the **Dot Product Similarity**
-  * Extends **Cosine Similarity** by multiplying it with vector magnitudes (lengths)
+  * Known as the **dot product similarity**
+  * Extends **cosine similarity** by multiplying it with vector magnitudes (lengths)
 
 Each vector similarity measure described above is illustrated by the following interactive chart:
 
@@ -94,7 +94,7 @@ The following interactive chart allows both dot product calculations to be inspe
 
  When vectors are **normalised** - their magnitude (length) is scaled to equal 1 -  then the **dot product** represents the cosine between two vectors (resulting in the **Cosine Similarity** measure) e.g: 
   * **Dot product** = (length of vector $\vec{a}$) * (length of vector $\vec{b}$) * (cosine of angle between vector $\vec{a}$ and $\vec{b}$)
-  * **Cosine Similarity** with normalised vectors = 1 * 1 * (cosine of angle between vector $\vec{a}$ and $\vec{b}$)
+  * **Cosine similarity** with normalised vectors = 1 * 1 * (cosine of angle between vector $\vec{a}$ and $\vec{b}$)
 
 The following interactive chart allows the cosine to be inspected between two normalised vectors:
   * The dashed circle has a radius of 1, because normalised vectors have a magnitude (length) of 1
@@ -120,7 +120,7 @@ The following interactive chart allows the cosine to be inspected between two no
   <br>
 </div>
 
-Subtracting the **Cosine Similarity** from 1 results in a distance measure (**Cosine Distance**) as shown by the following interactive chart:
+Subtracting the **cosine similarity** from 1 results in a distance measure (**cosine distance**) as shown by the following interactive chart:
 
 <div id="html" markdown="0">
 
@@ -142,7 +142,7 @@ Subtracting the **Cosine Similarity** from 1 results in a distance measure (**Co
   <br>
 </div>
 
-The following chart allows us to compare the **Cosine Distance** against the **Euclidean distance** for **normliased vectors**:
+The following chart allows us to compare the **cosine distance** against the **Euclidean distance** for **normliased vectors**. We can see that both increase and decrease together, although the relationship isn't linear, relative ordering between the two exists - the sorted order is consistent between the two. 
 
 <div id="html" markdown="0">
 
@@ -180,7 +180,7 @@ Categorisation values are **normalised** for each movie. E.g. the categorisation
 
   <script>
 
-    {% include vector-similarity-measures/interpretation.js %}
+    {% include vector-similarity-measures/interpretation_charts.js %}
 
     const coordsA = [5, 1];
     const coordsB = [9, 9];
@@ -193,10 +193,10 @@ Categorisation values are **normalised** for each movie. E.g. the categorisation
 </div>
 
 As the movie vectors are **normalised**, we know that:
-  * **Dot Product Similarity** is equal to the **Cosine Similarity** 
-  * **Euclidean Distance** orders vectors by distance the same way as the **Cosine Distance** orders vectors by distance
+  * **Dot product similarity** is equal to the **cosine similarity** 
+  * **Euclidean distance** orders vectors by distance the same way as the **cosine distance** orders vectors by distance
 
-Similarity measures between each movie can be shown by a pairwise distance matrix. The following table shows a pairwise distance matrix using the **Euclidean Distance**. E.g. the top left cell corresponds to the distance between Movie A and Movie A which is 0. Furthermote, the top right cell corresponds to the distqnce between Movie A and Movie C which is 1.14.  
+Similarity measures between each movie can be shown by a pairwise distance matrix. The following table shows a pairwise distance matrix using the **Euclidean distance**. E.g. the top left cell corresponds to the distance between Movie A and Movie A which is 0. Furthermore, the top right cell corresponds to the distance between Movie A and Movie C which is 1.14.  
 
 
 
@@ -226,14 +226,14 @@ A pairwise distance matrix using the **Cosine Distance** follows for comparison:
 
 
 
-From the above, the following statements are true when using either the **Euclidean Distance** or **Cosime Distance**:
+From the above, the following statements are true when using either the **Euclidean distance** or **cosine distance**:
   * Movies ordered by distance from Movie A = Movie B, Movie C
   * Movies ordered by distance from Movie B = Movie A, Movie C
   * Movies ordered by distance from Movie C = Movie B, Movie A
 
-More specifically for our movie recommendation example, we can say that if someone enjoyed Movie A, then the most similar movie to reccomend is Movie B followed by Movie C. 
+More specifically for our movie recommendation example, we can say that if someone enjoyed Movie A, then the most similar movie to recommend is Movie B followed by Movie C. 
 
-The rest of this intepretation section will explore a scenario where data is **not normalised**. Extending our movie recommendation scenario, say that the movie vector magnitude (length) represents a popularity score e.g. number of likes. The following graph shows Movie vectors which have varying popularity scores, where Movie B is the most popular and Movie C is the least popular with magnitudes (lengths) of 12.73 and 3.04 respectively.  
+The rest of this intepretation section will explore a scenario where data is **not normalised**. Extending our movie recommendation scenario, say that the movie vector magnitude (length) represents a popularity score e.g. number of likes. The following graph shows Movie vectors which have varying popularity scores, where Movie B is the most popular and Movie C is the least popular with magnitudes (lengths) of 12.73 and 3.04 respectively:  
 
 <div id="html" markdown="0">
 
@@ -247,9 +247,9 @@ The rest of this intepretation section will explore a scenario where data is **n
   <br>
 </div>
 
-Pairwise similarity tables follow for the **Euclidean Distance**, **Cosine Distance** and **Dot Product** similarity measures.
+Pairwise similarity tables follow for the **Euclidean distance**, **cosine distance** and **dot product** similarity measures.
 
-Pairwise **Euclidean Distance** between movie vectors:
+Pairwise **Euclidean distance** between movie vectors:
 
 
 
@@ -264,9 +264,9 @@ Pairwise **Euclidean Distance** between movie vectors:
 
 
 
-We can see that the **Euclidean Distance** scores Movies with minimum difference across all factors as more similar E.g. movies ordered by straight line distance from Movie A = Movie C, Movie B. Movie C is less popular than Movie A, however the straight line distance between Movie A and B (8.94) is far greater than the straight line distance between A and C (4.92)
+We can see that the **Euclidean distance** scores Movies with minimum combined difference across all factors as more similar E.g. movies ordered by straight line distance from Movie A = Movie C, Movie B. Movie C is less popular than Movie A, however the straight line distance between Movie A and B (8.94) is far greater than the straight line distance between A and C (4.92)
 
-Pairwise **Cosine Distance** between movie vectors:
+Pairwise **cosine distance** between movie vectors:
 
 
 
@@ -281,9 +281,9 @@ Pairwise **Cosine Distance** between movie vectors:
 
 
 
-**Cosine Distance** normalises vectors as part of its calculation. Therefore movie popularity information is removed and does not affect this similarity measure.
+**Cosine distance** normalises vectors as part of its calculation. Therefore movie popularity information is removed and does not affect this similarity measure.
 
-Pairwise **Dot Product Similarity** between movie vectors:
+Pairwise **dot product similarity** between movie vectors:
 
 
 
@@ -298,7 +298,7 @@ Pairwise **Dot Product Similarity** between movie vectors:
 
 
 
-With **Dot Product Similarity**, a higher value represents a higher similarity. We can see that Movie B dominates similarity due to its high popularity value. E.g. the most similar movie to both Movie A and C is Movie B. 
+With **dot product similarity**, a higher value represents a higher similarity. We can see that Movie B dominates similarity due to its high popularity value. E.g. the most similar movie to both Movie A and C is Movie B. 
 
 As a summary, this section has interpreted vector similarity measures with respct to a simplistic movie recommendation scenario. First we worked through a **normalised** scanario and then expanded the scenario to a **non normlaised** scenario. We can see that selecting the right vector similarity measure is an important consideration. 
 
@@ -413,9 +413,28 @@ print(f'Euclidean Distance between vector a and b: {scipy.spatial.distance.eucli
 
 ## Maths Notations
 
+Vector similarity maths notations are defined in this section followed by an interactive chart. The following equations refer to two vectors, vector $\vec{a}$ and $\vec{b}$ which are limited to two dimensions. E.g. where $\vec{a} = (5, 9)$, $\vec{a}_x$ refers to the first dimension which has a value of 5 and $\vec{a}_y$ refers to the second dimension which has a value of 9. 
 
+Vector magnitude (length):
 
+$\vert\vert \vec{a} \vert\vert = \sqrt{\vec{a}_x ^2 + \vec{a}_y ^2 }$
 
+Euclidean distance:
+
+$ \vert\vert \vec{a} - \vec{b} \vert\vert = \sqrt{(\vec{a}_x - \vec{b}_x)^2 + ( \vec{a}_y - \vec{b}_y)^2 }$
+
+Dot product similarity 
+
+  * Algebraic representation: 
+    * $\vec{a} \cdot \vec{b} = \vec{a}_x * \vec{b}_x + \vec{a}_y * \vec{b}_y$
+  * Geometric representation: 
+    * $\vec{a} \cdot \vec{b} = \vert\vert \vec{a} \vert\vert \, \vert\vert \vec{b} \vert\vert \cos\theta$
+
+Cosine similarity: 
+
+$\cos \theta = \dfrac{ \vec{a} \cdot \vec{b}  }{  \vert\vert \vec{a} \vert\vert \, \vert\vert \vec{b} \vert\vert }$
+
+The following interactive chart allows the equations to be dynamically inspected (drag the vector coordinates around):
 
 <div id="html" markdown="0">
 
@@ -428,3 +447,9 @@ print(f'Euclidean Distance between vector a and b: {scipy.spatial.distance.eucli
 </div>
 
 ## References 
+
+[JSXGraph](https://jsxgraph.uni-bayreuth.de/wp/index.html) was used to create the graphs in this blog post. The examples that come with this library are excellent, this blog post heavily extended the sine and cosine example which can be found [here](https://jsxgraph.uni-bayreuth.de/wiki/index.php/Sine_and_cosine).
+
+Google has some great material on the topic of vector similarity measures [here](https://developers.google.com/machine-learning/clustering/similarity/measuring-similarity) and [here](https://cloud.google.com/spanner/docs/choose-vector-distance-function) - this blog post covers the core topics from this material. 
+
+

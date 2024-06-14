@@ -18,31 +18,9 @@ class Chart {
 
     this.board.suspendUpdate();
 
-    this.vectorA = this.board.create("point", [3.5, 1], {
-      face: "o",
-      size: 2,
-      name: "\\[ \\vec{a} \\]",
-    });
-    this.arrowA = this.board.create("arrow", [[0, 0], this.vectorA], {
-      fixed: true,
-    });
-    this.board.create("smartlabel", [this.arrowA], {
-      measure: "length",
-      cssClass: "smart-label-pure smart-label-circle-vector-a",
-    });
+    this.vectorA = createInteractiveVector(this.board, [3.5, 1], 'a', 'smart-label-circle-vector-a');
 
-    this.vectorB = this.board.create("point", [2, 4], {
-      face: "o",
-      size: 2,
-      name: "\\[ \\vec{b} \\]",
-    });
-    this.arrowB = this.board.create("arrow", [[0, 0], this.vectorB], {
-      fixed: true,
-    });
-    this.board.create("smartlabel", [this.arrowB], {
-      measure: "length",
-      cssClass: "smart-label-pure smart-label-circle-vector-b",
-    });
+    this.vectorB = createInteractiveVector(this.board, [2, 4], 'b', 'smart-label-circle-vector-b');
 
     this.origin = this.board.create("point", [0, 0], {
       face: "o",
@@ -135,7 +113,7 @@ class Chart {
             this.vectorA.Y() - this.vectorB.Y()
           );
 
-          const EuclideanDistnce = `$ x = ${l2.toFixed(
+          const euclideanDistanceLine = `$ \\vert\\vert \\vec{a} - \\vec{b} \\vert\\vert = ${l2.toFixed(
             2
           )} = \\sqrt{(${vectorAXColorValue} - ${vectorBXColorValue})^2 + (${vectorAYColorValue} - ${vectorBYColorValue})^2 }$`;
      
@@ -143,9 +121,9 @@ class Chart {
           const cosineFromDegrees = `$ \\cos ${this.angleAB.Value('degrees').toFixed(1)}$°`
 
           if (this.showLabelOption == SIMPLE_LBL_BASIC) {
-            return `$\\vec{a}$ length = $${vectorAMagnitudeColorValue}$ <br><br> $\\vec{b}$ length = $${vectorBMagnitudeColorValue}$ <br><br> Euclidean Distance = ${l2.toFixed(
+            return `$\\vec{a}$ length = $${vectorAMagnitudeColorValue}$ <br><br> $\\vec{b}$ length = $${vectorBMagnitudeColorValue}$ <br><br> Euclidean distance = ${l2.toFixed(
               2
-            )} <br><br> Cosine Similarity = $${cosineValueColorValue}$ = ${cosineFromDegrees} <br><br> Dot Product = $${dotProductColorValue} = ${dotProductCalculation}$`;
+            )} <br><br> Cosine similarity = $${cosineValueColorValue}$ = ${cosineFromDegrees} <br><br> Dot product = $${dotProductColorValue} = ${dotProductCalculation}$`;
           }
 
           if (this.showLabelOption == SIMPLE_LBL_BASIC_MULTI_DOT_PRODUCT_REPRESENTATIONS) {
@@ -164,7 +142,7 @@ class Chart {
             const cosineFormulaeWithVariables = `\\dfrac{ ${dotProductColorValue} }{ ${vectorAMagnitudeColorValue} * ${vectorBMagnitudeColorValue} } `;
             const cosTheta = `$ ${cosineFormulae} = ${cosineFormulaeWithVariables} $`;
       
-            return `${vectorALine} <br><br> ${vectorBLine} <br><br> ${EuclideanDistnce} <br><br> ${vectorAMagnitudeLine} <br><br> ${vectorBMagnitudeLine} <br><br> ${dotProductLineCalc1} <br><br> ${dotProductLineCalc2} <br><br> ${cosTheta}`;
+            return `${vectorALine} <br><br> ${vectorBLine} <br><br> ${euclideanDistanceLine} <br><br> ${vectorAMagnitudeLine} <br><br> ${vectorBMagnitudeLine} <br><br> ${dotProductLineCalc1} <br><br> ${dotProductLineCalc2} <br><br> ${cosTheta}`;
           }
 
           return ``;
@@ -177,19 +155,6 @@ class Chart {
         mathJax: true
        }
     );
-
-    /*
-    this.board.on('update', () => {
-      /console.log('UPDATE');
-      
-      MathJax.startup.promise = MathJax.startup.promise
-      .then(() => MathJax.typesetPromise())
-      .catch((err) => console.log('Typeset failed: ' + err.message));
-      
-      //console.log('typeset promise');
-      //MathJax.typesetPromise();
-    });
-    */
 
     this.board.unsuspendUpdate();
   }
