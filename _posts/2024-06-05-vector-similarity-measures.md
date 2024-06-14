@@ -1,7 +1,7 @@
 ---
 title: "DRAFT: Vector Similarity Measures"
 date: "2024-06-05"
-image: "/assets/images/vector-similarity-measures.svg"
+image: "/assets/images/vector-similarity-measures.jpg"
 ---
 
 Vector similarity measures are a key Machine Learning building block. In this context, a vector encodes properties (features) of an entity, known as a **feature vector**. 
