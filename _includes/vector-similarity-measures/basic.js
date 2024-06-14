@@ -18,31 +18,9 @@ class Chart {
 
     this.board.suspendUpdate();
 
-    this.vectorA = this.board.create("point", [3.5, 1], {
-      face: "o",
-      size: 2,
-      name: "\\[ \\vec{a} \\]",
-    });
-    this.arrowA = this.board.create("arrow", [[0, 0], this.vectorA], {
-      fixed: true,
-    });
-    this.board.create("smartlabel", [this.arrowA], {
-      measure: "length",
-      cssClass: "smart-label-pure smart-label-circle-vector-a",
-    });
+    this.vectorA = createInteractiveVector(this.board, [3.5, 1], 'a', 'smart-label-circle-vector-a');
 
-    this.vectorB = this.board.create("point", [2, 4], {
-      face: "o",
-      size: 2,
-      name: "\\[ \\vec{b} \\]",
-    });
-    this.arrowB = this.board.create("arrow", [[0, 0], this.vectorB], {
-      fixed: true,
-    });
-    this.board.create("smartlabel", [this.arrowB], {
-      measure: "length",
-      cssClass: "smart-label-pure smart-label-circle-vector-b",
-    });
+    this.vectorB = createInteractiveVector(this.board, [2, 4], 'b', 'smart-label-circle-vector-b');
 
     this.origin = this.board.create("point", [0, 0], {
       face: "o",
@@ -178,18 +156,7 @@ class Chart {
        }
     );
 
-    /*
-    this.board.on('update', () => {
-      /console.log('UPDATE');
-      
-      MathJax.startup.promise = MathJax.startup.promise
-      .then(() => MathJax.typesetPromise())
-      .catch((err) => console.log('Typeset failed: ' + err.message));
-      
-      //console.log('typeset promise');
-      //MathJax.typesetPromise();
-    });
-    */
+
 
     this.board.unsuspendUpdate();
   }

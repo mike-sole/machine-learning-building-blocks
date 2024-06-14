@@ -25,4 +25,32 @@ class Point {
     const magnitude = getMagnitude(v);
     return new Point(v.X() / magnitude, v.Y() / magnitude);
   }
+
+  function createVector(board, coord, symbol, style, ptSize) {
+    const vec = board.create("point", coord, {
+      face: "o",
+      size: ptSize,
+      name: `\\[ \\vec{${symbol}} \\]`,
+    });
   
+    const arrow = board.create("arrow", [[0, 0], vec], {
+      fixed: true,
+    });
+  
+    board.create("smartlabel", [arrow], {
+      measure: "length",
+      cssClass: `smart-label-pure ${style}`,
+    });
+  
+    return vec;
+  }
+  
+
+function createFixedVector(board, coord, symbol, style) {
+  return createVector(board, coord, symbol, style, 0);
+}
+
+function createInteractiveVector(board, coord, symbol, style) {
+  return createVector(board, coord, symbol, style, 2);
+}
+
