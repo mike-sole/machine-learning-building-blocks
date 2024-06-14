@@ -26,7 +26,7 @@ A vector represents a point (coordinate) in space relative to another point in s
   <script>
     {% include vector-similarity-measures/utils.js %}
 
-    {% include vector-similarity-measures/basic.js %}
+    {% include vector-similarity-measures/similarity_measure_comparison_charts.js %}
 
     new Chart("jxgbox-basic");
   </script>
@@ -180,7 +180,7 @@ Categorisation values are **normalised** for each movie. E.g. the categorisation
 
   <script>
 
-    {% include vector-similarity-measures/interpretation.js %}
+    {% include vector-similarity-measures/interpretation_charts.js %}
 
     const coordsA = [5, 1];
     const coordsB = [9, 9];
@@ -413,8 +413,24 @@ print(f'Euclidean Distance between vector a and b: {scipy.spatial.distance.eucli
 
 ## Maths Notations
 
+Vector magnitude (length):
 
+$\vert\vert \vec{a} \vert\vert = \sqrt{x^2 + y^2 }$
 
+Euclidean Distance:
+
+$x = \sqrt{(x - x)^2 + ( x - x)^2 }$
+
+Dot Product Similarity 
+
+  * Algebraic representation: 
+    * $\vec{a} \cdot \vec{b}$ = $\vec{a}_0 * \vec{b}_0 + \vec{a}_1 * \vec{b}_1 + ... + \vec{a}_n * \vec{b}_n$
+  * Geometric representation: 
+    * $\vec{a} \cdot \vec{b} = \vert\vert \vec{a} \vert\vert \: \vert\vert \vec{b} \vert\vert \cos\theta$
+
+Cosine Similarity: 
+
+$\cos \theta = \dfrac{ \vec{a} \cdot \vec{b}  }{  \vert\vert \vec{a} \vert\vert \: \vert\vert \vec{b} \vert\vert }$
 
 
 <div id="html" markdown="0">
