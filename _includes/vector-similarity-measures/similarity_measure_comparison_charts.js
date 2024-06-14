@@ -113,7 +113,7 @@ class Chart {
             this.vectorA.Y() - this.vectorB.Y()
           );
 
-          const euclideanDistanceLine = `$ x = ${l2.toFixed(
+          const euclideanDistanceLine = `$ \\vert\\vert \\vec{a} - \\vec{b} \\vert\\vert = ${l2.toFixed(
             2
           )} = \\sqrt{(${vectorAXColorValue} - ${vectorBXColorValue})^2 + (${vectorAYColorValue} - ${vectorBYColorValue})^2 }$`;
      
@@ -121,9 +121,9 @@ class Chart {
           const cosineFromDegrees = `$ \\cos ${this.angleAB.Value('degrees').toFixed(1)}$°`
 
           if (this.showLabelOption == SIMPLE_LBL_BASIC) {
-            return `$\\vec{a}$ length = $${vectorAMagnitudeColorValue}$ <br><br> $\\vec{b}$ length = $${vectorBMagnitudeColorValue}$ <br><br> Euclidean Distance = ${l2.toFixed(
+            return `$\\vec{a}$ length = $${vectorAMagnitudeColorValue}$ <br><br> $\\vec{b}$ length = $${vectorBMagnitudeColorValue}$ <br><br> Euclidean distance = ${l2.toFixed(
               2
-            )} <br><br> Cosine Similarity = $${cosineValueColorValue}$ = ${cosineFromDegrees} <br><br> Dot Product = $${dotProductColorValue} = ${dotProductCalculation}$`;
+            )} <br><br> Cosine similarity = $${cosineValueColorValue}$ = ${cosineFromDegrees} <br><br> Dot product = $${dotProductColorValue} = ${dotProductCalculation}$`;
           }
 
           if (this.showLabelOption == SIMPLE_LBL_BASIC_MULTI_DOT_PRODUCT_REPRESENTATIONS) {
