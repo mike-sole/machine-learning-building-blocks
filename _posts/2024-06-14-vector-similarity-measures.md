@@ -1,6 +1,6 @@
 ---
-title: "DRAFT: Vector Similarity Measures"
-date: "2024-06-05"
+title: "Vector Similarity Measures"
+date: "2024-06-14"
 image: "/assets/images/vector-similarity-measures.svg"
 ---
 
@@ -92,7 +92,7 @@ The following interactive chart allows both dot product calculations to be inspe
 
 
 
- When vectors are **normalised** - their magnitude (length) is scaled to equal 1 -  then the **dot product** represents the cosine between two vectors (resulting in the **Cosine Similarity** measure) e.g: 
+ When vectors are **normalised** - their magnitude (length) is scaled to equal 1 -  then the **dot product** represents the cosine between two vectors (resulting in the **cosine similarity** measure) e.g: 
   * **Dot product** = (length of vector $\vec{a}$) * (length of vector $\vec{b}$) * (cosine of angle between vector $\vec{a}$ and $\vec{b}$)
   * **Cosine similarity** with normalised vectors = 1 * 1 * (cosine of angle between vector $\vec{a}$ and $\vec{b}$)
 
@@ -142,7 +142,7 @@ Subtracting the **cosine similarity** from 1 results in a distance measure (**co
   <br>
 </div>
 
-The following chart allows us to compare the **cosine distance** against the **Euclidean distance** for **normliased vectors**. We can see that both increase and decrease together, although the relationship isn't linear, relative ordering between the two exists - the sorted order is consistent between the two. 
+The following chart allows us to compare the **cosine distance** against the **Euclidean distance** for **normalised vectors**. We can see that both increase and decrease together, although the relationship isn't linear, relative ordering between the two exists - the sorted order is consistent between the two. 
 
 <div id="html" markdown="0">
 
@@ -211,7 +211,7 @@ Similarity measures between each movie can be shown by a pairwise distance matri
 
 
 
-A pairwise distance matrix using the **Cosine Distance** follows for comparison: 
+A pairwise distance matrix using the **cosine distance** follows for comparison: 
 
 
 
@@ -233,7 +233,7 @@ From the above, the following statements are true when using either the **Euclid
 
 More specifically for our movie recommendation example, we can say that if someone enjoyed Movie A, then the most similar movie to recommend is Movie B followed by Movie C. 
 
-The rest of this intepretation section will explore a scenario where data is **not normalised**. Extending our movie recommendation scenario, say that the movie vector magnitude (length) represents a popularity score e.g. number of likes. The following graph shows Movie vectors which have varying popularity scores, where Movie B is the most popular and Movie C is the least popular with magnitudes (lengths) of 12.73 and 3.04 respectively:  
+The rest of this interpretation section will explore a scenario where data is **not normalised**. Extending our movie recommendation scenario, say that the movie vector magnitude (length) represents a popularity score e.g. number of likes. The following graph shows Movie vectors which have varying popularity scores, where Movie B is the most popular and Movie C is the least popular with magnitudes (lengths) of 12.73 and 3.04 respectively:  
 
 <div id="html" markdown="0">
 
@@ -300,7 +300,7 @@ Pairwise **dot product similarity** between movie vectors:
 
 With **dot product similarity**, a higher value represents a higher similarity. We can see that Movie B dominates similarity due to its high popularity value. E.g. the most similar movie to both Movie A and C is Movie B. 
 
-As a summary, this section has interpreted vector similarity measures with respct to a simplistic movie recommendation scenario. First we worked through a **normalised** scanario and then expanded the scenario to a **non normlaised** scenario. We can see that selecting the right vector similarity measure is an important consideration. 
+As a summary, this section has interpreted vector similarity measures with respect to a simplistic movie recommendation scenario. First we worked through a **normalised** scenario and then expanded the scenario to a **non-normalised** scenario. We can see that selecting the right vector similarity measure is an important consideration. 
 
 ## Code
 
