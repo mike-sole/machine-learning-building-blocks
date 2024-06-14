@@ -48,7 +48,7 @@ createPost "${postTitle}" "${postDate}" "${postImage}" "${notebookName}"
 
 postDate='2024-06-05'
 postTitle='DRAFT: Vector Similarity Measures'
-postImage='/assets/images/vector-similarity-measures.jpg'
+postImage='/assets/images/vector-similarity-measures.svg'
 notebookName='vector-similarity-measures'
 
 createPost "${postTitle}" "${postDate}" "${postImage}" "${notebookName}"
