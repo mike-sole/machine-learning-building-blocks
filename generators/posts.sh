@@ -55,6 +55,18 @@ createPost "${postTitle}" "${postDate}" "${postImage}" "${notebookName}"
 
 
 ############################################################
+# 3 - vector similarity measures 
+############################################################
+
+postDate='2024-06-17'
+postTitle='Neural Networks: Perceptron'
+postImage='/assets/images/vector-similarity-measures.svg'
+notebookName='nn-perceptron'
+
+createPost "${postTitle}" "${postDate}" "${postImage}" "${notebookName}"
+
+
+############################################################
 # clean up 
 ############################################################
 

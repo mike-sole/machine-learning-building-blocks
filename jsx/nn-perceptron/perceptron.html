@@ -45,43 +45,23 @@
   <body>
     <div id="html">
 
-      <!--
-
       <div
-      id="box"
-      class="box"
+      id="perceptron"
+      class="perceptron"
       style="width: 50%; aspect-ratio: 1 / 1"
     ></div>
 
-    <div
-      id="box2"
-      class="box2"
-      style="width: 50%; aspect-ratio: 1 / 1"
-    ></div>
 
-      -->
 
-    <div style="width: 100%; display: table;">
-      <div style="display: table-row">
-          <div style="width: 50%; display: table-cell;"> 
-            <div id="testUnitCircle" class="testUnitCircle" style="width: 100%; aspect-ratio : 1 / 1;"></div>
-          </div>
-          <div style="width: 50% display: table-cell;">
-          
-    <div id="testMetrics" class="testMetrics" style="width: 100%; aspect-ratio : 1 / 1;"></div>
-           </div>
-      </div>
-  </div>
 
-      <script src="../_includes/vector-similarity-measures/unit_circle_charts.js">
+      <script src="../../_includes/nn-perceptron/perceptron.js">
 
         
       </script>
       
       <script>
-        const board = new UnitCircleChart('test');
-        board.withCosineSimilarityMeasure(false);
-        board.withEuclideanDistanceMetric();
+        const perceptronChart = new PerceptronChart('perceptron');
+        
       </script>
 
 
