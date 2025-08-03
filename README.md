@@ -20,7 +20,7 @@ View the blog [here](https://mike-sole.github.io/machine-learning-building-block
 
 ## Development Tools
 
-Generate posts: `./generators/posts.sh`
+Generate posts: `. ./generators/posts.sh`
 
 
 Run dev server: `./run-local-dev.sh`
