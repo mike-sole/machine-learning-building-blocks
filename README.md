@@ -10,6 +10,6 @@ The blog is published via a GitHub Pages site using Jekyll ([minima](https://git
 
 ## Development Tools
 
-Run dev server: `./run-local-dev.sh`
+Run dev server: `. ./run-local-dev.sh`
 
 Generate posts: `. ./generators/posts.sh`
