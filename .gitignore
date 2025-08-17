@@ -43,3 +43,4 @@ venv
 
 /notebooks/*.md
 
+vendor
