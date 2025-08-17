@@ -59,7 +59,7 @@ createPost "${postTitle}" "${postDate}" "${postImage}" "${notebookName}"
 ############################################################
 
 postDate='2024-06-17'
-postTitle='Neural Networks: Perceptron'
+postTitle='Neural Networks: Perceptron (model)'
 postImage='/assets/images/vector-similarity-measures.svg'
 notebookName='nn-perceptron'
 

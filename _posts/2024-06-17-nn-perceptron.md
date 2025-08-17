@@ -1,5 +1,5 @@
 ---
-title: "Neural Networks: Perceptron"
+title: "Neural Networks: Perceptron (model)"
 date: "2024-06-17"
 image: "/assets/images/vector-similarity-measures.svg"
 ---
@@ -8,13 +8,22 @@ image: "/assets/images/vector-similarity-measures.svg"
 
 
 
-Neural Networks ... The perceptron ... 
+The perceptron is a foundational learning algorithm and the elementary building block of neural networks. Grasping its function is crucial for understanding how modern deep learning models work, which achieve state-of-the-art performance in fields like natural language processing and computer vision.
 
-Train / predict 
+Key properties of the perceptron:
+* **Classifier**: It produces a categorical output, predicting a class label like 'spam' or 'not spam'.
 
-The perceptron 
+* **Linear**: The model's decision boundary is a straight line, which means it can only separate data that is linearly separable.
 
-A previous blog post introduced the [weighted sum](https://mike-sole.github.io/machine-learning-building-blocks/2024/04/06/weighted-sum.html) (also known as the **dot product**)
+* **Supervised**: It learns from a labeled dataset, where the correct output for each input is provided during training.
+
+* **Weighted Sum**: 
+
+  * Calculates a weighted sum of inputs to predict an output label
+
+  * Learning involes learning the weights of the weighted sum 
+
+  * A previous blog post introduced the [weighted sum](https://mike-sole.github.io/machine-learning-building-blocks/2024/04/06/weighted-sum.html)
 
 <div id="html" markdown="0">
 
