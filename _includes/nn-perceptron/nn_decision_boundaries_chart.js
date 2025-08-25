@@ -59,14 +59,17 @@ class Chart {
       name: `\\[ b \\]`,
     });
 
-    this.addPoint(3.0, 5.0, "action");
-    this.addPoint(1.6, 3.6, "action");
-    this.addPoint(1, 2.5, "action");
-    this.addPoint(1.2, 4, "action");
+    this.addPoint(3.0, 5.0, "\\text{spam}");
+    this.addPoint(1.6, 3.6, "\\text{spam}");
+    this.addPoint(1, 2.5, "\\text{spam}");
+    this.addPoint(1.2, 4, "\\text{spam}");
+    this.addPoint(-4.75, 3.2, "\\text{spam}");
+    this.addPoint(-4, 2.8, "\\text{spam}");
+    this.addPoint(-4.5, 2.1, "\\text{spam}");
 
-    this.addPoint(5, 4, "comedy");
-    this.addPoint(4, 3.5, "comedy");
-    this.addPoint(4.75, 2.5, "comedy");
+    this.addPoint(5, 4, "\\text{not spam}");
+    this.addPoint(4, 3.5, "\\text{not spam}");
+    this.addPoint(4.75, 2.5, "\\text{not spam}");
 
     this.bias.on("drag", (e, i) => this.updateBias());
     this.weightVector.on("drag", (e, i) => this.updateWeightVec());

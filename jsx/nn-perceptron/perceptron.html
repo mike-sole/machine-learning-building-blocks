@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+
+  <style>
+    body {
+      background-color: #fdfdfd;
+    }
+  </style>
+
     <meta charset="UTF-8" />
     <title>JSXGraph template</title>
 
@@ -48,22 +55,27 @@
       <div
       id="perceptron"
       class="perceptron"
-      style="width: 50%; aspect-ratio: 1 / 1"
+      style="width: 80%; aspect-ratio: 1 / 1"
     ></div>
 
+      <div
+      id="perceptron-decision-boundary"
+      class="perceptron-decision-boundary"
+      style="width: 80%; aspect-ratio: 1 / 1"
+    ></div>
 
+      <script src="../../_includes/nn-perceptron/perceptron.js"></script>
 
-
-      <script src="../../_includes/nn-perceptron/perceptron.js">
-
-        
-      </script>
+      <script src="../../_includes/vector-similarity-measures/utils.js"></script>
+      <script src="../../_includes/nn-perceptron/nn_decision_boundaries_chart.js"></script>
       
       <script>
         const perceptronChart = new PerceptronChart('perceptron');
-        
       </script>
 
+      <script>
+        new Chart("perceptron-decision-boundary");
+      </script>
 
     </div>
   </body>
