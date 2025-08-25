@@ -1,7 +1,7 @@
 ---
 title: "Neural Networks: Perceptron (model)"
 date: "2024-06-17"
-image: "/assets/images/vector-similarity-measures.svg"
+image: "/assets/images/perceptron-decision-boundary.svg"
 ---
 
 
@@ -19,11 +19,13 @@ Key properties of the perceptron:
 
 * **Weighted Sum**: 
 
-  * Calculates a weighted sum of inputs to predict an output label
+  * Calculates a weighted sum of inputs followed by a threshold function to predict an output label
 
   * Learning involes learning the weights of the weighted sum 
 
   * A previous blog post introduced the [weighted sum](https://mike-sole.github.io/machine-learning-building-blocks/2024/04/06/weighted-sum.html)
+
+
 
 <div id="html" markdown="0">
 

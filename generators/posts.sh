@@ -60,7 +60,7 @@ createPost "${postTitle}" "${postDate}" "${postImage}" "${notebookName}"
 
 postDate='2024-06-17'
 postTitle='Neural Networks: Perceptron (model)'
-postImage='/assets/images/vector-similarity-measures.svg'
+postImage='/assets/images/perceptron-decision-boundary.svg'
 notebookName='nn-perceptron'
 
 createPost "${postTitle}" "${postDate}" "${postImage}" "${notebookName}"
