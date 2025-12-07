@@ -19,27 +19,24 @@ Key properties of the perceptron:
 
 * **Weighted Sum**: 
 
-  * Calculates a weighted sum of inputs followed by a threshold function to predict an output label
+  * The perceptron mdoel is a weighted sum followed by a threshold, a previous blog post introduced the [weighted sum](https://mike-sole.github.io/machine-learning-building-blocks/2024/04/06/weighted-sum.html)
 
-  * Learning involes learning the weights of the weighted sum 
+A perceptron is represented by a vector. This vector is called a weight vector. 
+* During training, weights are learnt to separate data into two classes 
+* During inference, the weighted sum is calculated between the weight vector and an input vector followed by a threshold to assign a class label 
 
-  * A previous blog post introduced the [weighted sum](https://mike-sole.github.io/machine-learning-building-blocks/2024/04/06/weighted-sum.html)
+This blog post focuses on the perceptron model and inference, a following blog post will focus on training the model. 
 
+The weighted sum (dot product) between two vectors has the following properties:
+* positive if the angle between the vectors is < 90 degrees
+* 0 if the angle between the vectors is 90 degrees
+* negative if the angle between the vectors is > 90 degrees
 
-
-<div id="html" markdown="0">
-
-  <div id="perceptron-chart" class="perceptron-chart" style="width: 75%; aspect-ratio : 1 / 1;"></div>
-
-  <script>
-
-    {% include nn-perceptron/perceptron.js %}
-
-    const perceptronChart = new PerceptronChart('perceptron-chart');
-        
-  </script>
-  <br>
-</div>
+Given that the weighted sum (dot product) between two vectors is 0 when the angle between them is 90 degrees, geometrically a decision boundary perpendicular to the weight vector is defined. This decision boundary can be thought of as the threshold function, if an input vector has a weighted sum (dot product) value >= 0 then it is assigned one class label, otherwise it is assigned the other. The interactive graph below visualises this: 
+* $\vec{w}$ is the weight vector 
+* red and blue points represent input vectors, each one has a label which shows the weighted sum (dot product) with the weight vector
+* the dashed line is the decision boundary, input vector points are colored red or blue depending on which side of the decision boundary they lie
+* the weight vector can be dragged around which in turn moves the decision boundary 
 
 <div id="html" markdown="0">
 
@@ -50,7 +47,7 @@ Key properties of the perceptron:
 
     {% include nn-perceptron/nn_decision_boundaries_chart.js %}
 
-    new Chart("perceptron-decision-boundary");
+    createFirstExampleChart("perceptron-decision-boundary");
   </script>
   <br>
 </div>

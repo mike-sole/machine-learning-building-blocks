@@ -6,10 +6,12 @@ const MATHS_EQUATIONS = 3;
 JXG.Options.text.useMathJax = true;
 
 class Chart {
-  constructor(name, showLabelOption) {
+  constructor(name, showLabelOption, classOnePoints, classTwoPoints, showBias) {
+
     this.showLabelOption = showLabelOption;
 
-    this.points = [];
+    this.classOnePoints = [];
+    this.classTwoPoints = [];
 
     this.board = JXG.JSXGraph.initBoard(name, {
       boundingbox: [-6, 6, 6, -6],
@@ -27,6 +29,7 @@ class Chart {
       [this.weightVectorX, this.weightVectorY],
       {
         face: "o",
+        color: "green",
         size: 2,
         name: `\\[ \\vec{w} \\]`,
       }
@@ -54,27 +57,27 @@ class Chart {
       }
     );
 
+    classOnePoints.forEach((pt) => this.addPoint(0, pt.x, pt.y, `\\text{${pt.label}}`));
+    classTwoPoints.forEach((pt) => this.addPoint(1, pt.x, pt.y, `\\text{${pt.label}}`));
+
     this.bias = this.board.create("glider", [invisibleWeightVectorLine], {
       size: 2,
+      visible: showBias,
       name: `\\[ b \\]`,
     });
 
-    this.addPoint(3.0, 5.0, "\\text{spam}");
-    this.addPoint(1.6, 3.6, "\\text{spam}");
-    this.addPoint(1, 2.5, "\\text{spam}");
-    this.addPoint(1.2, 4, "\\text{spam}");
-    this.addPoint(-4.75, 3.2, "\\text{spam}");
-    this.addPoint(-4, 2.8, "\\text{spam}");
-    this.addPoint(-4.5, 2.1, "\\text{spam}");
+    if(showBias) {
+      this.bias.on("drag", (e, i) => this.updateBias());
+    }
 
-    this.addPoint(5, 4, "\\text{not spam}");
-    this.addPoint(4, 3.5, "\\text{not spam}");
-    this.addPoint(4.75, 2.5, "\\text{not spam}");
-
-    this.bias.on("drag", (e, i) => this.updateBias());
     this.weightVector.on("drag", (e, i) => this.updateWeightVec());
 
-    this.board.create("perpendicular", [invisibleWeightVectorLine, this.bias]);
+    this.board.create("perpendicular", [invisibleWeightVectorLine, this.bias],
+      {
+        strokeWidth: 3, 
+        dash: 2
+      }
+    );
 
     this.board.create("arrow", [this.bias, this.weightVector], {
       fixed: true,
@@ -111,7 +114,7 @@ class Chart {
   }
 
   updatePointClassifications() {
-    this.points.forEach((pt) => {
+    this.classOnePoints.forEach((pt) => {
       
       const dotProduct =
         this.weightVector.X() * (pt.X() - this.bias.X()) +
@@ -120,10 +123,27 @@ class Chart {
       dotProduct >= 0
         ? pt.setAttribute({ color: "red" })
         : pt.setAttribute({ color: "blue" });
+
+      pt.setAttribute({ name: `${dotProduct.toFixed(2)}` });
+
+    });
+
+    this.classTwoPoints.forEach((pt) => {
+      
+      const dotProduct =
+        this.weightVector.X() * (pt.X() - this.bias.X()) +
+        this.weightVector.Y() * (pt.Y() - this.bias.Y());
+      
+      dotProduct >= 0
+        ? pt.setAttribute({ color: "red" })
+        : pt.setAttribute({ color: "blue" });
+
+      pt.setAttribute({ name: `${dotProduct.toFixed(2)}` });
+
     });
   }
 
-  addPoint(x, y, name) {
+  addPoint(classLbl, x, y, name) {
     const pt = this.board.create("point", [x, y], {
       face: "o",
       size: 2,
@@ -132,6 +152,48 @@ class Chart {
 
     pt.on("drag", (e, i) => this.updatePointClassifications());
 
-    this.points.push(pt);
+    if(classLbl === 0) {
+      this.classOnePoints.push(pt);
+    } else {
+      this.classTwoPoints.push(pt);
+    }
   }
+}
+
+function createPoint(x, y, label) {
+  return { x: x, y: y, label: label };
+}
+
+function createFirstExampleChart(name, showLabelOption) {
+
+    const showBias = false;
+
+    const classOnePoints = [
+      createPoint(3.0, 5.0, "spam"),
+      createPoint(1, 2.5, "spam"),
+      createPoint(1.2, 4, "spam"),
+      createPoint(-4.75, 3.2, "spam"),
+      createPoint(-4, 2.8, "spam"),
+      createPoint(-4.5, 2.1, "spam"),
+    ];
+    
+    const classTwoPoints = [
+      createPoint(5, 4, "not spam"),
+      createPoint(4, 3.5, "not spam"),
+      createPoint(4.75, 2.5, "not spam"),
+      createPoint(-2, -2.2, "not spam"),
+      createPoint(-3, -2.75, "not spam"),
+      createPoint(-1.75, -3.67, "not spam"),
+    ];
+
+  return new Chart(
+    name, 
+    showLabelOption,
+    classOnePoints,
+    classTwoPoints,
+    showBias);
+}
+
+function createSecondExampleChart(name, showLabelOption) {
+  return new Chart(name, showLabelOption);
 }
