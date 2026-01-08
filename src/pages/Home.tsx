@@ -44,7 +44,7 @@ export const Home: React.FC = () => {
                                 <div className="post-thumbnail-container">
                                     <Link to={`/post/${post.id}`}>
                                         <img
-                                            src={post.thumbnail}
+                                            src={post.thumbnail.startsWith('/') ? import.meta.env.BASE_URL + post.thumbnail.slice(1) : post.thumbnail}
                                             alt={post.title}
                                             className="post-thumbnail"
                                         />
