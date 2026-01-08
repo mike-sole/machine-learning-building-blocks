@@ -5,7 +5,7 @@ import { Post } from './pages/Post';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/machine-learning-building-blocks">
       <Routes>
         <Route path="/" element={<Layout />}>
           {/* This line was likely a malformed comment or an attempt to remove a line.
