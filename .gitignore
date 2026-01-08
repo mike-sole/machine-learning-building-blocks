@@ -44,3 +44,13 @@ venv
 /notebooks/*.md
 
 vendor
+# Node
+node_modules
+dist
+dist-ssr
+*.local
+
+# Testing
+playwright-report/
+test-results/
+.vite
