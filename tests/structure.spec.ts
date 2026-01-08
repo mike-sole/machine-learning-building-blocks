@@ -3,10 +3,10 @@ import { test, expect } from '@playwright/test';
 const posts = [
     {
         name: 'post-vector-similarity',
-        path: '/post/vector-similarity-measures',
+        path: '/machine-learning-building-blocks/post/vector-similarity-measures',
         checks: async (page) => {
             // 1. Verify "Movies ordered by distance" list is flat
-            const movieAListItem = page.getByText('Movies ordered by distance from Movie A', { exact: false });
+            const movieAListItem = page.locator('li').filter({ hasText: 'Movies ordered by distance from Movie A' }).first();
             await expect(movieAListItem).toBeVisible();
 
             // 2. Verify Paragraphs are NOT code blocks
@@ -32,10 +32,10 @@ const posts = [
     },
     {
         name: 'post-weighted-sum',
-        path: '/post/weighted-sum',
+        path: '/machine-learning-building-blocks/post/weighted-sum',
         checks: async (page) => {
             // Check for correct list rendering
-            await expect(page.getByText('Action: 10 / 10', { exact: false }).first()).toBeVisible();
+            await expect(page.locator('li').filter({ hasText: 'Action: 10 / 10' }).first()).toBeVisible();
 
             // Check for block math presence
             await expect(page.getByRole('heading', { name: 'Maths Notations' })).toBeVisible();
@@ -47,11 +47,11 @@ const posts = [
     },
     {
         name: 'post-matrix-multiplication',
-        path: '/post/matrix-multiplication',
+        path: '/machine-learning-building-blocks/post/matrix-multiplication',
         checks: async (page) => {
             // Check for list items
-            await expect(page.getByText('Mike:', { exact: false }).first()).toBeVisible();
-            await expect(page.getByText('Sienna:', { exact: false }).first()).toBeVisible();
+            await expect(page.locator('li').filter({ hasText: /Mike\s*:/ }).first()).toBeVisible();
+            await expect(page.locator('li').filter({ hasText: /Sienna\s*:/ }).first()).toBeVisible();
 
             // Bold text in lists
             await expect(page.locator('strong').filter({ hasText: /^Weighted sum$/ }).first()).toBeVisible();
@@ -63,12 +63,12 @@ const posts = [
     },
     {
         name: 'post-perceptron-model',
-        path: '/post/the-perceptron-model',
+        path: '/machine-learning-building-blocks/post/the-perceptron-model',
         checks: async (page) => {
             // Check lists
-            await expect(page.getByText('Should I watch this movie? (Yes / No)', { exact: false })).toBeVisible();
+            await expect(page.locator('li').filter({ hasText: 'Should I watch this movie' }).first()).toBeVisible();
             // Removed "1." list marker
-            await expect(page.getByText('Weighted Sum: Aggregates the inputs.', { exact: false })).toBeVisible();
+            await expect(page.locator('li').filter({ hasText: 'Weighted Sum: Aggregates the inputs' }).first()).toBeVisible();
 
             // Bold text
             await expect(page.locator('strong').filter({ hasText: /^Perceptron$/ }).first()).toBeVisible();
@@ -81,11 +81,11 @@ const posts = [
     },
     {
         name: 'post-training-perceptron',
-        path: '/post/training-the-perceptron',
+        path: '/machine-learning-building-blocks/post/training-the-perceptron',
         checks: async (page) => {
             // Check lists
             // Removed "1." list marker
-            await expect(page.getByText('Initialise:', { exact: false })).toBeVisible();
+            await expect(page.locator('li').filter({ hasText: 'Initialise:' }).first()).toBeVisible();
 
             // Bold text
             await expect(page.locator('strong').filter({ hasText: /^Perceptron Learning Algorithm$/ }).first()).toBeVisible();
