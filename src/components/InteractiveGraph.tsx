@@ -17,8 +17,15 @@ export const InteractiveGraph: React.FC<InteractiveGraphProps> = ({ id }) => {
     const boardRef = useRef<JXG.Board | null>(null);
     const board2Ref = useRef<JXG.Board | null>(null);
 
+    const [logs, setLogs] = React.useState<string[]>([]);
+    const [actions, setActions] = React.useState<Record<string, () => void>>({});
+
     useEffect(() => {
         if (!containerRef.current) return;
+
+        // Reset state on id change
+        setLogs([]);
+        setActions({});
 
         // Enable MathJax
         JXG.Options.text.useMathJax = true;
@@ -107,7 +114,7 @@ export const InteractiveGraph: React.FC<InteractiveGraphProps> = ({ id }) => {
             };
 
             // Call multi-board initializer
-            (initGraph as any)([board, board2]);
+            (initGraph as any)([board, board2], setLogs, setActions);
 
             // Re-run MathJax for both boards, with a small delay to ensuring DOM is ready
             const MathJax = (window as any).MathJax;
@@ -129,7 +136,7 @@ export const InteractiveGraph: React.FC<InteractiveGraphProps> = ({ id }) => {
             });
         } else {
             // Single board initialization
-            (initGraph as any)(board);
+            (initGraph as any)(board, setLogs, setActions);
 
             // Re-run MathJax
             const MathJax = (window as any).MathJax;
@@ -164,9 +171,65 @@ export const InteractiveGraph: React.FC<InteractiveGraphProps> = ({ id }) => {
 
     const containerStyle = (graphEntry && typeof graphEntry === 'object' && 'containerStyle' in graphEntry) ? graphEntry.containerStyle : {};
 
-    if (isMultiBoard) {
-        return (
-            <div className="w-full my-8 px-4" style={{ display: 'flex', justifyContent: 'center' }}>
+    return (
+        <div style={{
+            width: '100%',
+            margin: '32px 0',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: '0 16px'
+        }}>
+            {/* Actions (Buttons) */}
+            {Object.keys(actions).length > 0 && (
+                <div style={{ display: 'flex', gap: '24px', marginBottom: '24px', flexWrap: 'wrap', justifyContent: 'center' }}>
+                    {Object.entries(actions).map(([label, action]) => (
+                        <button
+                            key={label}
+                            onClick={action}
+                            style={{
+                                padding: '8px 24px',
+                                backgroundColor: '#2563eb',
+                                color: 'white',
+                                borderRadius: '8px',
+                                border: 'none',
+                                cursor: 'pointer',
+                                fontSize: '0.875rem',
+                                fontWeight: 600,
+                                boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                                transition: 'background-color 0.2s'
+                            }}
+                            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#1d4ed8')}
+                            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#2563eb')}
+                        >
+                            {label}
+                        </button>
+                    ))}
+                </div>
+            )}
+
+            {/* Logs */}
+            {logs.length > 0 && (
+                <div style={{
+                    width: '100%',
+                    maxWidth: '700px',
+                    marginBottom: '32px',
+                    padding: '16px',
+                    backgroundColor: '#f9fafb',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '8px',
+                    fontSize: '0.875rem',
+                    fontFamily: 'monospace',
+                    overflowX: 'auto',
+                    boxShadow: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)'
+                }}>
+                    {logs.map((log, i) => (
+                        <div key={i} style={{ marginBottom: '4px' }} dangerouslySetInnerHTML={{ __html: log || '&nbsp;' }} />
+                    ))}
+                </div>
+            )}
+
+            {isMultiBoard ? (
                 <div style={{
                     display: 'flex',
                     flexDirection: 'row',
@@ -187,20 +250,13 @@ export const InteractiveGraph: React.FC<InteractiveGraphProps> = ({ id }) => {
                         style={{ flex: '1 1 0', minWidth: '300px', maxWidth: '500px', aspectRatio: '1 / 1', border: '1px solid #eee', borderRadius: '8px' }}
                     />
                 </div>
-            </div>
-        );
-    }
-
-
-
-
-    return (
-        <div className="w-full my-8 flex justify-center px-4 sm:px-0" style={{ display: 'flex', justifyContent: 'center' }}>
-            <div
-                ref={containerRef}
-                className="jxgbox"
-                style={{ width: '100%', maxWidth: '700px', aspectRatio: '1 / 1', border: '1px solid #eee', borderRadius: '8px', ...containerStyle }}
-            />
+            ) : (
+                <div
+                    ref={containerRef}
+                    className="jxgbox"
+                    style={{ width: '100%', maxWidth: '700px', aspectRatio: '1 / 1', border: '1px solid #eee', borderRadius: '8px', ...containerStyle }}
+                />
+            )}
         </div>
     );
 };

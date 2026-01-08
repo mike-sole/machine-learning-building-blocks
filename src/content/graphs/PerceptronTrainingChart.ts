@@ -31,15 +31,39 @@ export class PerceptronTrainingChart {
     debugLines: any[] = [];
     debugInfo: string[] = ["Ready to train."];
 
-    constructor(board: JXG.Board, data: PointData[]) {
+    // Callbacks for external interaction
+    onLogUpdate?: (logs: string[]) => void;
+    onRegisterActions?: (actions: Record<string, () => void>) => void;
+
+    constructor(
+        board: JXG.Board,
+        data: PointData[],
+        onLogUpdate?: (logs: string[]) => void,
+        onRegisterActions?: (actions: Record<string, () => void>) => void
+    ) {
         this.board = board;
         this.data = data;
+        this.onLogUpdate = onLogUpdate;
+        this.onRegisterActions = onRegisterActions;
 
         // Initialize with weights and bias that place the anchor at (0.5, -0.5)
         this.weights = { x: 1, y: -1 };
         this.bias = -1;
 
         this.initVisuals();
+
+        // Register Actions
+        if (this.onRegisterActions) {
+            this.onRegisterActions({
+                'Train Step': () => this.trainStep(),
+                'Reset': () => this.reset()
+            });
+        }
+
+        // Initial log update
+        if (this.onLogUpdate) {
+            this.onLogUpdate(this.debugInfo);
+        }
     }
 
     initVisuals() {
@@ -229,41 +253,7 @@ export class PerceptronTrainingChart {
             useMathJax: false
         });
 
-        // 6. Debug / Stats Text (Multiline)
-        const startY = 5.1; // Adjusted slightly up to fit more lines
-        const standardHeight = 0.35;
-        const shortHeight = 0.1;
 
-        // Function to calculate Y position dynamically based on empty gaps
-        const getY = (index: number) => {
-            let y = startY;
-            for (let j = 0; j < index; j++) {
-                // If a line is empty, it's a gap - use shortHeight
-                const height = (this.debugInfo[j] === '') ? shortHeight : standardHeight;
-                y -= height;
-            }
-            return y;
-        };
-
-        for (let i = 0; i < 17; i++) {
-            this.board.create('text', [-5.7, () => getY(i), () => this.debugInfo[i] || ''], {
-                fontSize: 10,
-                fixed: true,
-                fontFamily: 'Courier New',
-                display: 'html', // Use HTML for colored spans
-                useMathJax: false
-            });
-        }
-
-        // 7. Buttons at the top
-        this.board.create('button', [-5.7, 5.6, 'Train Step', () => this.trainStep()], {
-            cssClass: 'my-button',
-            fixed: true
-        });
-
-        this.board.create('button', [-4.4, 5.6, 'Reset', () => this.reset()], {
-            fixed: true
-        });
     }
 
     trainStep() {
@@ -353,6 +343,11 @@ export class PerceptronTrainingChart {
             ];
         }
 
+        // Notify via callback
+        if (this.onLogUpdate) {
+            this.onLogUpdate(this.debugInfo);
+        }
+
         // Move to next point
         this.currentIndex = (this.currentIndex + 1) % this.data.length;
 
@@ -366,6 +361,11 @@ export class PerceptronTrainingChart {
         this.isConverged = false;
         this.currentPointHighlight.setAttribute({ visible: false });
         this.debugInfo = ["Reset. Ready to train."];
+
+        if (this.onLogUpdate) {
+            this.onLogUpdate(this.debugInfo);
+        }
+
         this.board.update();
     }
 }

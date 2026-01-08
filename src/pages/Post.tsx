@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams, Navigate } from 'react-router-dom';
+import { useParams, Navigate, Link } from 'react-router-dom';
 import { posts } from '../content/posts';
 // import type { ContentBlock } from '../content/posts';
 import { InteractiveGraph } from '../components/InteractiveGraph';
@@ -116,7 +116,7 @@ export const Post: React.FC = () => {
             {/* Navigation Footer */}
             <div className="mt-16 pt-8 border-t border-gray-200">
                 <div className="flex justify-between items-center">
-                    <a href="/" className="text-blue-600 font-medium hover:underline">← Back to Posts</a>
+                    <Link to="/" className="text-blue-600 font-medium hover:underline">← Back to Posts</Link>
                 </div>
             </div>
 
