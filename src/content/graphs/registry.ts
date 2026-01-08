@@ -4,8 +4,17 @@ import { PerceptronChart } from './PerceptronChart';
 import { PerceptronTrainingChart } from './PerceptronTrainingChart';
 import * as h from './helpers';
 
-export type GraphInitializer = (board: JXG.Board) => void;
-export type MultiGraphInitializer = (boards: JXG.Board[]) => void;
+export type GraphInitializer = (
+    board: JXG.Board,
+    onLogUpdate?: (logs: string[]) => void,
+    onRegisterActions?: (actions: Record<string, () => void>) => void
+) => void;
+
+export type MultiGraphInitializer = (
+    boards: JXG.Board[],
+    onLogUpdate?: (logs: string[]) => void,
+    onRegisterActions?: (actions: Record<string, () => void>) => void
+) => void;
 
 export interface GraphConfig {
     initializer: GraphInitializer | MultiGraphInitializer;
@@ -463,7 +472,11 @@ const registry: Record<string, GraphInitializer | GraphConfig> = {
                 button: false // Disable the default zoom/pan buttons to keep it clean
             }
         },
-        initializer: (board: JXG.Board) => {
+        initializer: (
+            board: JXG.Board,
+            onLogUpdate?: (logs: string[]) => void,
+            onRegisterActions?: (actions: Record<string, () => void>) => void
+        ) => {
             const data = [
                 { x: 4.0, y: 5.0, label: "spam", class: 1 },
                 { x: 5.0, y: 4.0, label: "spam", class: 1 },
@@ -474,7 +487,7 @@ const registry: Record<string, GraphInitializer | GraphConfig> = {
                 { x: 1.0, y: 2.0, label: "not spam", class: 0 },
             ];
 
-            new PerceptronTrainingChart(board, data);
+            new PerceptronTrainingChart(board, data, onLogUpdate, onRegisterActions);
         }
     } as GraphConfig
 };
