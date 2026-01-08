@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test';
 
 const pages = [
-    { name: 'home', path: '/' },
-    { name: 'post-weighted-sum', path: '/post/weighted-sum' },
-    { name: 'post-matrix-multiplication', path: '/post/matrix-multiplication' },
-    { name: 'post-vector-similarity', path: '/post/vector-similarity-measures' },
-    { name: 'post-perceptron-model', path: '/post/the-perceptron-model' },
-    { name: 'post-training-perceptron', path: '/post/training-the-perceptron' },
+    { name: 'home', path: '/machine-learning-building-blocks/' },
+    { name: 'post-weighted-sum', path: '/machine-learning-building-blocks/post/weighted-sum' },
+    { name: 'post-matrix-multiplication', path: '/machine-learning-building-blocks/post/matrix-multiplication' },
+    { name: 'post-vector-similarity', path: '/machine-learning-building-blocks/post/vector-similarity-measures' },
+    { name: 'post-perceptron-model', path: '/machine-learning-building-blocks/post/the-perceptron-model' },
+    { name: 'post-training-perceptron', path: '/machine-learning-building-blocks/post/training-the-perceptron' },
 ];
 
 for (const { name, path } of pages) {
