@@ -20,9 +20,6 @@ concurrency:
 jobs:
   # Single deploy job since we're just building
   deploy:
-    environment:
-      name: 'github-pages'
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -40,7 +37,9 @@ jobs:
       - name: Build
         # Passing base URL here so local dev remains clean (at root)
         # while production build gets the correct repo subpath.
-        run: npm run build -- --base=/machine-learning-building-blocks/
+        run: |
+          npm run build -- --base=/machine-learning-building-blocks/
+          touch dist/.nojekyll
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
