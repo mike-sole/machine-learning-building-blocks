@@ -41,11 +41,11 @@ Mike needs a **Yes / No** decision. Let's set his threshold to **150**:
   * **Movie A:** Watch 
   * **Movie B:** Skip
 
-**The Standardization Trick**: Computers process data faster when comparing numbers to **0**. Instead of asking *"Is score > 150?"*, we shift the starting line back by 150. This shift is the Bias (-150).
+**The Bias Trick**: Computers process data faster when comparing numbers to **0**. Instead of asking *"Is score > 150?"*, we shift the starting line back by 150. This shift is the Bias (-150).
   * **Old Rule:** Reach 150.
   * **New Rule:** Start at (-150), then reach **0**.
 
-Both methods give the exact same result, but the **Bias** method allows every neuron to use the same universal check: **Is the result positive?**. To make the math elegant, we treat the Bias as just another weight. We add an invisible input feature with its value set to **1**, its corresponding weight is the bias weight. 
+Both methods give the exact same result, but the **Bias Trick** allows every neuron to use the same universal check: **Is the result positive?**. To make the math elegant, we treat the Bias as just another weight. We add an invisible input feature with its value set to **1**, its corresponding weight is the bias weight. 
 
 **Movie A:** 
   * Features: High Action (<span style="color:#E74C3C; font-weight:bold;">30</span>), Mid Comedy (<span style="color:#27AE60; font-weight:bold;">45</span>), Bias Feature (<span style="color:#3498DB; font-weight:bold;">1</span>)
@@ -122,7 +122,7 @@ $$
 z = w \cdot x + b
 $$
 
-**Note:** In our code, we performed the "Standardization Trick," effectively combining $w$ and $b$ into a single vector operation.
+**Note:** In our code, we performed the "Bias Trick," effectively combining $w$ and $b$ into a single vector operation.
 
 The activation(Step Function):
 $$

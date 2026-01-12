@@ -21,7 +21,7 @@ This interactive chart shows exactly how a **Perceptron** learns to separate dat
 
 Why use a **Learning Rate**? It acts as a "speed limit" for learning. Instead of adding the full input vector (which might cause the line to swing wildly), we only add a small fraction of it (e.g., $\eta = 0.05$ used by the interactive chart). This ensures the model learns the general trend rather than overreacting to a single point.
 
-Note: to clearly demonstrate the bias, we do not use the **Standardization Trick** here (where the bias is combined with the weights, as highlighted in the [previous post](/post/the-perceptron-model)).
+Note: to clearly demonstrate the bias, we do not use the **Bias Trick** here (where the bias is combined with the weights, as highlighted in the [previous post](/post/the-perceptron-model)).
 
 ```graph
 perceptron-training
