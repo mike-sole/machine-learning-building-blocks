@@ -234,7 +234,7 @@ export class MLPDecisionBoundariesChart {
         // Grid Lines
         for (let x = Math.ceil(minX); x <= Math.floor(maxX); x += step) {
             if (x === 0) continue;
-            const [vx, vy_center] = map(x, (minY + maxY) / 2);
+            const [vx] = map(x, (minY + maxY) / 2);
             const dx = Math.abs(vx - cx);
             if (dx < r) {
                 const dy = Math.sqrt(r * r - dx * dx);
@@ -246,7 +246,7 @@ export class MLPDecisionBoundariesChart {
 
         for (let y = Math.ceil(minY); y <= Math.floor(maxY); y += step) {
             if (y === 0) continue;
-            const [vx_center, vy] = map((minX + maxX) / 2, y);
+            const [, vy] = map((minX + maxX) / 2, y);
             const dy = Math.abs(vy - cy);
             if (dy < r) {
                 const dx = Math.sqrt(r * r - dy * dy);
@@ -299,7 +299,7 @@ export class MLPDecisionBoundariesChart {
         return { map, unmap, cx, cy, scaleX, scaleY, circle, r };
     }
 
-    setupInteractiveNeuron(view: any, initialState: WeightState, clipRadius: number, dataPoints?: any[], incomingWeightLabels?: any[], biasLabel?: any, onUpdate?: (w: Vector2, b: number) => void) {
+    setupInteractiveNeuron(view: any, initialState: WeightState, _clipRadius: number, dataPoints?: any[], incomingWeightLabels?: any[], biasLabel?: any, onUpdate?: (w: Vector2, b: number) => void) {
         let weights = { ...initialState.w };
         let bias = initialState.b;
 
@@ -353,11 +353,11 @@ export class MLPDecisionBoundariesChart {
             fixed: true
         });
 
-        const distanceLabel = this.board.create('text', [0, 0, ''], {
+        const distanceLabel: any = this.board.create('text', [0, 0, ''], {
             anchorX: 'right', anchorY: 'bottom', fontSize: 10, strokeColor: 'purple', fontWeight: 'bold', fixed: true
         });
 
-        const weightLabel = this.board.create('text', [0, 0, ''], {
+        const weightLabel: any = this.board.create('text', [0, 0, ''], {
             fontSize: 10, useMathJax: false, display: 'html', fixed: true
         });
 
