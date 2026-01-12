@@ -5,6 +5,9 @@ import { vectorSimilarityPost } from './blog/003-vector-similarity-measures';
 import { thePerceptronModelPost } from './blog/004-the-perceptron-model';
 import { trainingThePerceptronPost } from './blog/005-training-the-perceptron';
 
+import { multiLayeredPerceptronPost } from './blog/006-the-multi-layered-perceptron';
+import { trainingMultiLayeredPerceptronPost } from './blog/007-training-the-multi-layered-perceptron';
+
 export * from './types';
 
 export const posts: BlogPost[] = [
@@ -12,5 +15,7 @@ export const posts: BlogPost[] = [
     matrixMultiplicationPost,
     vectorSimilarityPost,
     thePerceptronModelPost,
-    trainingThePerceptronPost
+    trainingThePerceptronPost,
+    multiLayeredPerceptronPost
+    // trainingMultiLayeredPerceptronPost
 ];

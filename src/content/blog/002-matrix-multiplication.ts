@@ -6,6 +6,6 @@ export const matrixMultiplicationPost: BlogPost = {
     title: 'Matrix Multiplication',
     date: 'Apr 24, 2024',
     description: 'Building upon the Weighted Sum operation, matrix multiplication calculates a collection of weighted sums in a single, powerful step.',
-    thumbnail: "/thumbnails/matrix_multiplication_thumbnail_1767562255496.png",
+    thumbnail: "/thumbnails/matrix-multiplication-detailed.png",
     content
 };
