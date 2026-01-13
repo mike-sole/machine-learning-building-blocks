@@ -15,7 +15,9 @@ import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 export const Post: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const post = posts.find(p => p.id === id);
+    // Handle the .html extension if present in the URL parameter
+    const cleanId = id?.replace(/\.html$/, '');
+    const post = posts.find(p => p.id === cleanId);
 
     useEffect(() => {
         window.scrollTo(0, 0);

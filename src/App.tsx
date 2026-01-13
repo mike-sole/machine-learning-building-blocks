@@ -12,7 +12,7 @@ function App() {
                 The original routes are restored to maintain functionality.
                 If you intended to remove specific routes, please provide a clearer instruction. */}
           <Route index element={<Home />} />
-          <Route path="post/:id" element={<Post />} />
+          <Route path=":year/:month/:day/:id" element={<Post />} />
         </Route>
       </Routes>
     </Router>

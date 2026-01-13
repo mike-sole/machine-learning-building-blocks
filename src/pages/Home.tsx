@@ -42,7 +42,7 @@ export const Home: React.FC = () => {
                         <div className="post-card-container">
                             {post.thumbnail && (
                                 <div className="post-thumbnail-container">
-                                    <Link to={`/post/${post.id}`}>
+                                    <Link to={`/${new Date(post.date).getFullYear()}/${String(new Date(post.date).getMonth() + 1).padStart(2, '0')}/${String(new Date(post.date).getDate()).padStart(2, '0')}/${post.id}.html`}>
                                         <img
                                             src={post.thumbnail.startsWith('/') ? import.meta.env.BASE_URL + post.thumbnail.slice(1) : post.thumbnail}
                                             alt={post.title}
@@ -53,7 +53,7 @@ export const Home: React.FC = () => {
                             )}
                             <div className="post-content">
                                 <h2 className="post-title">
-                                    <Link to={`/post/${post.id}`}>
+                                    <Link to={`/${new Date(post.date).getFullYear()}/${String(new Date(post.date).getMonth() + 1).padStart(2, '0')}/${String(new Date(post.date).getDate()).padStart(2, '0')}/${post.id}.html`}>
                                         {post.title}
                                     </Link>
                                 </h2>
@@ -64,7 +64,7 @@ export const Home: React.FC = () => {
 
                                 <div className="post-card-footer">
                                     <Link
-                                        to={`/post/${post.id}`}
+                                        to={`/${new Date(post.date).getFullYear()}/${String(new Date(post.date).getMonth() + 1).padStart(2, '0')}/${String(new Date(post.date).getDate()).padStart(2, '0')}/${post.id}.html`}
                                         className="read-more"
                                     >
                                         Read Article <ArrowRight size={16} className="arrow-icon" />
