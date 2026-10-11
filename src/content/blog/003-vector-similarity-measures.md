@@ -7,7 +7,7 @@ A vector represents a point (coordinate) in space. As a result, a vector has bot
 - Vector magnitude (length) is shown by the intersecting labels
 - Intuitive measures between $\vec{ a }$ and $\vec{ b }$
   - Distance between $\vec{ a }$ and $\vec{ b }$ coordinates is shown by the dashed line
-  - Angle between the directions of $\vec{ a }$ and $\vec{ b }$
+  - Angle between the directions of **a** and **b**
 
 ```graph
 vector-similarity-intro
@@ -19,7 +19,7 @@ Vector similarity measures take one or more vector properties into consideration
   - Known as the **Euclidean distance**
 - Difference between vector directions
   - Known as the **cosine similarity**
-  - Calculated using the cosine of the angle between two vectors. The cosine function returns the value of 1 when two vectors point in the same direction and -1 when two vectors point in the opposite direction. The following graph visualises this function:
+  - Calculated using the cosine of the angle between two vectors. The cosine function returns the value of 1 when two vectors point in the same direction and - 1 when two vectors point in the opposite direction. The following graph visualises this function:
 
 ```graph
 cosine-function
@@ -38,7 +38,7 @@ dot-product-geometric
 A previous blog post introduced the [weighted sum](/post/weighted-sum) (also known as the **dot product**) using the algebraic representation of multiplying corresponding elements between vectors before adding them together. We have just seen the geometric representation of the **dot product** as opposed to the algebraic representation:
 
 - Algebraic representation:
-  - $\vec{ a } \cdot \vec{ b } = \vec{ a } _1 * \vec{ b } _1 + \vec{ a } _2 * \vec{ b } _2 + \dots + \vec{ a } _n * \vec{ b } _n$
+  - $\vec{ a } \cdot \vec{ b } = \vec{ a } _0 * \vec{ b } _0 + \vec{ a } _1 * \vec{ b } _1 + \dots + \vec{ a } _n * \vec{ b } _n$
 - Geometric representation:
   - $\vec{ a } \cdot \vec{ b } = (\text{length of vector } \vec{ a }) * (\text{length of vector } \vec{ b }) * (\text{cosine of angle between } \vec{ a } \text{ and } \vec{ b }) $
 
@@ -130,7 +130,7 @@ Pairwise **Euclidean distance** between movie vectors:
 | **Movie B** | 8.94 | 0.00 | 10.40 |
 | **Movie C** | 4.92 | 10.40 | 0.00 |
 
-We can see that the **Euclidean distance** scores Movies with minimum combined difference across all factors as more similar. E.g. movies ordered by straight line distance from Movie A = Movie C, Movie B. Movie C is less popular than Movie A, however the straight line distance between Movie A and B (8.94) is far greater than the straight line distance between A and C (4.92).
+We can see that the **Euclidean distance** scores Movies with minimum combined difference across all factors as more similar. E.g. movies ordered by straight line distance from Movie A = Movie C, Movie B. Movie C is less popular than Movie A, however the straight line distance between Movie A and B (8.94) is far greater than the straight line distance between A and C (4.92)
 
 Pairwise **cosine distance** between movie vectors:
 
@@ -221,7 +221,7 @@ Using the NumPy and SciPy libraries:
 
 ```python
 import numpy as np
-from scipy.spatial import distance
+import scipy
 
 np.set_printoptions(precision = 2)
 
@@ -241,13 +241,13 @@ print(f'Vector b normalised = {vector_b / np.linalg.norm(vector_b)}')
 
 # similarity measures
 print(f'\nDot Product between vector a and b: {np.dot(vector_a, vector_b):.2f}')
-print(f'Cosine Distance between vector a and b: {distance.cosine(vector_a, vector_b):.2f}')
-print(f'Euclidean Distance between vector a and b: {distance.euclidean(vector_a, vector_b):.2f}')
+print(f'Cosine Distance between vector a and b: {scipy.spatial.distance.cosine(vector_a, vector_b):.2f}')
+print(f'Euclidean Distance between vector a and b: {scipy.spatial.distance.euclidean(vector_a, vector_b):.2f}')
 ```
 
 ```text
 Output
-Vector a = [3.5 1. ]
+Vector a = [3.5 1.]
 Vector b = [2. 4.]
 
 Vector a magnitude (length) = 3.64

@@ -21,8 +21,6 @@ This interactive chart shows exactly how a **Perceptron** learns to separate dat
 
 Why use a **Learning Rate**? It acts as a "speed limit" for learning. Instead of adding the full input vector (which might cause the line to swing wildly), we only add a small fraction of it (e.g., $\eta = 0.05$ used by the interactive chart). This ensures the model learns the general trend rather than overreacting to a single point.
 
-Note: the learning rate only has this effect when the starting weights are non-zero (the interactive chart starts with weights $[1, -1]$ and a bias of $-1$). If the weights and bias both start at 0, as in the code below, every update is a multiple of $\eta$, so changing $\eta$ simply scales the final weights and bias and the decision boundary ends up in exactly the same place.
-
 Note: to clearly demonstrate the bias, we do not use the **Bias Trick** here (where the bias is combined with the weights, as highlighted in the [previous post](/post/the-perceptron-model)).
 
 ```graph
@@ -42,7 +40,7 @@ Here is the Python code that powers the logic above:
 import numpy as np
 
 def train_perceptron(training_data, labels, learning_rate=0.05, epochs=50):
-    # 1. Initialise Weights
+    # 1. Initialize Weights
     num_features = training_data.shape[1]
     weights = np.zeros(num_features)
     bias = 0
@@ -80,7 +78,7 @@ labels = np.array([
 
 weights, bias = train_perceptron(training_data, labels)
 print(f"Final Weights: {weights}")
-print(f"Final Bias: {bias:.2f}\n")
+print(f"Final Bias: {bias}\n")
 
 print("Verifying predictions:")
 for input_vector, target_label in zip(training_data, labels):
@@ -94,7 +92,7 @@ for input_vector, target_label in zip(training_data, labels):
 
 ```text
 Final Weights: [0.05 0.2 ]
-Final Bias: -0.50
+Final Bias: -0.5
 
 Verifying predictions:
 Input: [4. 5.], Target: 1, Predicted: 1 (Correct)
