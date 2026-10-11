@@ -154,7 +154,16 @@ export const InteractiveGraph: React.FC<InteractiveGraphProps> = ({ id }) => {
             });
         }
 
+        // Test hook (dev builds only): lets the Playwright chart driver map chart coordinates to the screen
+        if (import.meta.env.DEV) {
+            const w = window as unknown as { __charts?: Record<string, JXG.Board[]> };
+            w.__charts = { ...w.__charts, [id]: board2Ref.current ? [board, board2Ref.current] : [board] };
+        }
+
         return () => {
+            if (import.meta.env.DEV) {
+                delete (window as unknown as { __charts?: Record<string, JXG.Board[]> }).__charts?.[id];
+            }
             if (boardRef.current) {
                 JXG.JSXGraph.freeBoard(boardRef.current);
             }
@@ -210,7 +219,7 @@ export const InteractiveGraph: React.FC<InteractiveGraphProps> = ({ id }) => {
 
             {/* Logs */}
             {logs.length > 0 && (
-                <div style={{
+                <div data-chart-log style={{
                     width: '100%',
                     maxWidth: '700px',
                     marginBottom: '32px',

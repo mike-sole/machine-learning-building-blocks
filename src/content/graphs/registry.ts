@@ -135,8 +135,8 @@ const registry: Record<string, GraphInitializer | GraphConfig> = {
         },
         initializer: (board: JXG.Board) => {
             const o = h.createOrigin(board);
-            const p1 = h.createVectorPoint(board, [3.5, 1], `\\( \\vec{a} \\)`);
-            const p2 = h.createVectorPoint(board, [2, 4], `\\( \\vec{b} \\)`);
+            const p1 = h.createVectorPoint(board, [3.5, 1], h.formatVectorName('a'));
+            const p2 = h.createVectorPoint(board, [2, 4], h.formatVectorName('b'));
 
             h.createVector(board, o, p1, h.SIMILARITY_COLORS.vector, 'smart-label-circle-vector-a');
             h.createVector(board, o, p2, h.SIMILARITY_COLORS.vector, 'smart-label-circle-vector-b');
@@ -328,8 +328,8 @@ const registry: Record<string, GraphInitializer | GraphConfig> = {
         },
         initializer: (board: JXG.Board) => {
             const o = h.createOrigin(board);
-            const p1 = h.createVectorPoint(board, [3.5, 1], `\\( \\vec{a} \\)`, h.SIMILARITY_COLORS.aMag);
-            const p2 = h.createVectorPoint(board, [2, 4], `\\( \\vec{b} \\)`, h.SIMILARITY_COLORS.aMag);
+            const p1 = h.createVectorPoint(board, [3.5, 1], h.formatVectorName('a'), h.SIMILARITY_COLORS.aMag);
+            const p2 = h.createVectorPoint(board, [2, 4], h.formatVectorName('b'), h.SIMILARITY_COLORS.aMag);
 
             h.createVector(board, o, p1, h.SIMILARITY_COLORS.vector, 'smart-label-circle-vector-a');
             h.createVector(board, o, p2, h.SIMILARITY_COLORS.vector, 'smart-label-circle-vector-b');

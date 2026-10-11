@@ -75,7 +75,7 @@ export const Post: React.FC = () => {
                             if (match && match[1] === 'graph') {
                                 const id = String(children).trim();
                                 return (
-                                    <div className="my-8">
+                                    <div className="my-8" data-chart={id}>
                                         <InteractiveGraph id={id} />
                                     </div>
                                 );
