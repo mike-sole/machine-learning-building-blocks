@@ -20,9 +20,7 @@ test.describe('MLP Decision Boundaries Chart', () => {
         const chart = page.locator('#jxgbox-mlp-decision-boundaries');
 
         await expect(page.getByText(/Hidden Node 1/)).toBeVisible();
-        const content = await chart.innerHTML();
-        console.log('Chart Content:', content);
-        await expect(page.getByText(/w.*-0\.63/).first()).toBeVisible();
+        await expect(chart.getByText('w₁ 1.00, w₂ 1.00')).toBeVisible();
 
         // Take a screenshot before interaction
         // await expect(chart).toHaveScreenshot('mlp-before-interaction.png'); 

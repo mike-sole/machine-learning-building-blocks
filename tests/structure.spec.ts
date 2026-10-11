@@ -91,7 +91,6 @@ const posts = [
             await expect(page.locator('strong').filter({ hasText: /^Perceptron Learning Algorithm$/ }).first()).toBeVisible();
 
             // REGRESSION CHECK: Ensure list item is not a code block
-            const textToCheck = 'If the expected output was 1 but we predicted 0';
             // Playwright might fuzzy match, so we take a substring
             const substring = 'If the expected output';
 
@@ -112,3 +111,10 @@ for (const post of posts) {
         await post.checks(page);
     });
 }
+
+test('internal post links navigate to the linked post', async ({ page }) => {
+    await page.goto('/machine-learning-building-blocks/post/matrix-multiplication');
+    await page.locator('article').getByRole('link', { name: 'weighted sum' }).first().click();
+    await expect(page).toHaveURL(/\/machine-learning-building-blocks\/2024\/04\/06\/weighted-sum\.html$/);
+    await expect(page.getByRole('heading', { level: 1, name: 'Weighted Sum' })).toBeVisible();
+});

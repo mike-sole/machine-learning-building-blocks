@@ -300,8 +300,8 @@ export class MLPDecisionBoundariesChart {
     }
 
     setupInteractiveNeuron(view: any, initialState: WeightState, _clipRadius: number, dataPoints?: any[], incomingWeightLabels?: any[], biasLabel?: any, onUpdate?: (w: Vector2, b: number) => void) {
-        let weights = { ...initialState.w };
-        let bias = initialState.b;
+        const weights = { ...initialState.w };
+        const bias = initialState.b;
 
         const { map, unmap } = view;
 

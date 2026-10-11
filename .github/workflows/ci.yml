@@ -1,0 +1,113 @@
+name: CI
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      update-snapshots:
+        description: 'Regenerate the Linux visual snapshots and commit them to this branch'
+        type: boolean
+        default: false
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Lint, build and unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type check and build
+        run: npm run build
+
+      - name: Unit tests
+        run: npm run test:unit
+
+  e2e:
+    name: Playwright tests
+    runs-on: ubuntu-latest
+    # Screenshots must be taken in the same environment as the committed baselines,
+    # so pin the official image to the @playwright/test version in package-lock.json
+    container:
+      image: mcr.microsoft.com/playwright:v1.57.0-noble
+      options: --user 1001
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Playwright tests
+        if: ${{ !inputs.update-snapshots }}
+        run: npm run test:e2e
+
+      - name: Update visual snapshots
+        if: ${{ inputs.update-snapshots }}
+        run: npx playwright test --update-snapshots
+
+      - name: Upload updated snapshots
+        if: ${{ inputs.update-snapshots }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-snapshots
+          path: tests/**/*-linux.png
+
+      - name: Upload Playwright report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+
+  commit-snapshots:
+    name: Commit updated snapshots
+    needs: e2e
+    if: ${{ inputs.update-snapshots }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download updated snapshots
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-snapshots
+          path: tests
+
+      - name: Commit and push
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add tests
+          git diff --cached --quiet || git commit -m 'Update Linux visual snapshots'
+          git push

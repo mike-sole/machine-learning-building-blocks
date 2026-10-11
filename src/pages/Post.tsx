@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams, Navigate, Link } from 'react-router-dom';
-import { posts } from '../content/posts';
+import { posts, getPostPath } from '../content/posts';
 // import type { ContentBlock } from '../content/posts';
 import { InteractiveGraph } from '../components/InteractiveGraph';
 import ReactMarkdown from 'react-markdown';
@@ -55,6 +55,14 @@ export const Post: React.FC = () => {
                         li: ({ node, ...props }) => <li className="mb-2 pl-1" {...props} />,
                         ul: ({ node, ...props }) => <ul className="mb-4 pl-8 list-disc [&_ul]:list-[circle] [&_ul]:pl-8" {...props} />,
                         strong: ({ node, ...props }) => <strong className="font-bold text-gray-900" {...props} />,
+                        a: ({ node, href, ...props }) => {
+                            // Route internal post links (written as /post/<id>) through the router so they respect the base path
+                            const linkedPost = href?.startsWith('/post/') && posts.find(p => p.id === href.slice('/post/'.length));
+                            if (linkedPost) {
+                                return <Link to={getPostPath(linkedPost)} {...props} />;
+                            }
+                            return <a href={href} {...props} />;
+                        },
                         table: ({ node, ...props }) => (
                             <div className="blog-table-container">
                                 <table className="blog-table" {...props} />

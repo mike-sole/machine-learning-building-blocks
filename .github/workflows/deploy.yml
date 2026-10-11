@@ -32,6 +32,7 @@ jobs:
         run: |
           npm run build
           touch dist/.nojekyll
+          cp dist/index.html dist/404.html
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4

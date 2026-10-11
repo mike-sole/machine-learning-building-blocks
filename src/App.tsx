@@ -1,18 +1,19 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { Home } from './pages/Home';
-import { Post } from './pages/Post';
+
+// Posts pull in KaTeX, JSXGraph and the syntax highlighter, so load them only when a post is opened
+const Post = lazy(() => import('./pages/Post').then(m => ({ default: m.Post })));
 
 function App() {
   return (
     <Router basename="/machine-learning-building-blocks">
       <Routes>
         <Route path="/" element={<Layout />}>
-          {/* This line was likely a malformed comment or an attempt to remove a line.
-                The original routes are restored to maintain functionality.
-                If you intended to remove specific routes, please provide a clearer instruction. */}
           <Route index element={<Home />} />
-          <Route path=":year/:month/:day/:id" element={<Post />} />
+          <Route path=":year/:month/:day/:id" element={<Suspense><Post /></Suspense>} />
+          <Route path="post/:id" element={<Suspense><Post /></Suspense>} />
         </Route>
       </Routes>
     </Router>
