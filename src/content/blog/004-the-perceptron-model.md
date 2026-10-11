@@ -41,7 +41,7 @@ Mike needs a **Yes / No** decision. Let's set his threshold to **150**:
   * **Movie A:** Watch 
   * **Movie B:** Skip
 
-**The Bias Trick**: Computers process data faster when comparing numbers to **0**. Instead of asking *"Is score > 150?"*, we shift the starting line back by 150. This shift is the Bias (-150).
+**The Bias Trick**: Comparing against **0** is simpler than tracking a separate threshold for every decision. Instead of asking *"Is score > 150?"*, we shift the starting line back by 150. This shift is the Bias (-150).
   * **Old Rule:** Reach 150.
   * **New Rule:** Start at (-150), then reach **0**.
 
@@ -124,7 +124,7 @@ $$
 
 **Note:** In our code, we performed the "Bias Trick," effectively combining $w$ and $b$ into a single vector operation.
 
-The activation(Step Function):
+The activation (Step Function):
 $$
 y = \begin{cases} 1 & \text{ if } z > 0 \\ 0 & \text{ if } z \leq 0 \end{cases}
 $$

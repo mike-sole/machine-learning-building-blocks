@@ -93,7 +93,7 @@ Since matrix multiplication calculates the weighted sum between every row of the
 
 Matrix multiplication is a collection of weighted sums. A weighted sum is calculated between each row of the first matrix and each column of the second matrix. The output is a matrix of the weighted sums as illustrated by the blog post header image.
 
-Following the movie recommendation example introduced in the interpretation section of the [previous weighted sum blog post](/post/weighted-sum). Movies and their categorisations can be represented as one matrix and user preferences can be represented as another matrix:
+Following on from the movie recommendation example introduced in the interpretation section of the [previous weighted sum blog post](/post/weighted-sum), movies and their categorisations can be represented as one matrix and user preferences can be represented as another matrix:
 
 As an example, Mike and Sienna rated their movie category preferences as follows:
 - <span style="color: rgb(255, 0, 0)">Mike</span>: (action: 9 / 10, sci-fi: 5 / 10, comedy: 2 / 10)
@@ -121,7 +121,7 @@ $$
 \textcolor{green}{0} & \textcolor{blue}{10} & \textcolor{orange}{1}
 \end{bmatrix}
 $$
-Multiplying the user preference matrix with the movie categorisation matrix give us:
+Multiplying the user preference matrix with the movie categorisation matrix gives us:
 
 $$
 \begin{bmatrix}
@@ -129,7 +129,7 @@ $$
 40 & 132 & 54
 \end{bmatrix}
 $$
-Adding row and column labels help with interpreting the movie rating results. We can see that the most recommended movie for Mike is Movie A and the most recommended movie for Sienna is movie B:
+Adding row and column labels helps with interpreting the movie rating results. We can see that the most recommended movie for Mike is Movie A and the most recommended movie for Sienna is movie B:
 
 | | Movie A | Movie B | Movie C |
 | --- | --- | --- | --- |
@@ -237,12 +237,12 @@ matrix 1 multiplied by matrix 2:
 
 ## Maths Notations
 
-Linear algebra defines matrix multiplication as the dot product operation. The following notation is used to represent the dot product between $A$ and $B$:
+Matrix multiplication is sometimes written with the dot symbol (NumPy's `np.dot` also performs matrix multiplication for 2D arrays). The following notation can be used to represent matrix multiplication between $A$ and $B$:
 $$
 A \cdot B
 $$
 
-Alternatively the following notation can be used to represent matrix multiplication:
+More commonly, the dot is omitted:
 $$
 AB
 $$

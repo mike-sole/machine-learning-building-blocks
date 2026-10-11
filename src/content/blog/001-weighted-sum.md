@@ -46,7 +46,7 @@ weighted_sum = 0
 for index in range(len(numbers)):
     weighted_sum += numbers[index] * weights[index]
 
-print('Weighted sum is: ', weighted_sum)
+print('Weighted sum is:', weighted_sum)
 ```
 
 ```text
@@ -64,7 +64,7 @@ weights = np.array([1, 4, 10])
 
 weighted_sum = np.dot(numbers, weights)
 
-print('Weighted sum is: ', weighted_sum)
+print('Weighted sum is:', weighted_sum)
 ```
 
 ```text

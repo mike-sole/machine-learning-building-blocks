@@ -26,18 +26,18 @@ relu-function
 
 ## Exploring MLP decision boundaries for XOR
 
-The following interactive graph demonstrates how a 2-Hidden-Layer MLP transforms the non-linear XOR input space into a linearly separable space. More specifically, we define:
+The following interactive graph demonstrates how an MLP with a single hidden layer of 2 neurons transforms the non-linear XOR input space into a linearly separable space. More specifically, we define:
 * points (2, 2) and (-2, -2) as spam
 * points (2, -2) and (-2, 2) as non-spam
 
 This interactive graph is unique: rather than showing a single pass of data e.g. one of the four points as input, each neuron displays a **decision boundary graph** showing how it processes the **entire XOR dataset**:
 
-*   **The Bias Trick**: Notice the extra input $x_0$. As introduced in [The Perceptron Model](/machine-learning-building-blocks/post/the-perceptron-model), this Fixed Input of 1 allows us to treat the bias ($b$) as just another learnable weight ($w_0$).
+*   **The Bias Trick**: Notice the extra input $x_0$. As introduced in [The Perceptron Model](/post/the-perceptron-model), this Fixed Input of 1 allows us to treat the bias ($b$) as just another learnable weight ($w_0$).
 
-*   **Hidden Neurons ($h_1, h_2$)**: These graphs plot the original Input Space ($x_1, x_2$). Using the same style of graph as [The Perceptron Model](/machine-learning-building-blocks/post/the-perceptron-model), the dashed line is the decision boundary formed by that neuron's weights. The weight vector and bias related points are interactive, allowing you to adjust them to see how they affect the decision boundary.
+*   **Hidden Neurons ($h_1, h_2$)**: These graphs plot the original Input Space ($x_1, x_2$). Using the same style of graph as [The Perceptron Model](/post/the-perceptron-model), the dashed line is the decision boundary formed by that neuron's weights. The weight vector and bias related points are interactive, allowing you to adjust them to see how they affect the decision boundary.
     *   Spam and non-spam points are highlighted in red and green respectively, their activation values are shown below their labels. Note that these are the **weighted sum values** when >= 0, **otherwise they are 0 following the ReLU activation function**.
 
-*   **Output Neuron ($\hat{y}$)**: This graph plots the **Tranformed Feature Space** ($h_1, h_2$). Its axes are the *outputs* of the hidden neurons - its x and y axis correspond to the outputs of $h_1$ and $h_2$ respectively. If the hidden layer successfully disentangles the XOR pattern, the points in this space will be linearly separable, allowing the output neuron to draw a final clean boundary.
+*   **Output Neuron ($\hat{y}$)**: This graph plots the **Transformed Feature Space** ($h_1, h_2$). Its axes are the *outputs* of the hidden neurons - its x and y axis correspond to the outputs of $h_1$ and $h_2$ respectively. If the hidden layer successfully disentangles the XOR pattern, the points in this space will be linearly separable, allowing the output neuron to draw a final clean boundary.
 
 **Try it:** Adjust the weights of the hidden neurons by dragging the weight vector and bias related points to see how they affect the decision boundary.
 
@@ -66,10 +66,10 @@ inputs = np.array([
 # Targets (Spam / Not Spam)
 targets = ["Spam", "Spam", "Not Spam", "Not Spam"]
 
-# Hidden Layer 1 Weights
+# Hidden Neuron 1 (h1) Weights
 w_h1 = np.array([0.3, 1.0, 1.0])
 
-# Hidden Layer 2 Weights
+# Hidden Neuron 2 (h2) Weights
 w_h2 = np.array([0.56, -0.95, -1.05])
 
 # Output Layer Weights
@@ -78,10 +78,10 @@ w_out = np.array([-2.41, 0.84, 0.86])
 print(f"{'Input':<12} | {'H1':<6} | {'H2':<6} | {'Score':<6} | {'Predicted':<10} | {'Target':<10} | Met?")
 print("-" * 75)
 
-for i, input in enumerate(inputs):
+for i, x in enumerate(inputs):
     # Hidden Layer Pass
-    h1 = relu(np.dot(input, w_h1))
-    h2 = relu(np.dot(input, w_h2))
+    h1 = relu(np.dot(x, w_h1))
+    h2 = relu(np.dot(x, w_h2))
     
     # Output Pass (1 at the start for bias trick)
     hidden_out = np.array([1, h1, h2])
@@ -91,14 +91,14 @@ for i, input in enumerate(inputs):
     target = targets[i]
     met = "✅" if decision == target else "❌"
     
-    print(f"{str(input[1:]):<12} | {h1:<6.2f} | {h2:<6.2f} | {z_final:<6.2f} | {decision:<10} | {target:<10} | {met}")
+    print(f"{str(x[1:]):<12} | {h1:<6.2f} | {h2:<6.2f} | {z_final:<6.2f} | {decision:<10} | {target:<10} | {met}")
 ```
 
 ```text
 Output
 Input        | H1     | H2     | Score  | Predicted  | Target     | Met?
 ---------------------------------------------------------------------------
-[ 2.  2.]    | 4.30   | 0.00   | 1.20   | Spam       | Spam       | ✅
+[2. 2.]      | 4.30   | 0.00   | 1.20   | Spam       | Spam       | ✅
 [-2. -2.]    | 0.00   | 4.56   | 1.51   | Spam       | Spam       | ✅
 [-2.  2.]    | 0.30   | 0.36   | -1.85  | Not Spam   | Not Spam   | ✅
 [ 2. -2.]    | 0.30   | 0.76   | -1.50  | Not Spam   | Not Spam   | ✅

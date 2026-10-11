@@ -19,3 +19,11 @@ export const posts: BlogPost[] = [
     multiLayeredPerceptronPost
     // trainingMultiLayeredPerceptronPost
 ];
+
+// Canonical post URL (matches the legacy Jekyll structure): /YYYY/MM/DD/<id>.html
+export const getPostPath = (post: BlogPost): string => {
+    const date = new Date(post.date);
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `/${date.getFullYear()}/${month}/${day}/${post.id}.html`;
+};
