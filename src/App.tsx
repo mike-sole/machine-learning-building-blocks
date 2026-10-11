@@ -1,7 +1,10 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { Home } from './pages/Home';
-import { Post } from './pages/Post';
+
+// Posts pull in KaTeX, JSXGraph and the syntax highlighter, so load them only when a post is opened
+const Post = lazy(() => import('./pages/Post').then(m => ({ default: m.Post })));
 
 function App() {
   return (
@@ -9,8 +12,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path=":year/:month/:day/:id" element={<Post />} />
-          <Route path="post/:id" element={<Post />} />
+          <Route path=":year/:month/:day/:id" element={<Suspense><Post /></Suspense>} />
+          <Route path="post/:id" element={<Suspense><Post /></Suspense>} />
         </Route>
       </Routes>
     </Router>

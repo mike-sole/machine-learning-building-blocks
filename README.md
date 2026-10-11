@@ -34,15 +34,35 @@ npm run dev
 ```
 The application will be available at `http://localhost:5173`.
 
+### Linting
+
+```bash
+npm run lint
+```
+
 ### Testing
 
 ```bash
-# Run e2e tests
+# Run unit tests (Vitest) then end-to-end tests (Playwright)
 npm run test
 
-# Run tests with UI
+# Run only the unit tests
+npm run test:unit
+
+# Run only the end-to-end tests
+npm run test:e2e
+
+# Run Playwright tests with UI
 npm run test:ui
 ```
+
+Visual regression screenshots are platform specific. CI compares against the `*-linux.png` baselines, which are generated inside the official Playwright Docker image. To regenerate them, run the **CI** workflow manually from the Actions tab with **Regenerate the Linux visual snapshots** ticked; it commits the updated images to the selected branch.
+
+## Continuous Integration
+
+The `.github/workflows/ci.yml` workflow runs on every pull request and on pushes to `main`:
+1. Lint, type check, build and unit tests.
+2. Playwright tests (including visual regression) inside the `mcr.microsoft.com/playwright` image. The HTML report is uploaded as a build artifact.
 
 ## Deployment
 

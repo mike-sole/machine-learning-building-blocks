@@ -8,8 +8,10 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "npx playwright test",
-    "test:ui": "npx playwright test --ui",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
+    "test:ui": "playwright test --ui",
     "predeploy": "npm run build && touch dist/.nojekyll && cp dist/index.html dist/404.html",
     "deploy": "gh-pages -d dist"
   },
