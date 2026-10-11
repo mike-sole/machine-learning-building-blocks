@@ -108,15 +108,37 @@ export async function pointStyles(page: Page, id: string, boardIndex = 0): Promi
     }, { id, boardIndex });
 }
 
-/** Drag from one page position to another with a real pointer. */
+/** Drag from one page position to another with a real pointer: a finger on touch devices, otherwise the mouse. */
 export async function dragScreen(page: Page, from: ScreenPoint, to: ScreenPoint): Promise<void> {
     // Move at human speed: chart libraries may drop pointer moves that arrive faster
     // than their frame rate (JSXGraph's maxFrameRate), which would lose the final position.
     const steps = 10;
+    const path = Array.from({ length: steps }, (_, i) => ({
+        x: from.x + ((to.x - from.x) * (i + 1)) / steps,
+        y: from.y + ((to.y - from.y) * (i + 1)) / steps,
+    }));
+
+    if (await page.evaluate(() => navigator.maxTouchPoints > 0)) {
+        // Playwright's touchscreen API only taps, so send the touch drag through the DevTools protocol (Chromium)
+        const cdp = await page.context().newCDPSession(page);
+        const touch = (type: string, p?: ScreenPoint) =>
+            cdp.send('Input.dispatchTouchEvent', { type, touchPoints: p ? [{ x: p.x, y: p.y }] : [] });
+        await touch('touchStart', from);
+        for (const p of path) {
+            await touch('touchMove', p);
+            await page.waitForTimeout(30);
+        }
+        await page.waitForTimeout(50);
+        await touch('touchMove', to);
+        await touch('touchEnd');
+        await cdp.detach();
+        return;
+    }
+
     await page.mouse.move(from.x, from.y);
     await page.mouse.down();
-    for (let i = 1; i <= steps; i++) {
-        await page.mouse.move(from.x + ((to.x - from.x) * i) / steps, from.y + ((to.y - from.y) * i) / steps);
+    for (const p of path) {
+        await page.mouse.move(p.x, p.y);
         await page.waitForTimeout(30);
     }
     await page.waitForTimeout(50);

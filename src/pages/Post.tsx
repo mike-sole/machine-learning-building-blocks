@@ -31,7 +31,7 @@ export const Post: React.FC = () => {
         <motion.article
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="max-w-[800px] mx-auto bg-white px-8 md:px-[30px]"
+            className="max-w-[800px] mx-auto bg-white px-4 md:px-[30px]"
         >
             <header className="mb-8 text-left border-b border-gray-100 pb-8">
                 <h1 className="text-4xl md:text-[42px] font-normal text-gray-900 mb-2 leading-tight">

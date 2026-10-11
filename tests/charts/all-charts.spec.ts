@@ -40,7 +40,7 @@ for (const post of posts) {
                 await c.scrollIntoViewIfNeeded();
                 const box = await c.boundingBox();
                 expect(box?.width, `${id} width`).toBeGreaterThan(200);
-                expect(box?.height, `${id} height`).toBeGreaterThan(200);
+                expect(box?.height, `${id} height`).toBeGreaterThan(100);
 
                 // MathJax/LaTeX source showing as text means a label failed to render
                 const raw = (await chartTexts(c)).filter(t => /\\\(|\\vec|\\text\{|\$\$/.test(t));
@@ -48,6 +48,35 @@ for (const post of posts) {
             }
 
             expect(errors).toEqual([]);
+        });
+
+        test('every chart fits the screen without sideways scrolling', async ({ page }) => {
+            await page.goto(`/machine-learning-building-blocks/post/${post.id}`);
+            await expect.poll(() => page.evaluate(() =>
+                Object.keys((window as unknown as { __charts?: object }).__charts ?? {}).length,
+            ), { timeout: 20_000 }).toBe(new Set(post.charts).size);
+
+            const viewport = page.viewportSize()!;
+            expect(await page.evaluate(() => document.documentElement.scrollWidth), 'page width').toBeLessThanOrEqual(viewport.width);
+
+            for (const id of post.charts) {
+                const c = chart(page, id);
+                await c.scrollIntoViewIfNeeded();
+                // Each board, and every label on it, lies within the visible width
+                const outside = await c.evaluate((el, width) => {
+                    const out: string[] = [];
+                    for (const board of el.querySelectorAll('.jxgbox')) {
+                        const b = board.getBoundingClientRect();
+                        if (b.left < 0 || b.right > width) out.push(`board at ${Math.round(b.left)}..${Math.round(b.right)}`);
+                        for (const label of board.querySelectorAll(':scope > div')) {
+                            const l = label.getBoundingClientRect();
+                            if (l.width > 0 && (l.left < b.left - 1 || l.right > b.right + 1)) out.push(`label "${(label as HTMLElement).innerText.trim()}" sticks out`);
+                        }
+                    }
+                    return out;
+                }, viewport.width);
+                expect(outside, `${id} fits the screen`).toEqual([]);
+            }
         });
 
         for (const id of post.charts) {

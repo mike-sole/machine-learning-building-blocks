@@ -16,6 +16,12 @@ export default defineConfig({
             name: 'chromium',
             use: { ...devices['Desktop Chrome'] },
         },
+        {
+            // Phone-sized touch screen: chart layout and touch dragging
+            name: 'mobile',
+            testMatch: 'charts/**/*.spec.ts',
+            use: { ...devices['Pixel 7'] },
+        },
     ],
     webServer: {
         command: 'npm run dev',
