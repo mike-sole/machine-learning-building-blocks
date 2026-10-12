@@ -42,3 +42,10 @@ export const TextAt: React.FC<{ at: Vec2; text: string; color?: string; size?: n
     const [px, py] = vec.transform(at, viewTransform);
     return <text x={px} y={py} style={{ fill: color, fontSize: size }}>{text}</text>;
 };
+
+/** A point's name, offset in pixels to the right of and above the point. */
+export const PointName: React.FC<{ at: Vec2; text: string; color?: string; dx?: number; dy?: number }> = ({ at, text, color = '#000000', dx = 10, dy = -10 }) => {
+    const { viewTransform } = useTransformContext();
+    const [px, py] = vec.transform(at, viewTransform);
+    return <text x={px + dx} y={py + dy} style={{ fill: color, fontSize: 12 }}>{text}</text>;
+};

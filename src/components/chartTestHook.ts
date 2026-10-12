@@ -50,6 +50,27 @@ export function registerChartForTests(id: string, boards: ChartBoardHandle[]): (
     };
 }
 
+const pendingBoards: Record<string, ChartBoardHandle[]> = {};
+
+/**
+ * Register board `index` of a chart with `count` boards. The chart appears in `window.__charts`
+ * only once all its boards have registered, so tests never see half a chart. No-op in production builds.
+ */
+export function registerChartBoardForTests(id: string, index: number, count: number, board: ChartBoardHandle): () => void {
+    if (!import.meta.env.DEV) return () => {};
+    const w = window as ChartsWindow;
+    const boards = (pendingBoards[id] = [...(pendingBoards[id] ?? [])]);
+    boards[index] = board;
+    const complete = boards.filter(Boolean).length === count;
+    if (complete) w.__charts = { ...w.__charts, [id]: boards };
+    return () => {
+        const remaining = [...(pendingBoards[id] ?? [])];
+        delete remaining[index];
+        pendingBoards[id] = remaining;
+        delete w.__charts?.[id];
+    };
+}
+
 const stripHtml = (s: unknown) =>
     String(typeof s === 'function' ? s() : s ?? '').replace(/<[^>]*>/g, '').trim();
 

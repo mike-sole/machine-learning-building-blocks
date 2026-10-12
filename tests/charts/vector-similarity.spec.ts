@@ -142,6 +142,21 @@ for (const { id, plots } of unitCircleCharts) {
             await expectText(c, '45.0°');
         });
 
+        test('shows the lengths of a and b from the start', async ({ page }) => {
+            const c = await openChart(page, POSTS.vectorSimilarity, id);
+            await expect.poll(async () => (await chartTexts(c)).filter(t => t === '1.00').length, { message: 'two 1.00 length labels' }).toBe(2);
+            if (id === 'distance-comparison') await expectText(c, f(distance(onUnitCircle(45), b)));
+        });
+
+        test('a stays on the unit circle when dragged inside it', async ({ page }) => {
+            const c = await openChart(page, POSTS.vectorSimilarity, id);
+            const half = onUnitCircle(120);
+            await dragPointTo(page, id, 'a', { x: half.x / 2, y: half.y / 2 });
+            const a = await plottedPoint(page, id, 'a');
+            expect(length(a)).toBeCloseTo(1, 2);
+            await expectText(c, '120.0°');
+        });
+
         for (const deg of [120, 250]) {
             test(`plots the measure for vector a at ${deg} degrees`, async ({ page }) => {
                 const c = await openChart(page, POSTS.vectorSimilarity, id);
