@@ -28,16 +28,7 @@ export interface GraphConfig {
 }
 
 const registry: Record<string, GraphInitializer | GraphConfig> = {
-    'vector-similarity-intro': (board) => {
-        const o = h.createOrigin(board);
-        const p1 = h.createVectorPoint(board, [3.5, 1], h.formatVectorName('a'));
-        const p2 = h.createVectorPoint(board, [2, 4], h.formatVectorName('b'));
-
-        h.createVector(board, o, p1, h.SIMILARITY_COLORS.vector, 'smart-label-circle-vector-a');
-        h.createVector(board, o, p2, h.SIMILARITY_COLORS.vector, 'smart-label-circle-vector-b');
-        h.createMeasurementLine(board, p1, p2, h.SIMILARITY_COLORS.vector, 'smart-label-circle-vector-ab');
-        h.createAngleLabel(board, p1, o, p2);
-    },
+    // 'vector-similarity-intro' is a Mafs chart: see mafsCharts.ts
     // 2. Cosine Function
     'cosine-function': {
         containerStyle: { maxWidth: '525px', aspectRatio: 'auto', height: '300px' },

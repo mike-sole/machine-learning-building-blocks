@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import JXG from 'jsxgraph';
 import registry from '../content/graphs/registry';
 import type { GraphConfig } from '../content/graphs/registry';
+import { mafsCharts } from '../content/graphs/mafsCharts';
 import { registerChartForTests, jsxGraphBoardHandle } from './chartTestHook';
 
 // Import JSXGraph CSS
@@ -12,7 +13,28 @@ interface InteractiveGraphProps {
     height?: number;
 }
 
+const chartWrapperStyle: React.CSSProperties = {
+    width: '100%',
+    margin: '32px 0',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+};
+
+/** Renders the chart with the given id: a Mafs chart when one exists, otherwise the JSXGraph chart. */
 export const InteractiveGraph: React.FC<InteractiveGraphProps> = ({ id }) => {
+    const MafsChart = mafsCharts[id];
+    if (MafsChart) {
+        return (
+            <div className="sm:px-4" style={chartWrapperStyle}>
+                <MafsChart id={id} />
+            </div>
+        );
+    }
+    return <JsxGraphChart id={id} />;
+};
+
+const JsxGraphChart: React.FC<InteractiveGraphProps> = ({ id }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const container2Ref = useRef<HTMLDivElement>(null);
     const boardRef = useRef<JXG.Board | null>(null);
@@ -143,13 +165,7 @@ export const InteractiveGraph: React.FC<InteractiveGraphProps> = ({ id }) => {
     const containerStyle = (graphEntry && typeof graphEntry === 'object' && 'containerStyle' in graphEntry) ? graphEntry.containerStyle : {};
 
     return (
-        <div className="sm:px-4" style={{
-            width: '100%',
-            margin: '32px 0',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center'
-        }}>
+        <div className="sm:px-4" style={chartWrapperStyle}>
             {/* Actions (Buttons) */}
             {Object.keys(actions).length > 0 && (
                 <div style={{ display: 'flex', gap: '24px', marginBottom: '24px', flexWrap: 'wrap', justifyContent: 'center' }}>

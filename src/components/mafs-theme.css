@@ -1,0 +1,10 @@
+/* Light theme for Mafs, matching the JSXGraph charts */
+.MafsView {
+    --mafs-bg: #ffffff;
+    --mafs-fg: #333333;
+    --mafs-origin-color: #666666;
+    --mafs-line-color: #dddddd;
+    --grid-line-subdivision-color: #f0f0f0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}
