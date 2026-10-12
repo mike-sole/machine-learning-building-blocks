@@ -1,17 +1,10 @@
 import React from 'react';
 import { MovablePoint, Polygon, Vector, Line } from 'mafs';
-import type { ChartPoint } from '../../../components/chartTestHook';
 import { SIMILARITY_COLORS as C } from '../colors';
 import { vectorLength, distance, ccwAngleDeg, angleSector, angleLabelPosition, type Vec2 } from './geometry';
 import { SegmentLabel, VectorName, CentredText } from './labels';
 
 const ORIGIN: Vec2 = [0, 0];
-
-/** The two draggable vectors as reported to the chart tests. */
-export const twoVectorPoints = (a: Vec2, b: Vec2): ChartPoint[] => [
-    { name: 'a', x: a[0], y: a[1], visible: true, draggable: true, color: C.aMag },
-    { name: 'b', x: b[0], y: b[1], visible: true, draggable: true, color: C.aMag },
-];
 
 interface TwoVectorSceneProps {
     a: Vec2;

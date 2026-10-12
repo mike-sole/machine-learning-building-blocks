@@ -2,8 +2,15 @@ import React, { useState } from 'react';
 import { MafsBoard } from '../../../components/MafsBoard';
 import { SIMILARITY_COLORS as c } from '../colors';
 import { vectorLength, distance, dot, cosineSimilarity, ccwAngleDeg, type Vec2 } from './geometry';
-import { TwoVectorScene, twoVectorPoints } from './TwoVectorScene';
+import { TwoVectorScene } from './TwoVectorScene';
+import type { ChartPoint } from '../../../components/chartTestHook';
 import { CalculationPanel, V, Value } from './CalculationPanel';
+
+/** The two draggable vectors as reported to the chart tests. */
+const twoVectorPoints = (a: Vec2, b: Vec2): ChartPoint[] => [
+    { name: 'a', x: a[0], y: a[1], visible: true, draggable: true, color: c.aMag },
+    { name: 'b', x: b[0], y: b[1], visible: true, draggable: true, color: c.aMag },
+];
 
 type Lines = (a: Vec2, b: Vec2) => React.ReactNode[];
 
