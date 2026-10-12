@@ -27,9 +27,6 @@ export const InteractiveGraph: React.FC<InteractiveGraphProps> = ({ id }) => {
         setLogs([]);
         setActions({});
 
-        // Enable MathJax
-        JXG.Options.text.useMathJax = true;
-
         // Get graph config
         const graphEntry = registry[id];
         if (!graphEntry) {
@@ -115,43 +112,9 @@ export const InteractiveGraph: React.FC<InteractiveGraphProps> = ({ id }) => {
 
             // Call multi-board initializer
             (initGraph as any)([board, board2], setLogs, setActions);
-
-            // Re-run MathJax for both boards, with a small delay to ensuring DOM is ready
-            const MathJax = (window as any).MathJax;
-            if (MathJax && MathJax.Hub && MathJax.Hub.Queue) {
-                setTimeout(() => {
-                    MathJax.Hub.Queue(["Typeset", MathJax.Hub, containerId]);
-                    MathJax.Hub.Queue(["Typeset", MathJax.Hub, containerId2]);
-                }, 10);
-            }
-
-            // Re-typeset after interaction
-            board.on('up', () => {
-                if (MathJax && MathJax.Hub && MathJax.Hub.Queue) {
-                    setTimeout(() => {
-                        MathJax.Hub.Queue(["Typeset", MathJax.Hub, containerId]);
-                        MathJax.Hub.Queue(["Typeset", MathJax.Hub, containerId2]);
-                    }, 10);
-                }
-            });
         } else {
             // Single board initialization
             (initGraph as any)(board, setLogs, setActions);
-
-            // Re-run MathJax
-            const MathJax = (window as any).MathJax;
-            if (MathJax && MathJax.Hub && MathJax.Hub.Queue) {
-                MathJax.Hub.Queue(["Typeset", MathJax.Hub, containerId]);
-            }
-
-            // Re-typeset after interaction
-            board.on('up', () => {
-                if (MathJax && MathJax.Hub && MathJax.Hub.Queue) {
-                    setTimeout(() => {
-                        MathJax.Hub.Queue(["Typeset", MathJax.Hub, containerId]);
-                    }, 10);
-                }
-            });
         }
 
         // Test hook (dev builds only): lets the Playwright chart driver map chart coordinates to the screen
