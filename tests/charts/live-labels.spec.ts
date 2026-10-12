@@ -82,7 +82,6 @@ const CASES: Case[] = [
         // from a rounding boundary. Other drags hit one: (0.2, 0.2) puts h1's bias at exactly 0, shown as 0.00 or -0.00, and
         // (0.36, 0.36) the output's at -3.175, so a sub-pixel difference in where the drag lands flips the last digit.
         steps: [0, 1, 2].map(occurrence => ({ drag: 'b', occurrence, by: { x: 0.32, y: 0.32 } })),
-        mobileBug: '#45: the boundary handle is too close to the weight handle to touch on a phone',
     },
 ];
 

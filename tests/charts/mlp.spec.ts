@@ -104,11 +104,7 @@ for (const [occurrence, name] of NEURONS.entries()) {
         }
     });
 
-    test(`dragging ${name}'s boundary changes its bias but not its weights`, async ({ page }, testInfo) => {
-        // Known bug (#45): on a phone the boundary handle is 15-30px from the weight handle, inside
-        // JSXGraph's 30px touch radius, so a finger on the boundary grabs the weight vector.
-        // Remove this once the chart is laid out for small screens.
-        test.fail(testInfo.project.name === 'mobile', 'boundary handle is too close to the weight handle to touch on a phone');
+    test(`dragging ${name}'s boundary changes its bias but not its weights`, async ({ page }) => {
         const c = await openChart(page, POSTS.mlp, id);
         await dragPointBy(page, id, 'b', { x: 0.2, y: 0.2 }, occurrence);
 
