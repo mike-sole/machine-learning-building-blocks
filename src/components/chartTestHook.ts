@@ -19,11 +19,23 @@ export interface ChartPoint {
     color?: string;
 }
 
+export interface ChartPlot {
+    /** Visible name, if any */
+    name: string;
+    /** The x range the function is drawn over */
+    from: number;
+    to: number;
+    /** The plotted value at x */
+    y(x: number): number;
+}
+
 export interface ChartBoardHandle {
     /** Chart coordinates → viewport (client) pixel coordinates */
     toScreen(x: number, y: number): { x: number; y: number };
     /** Every point on the board, in creation order */
     points(): ChartPoint[];
+    /** Every plotted function y = f(x) on the board, in creation order */
+    plots(): ChartPlot[];
 }
 
 type ChartsWindow = Window & { __charts?: Record<string, ChartBoardHandle[]> };
@@ -68,6 +80,18 @@ export function jsxGraphBoardHandle(board: JXG.Board): ChartBoardHandle {
                     color: el.visProp.fillcolor == null ? undefined : String(el.visProp.fillcolor).toLowerCase(),
                 }));
         },
+        plots() {
+            return b.objectsList
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                .filter((el: any) => el.elType === 'curve' && el.visProp.curvetype === 'functiongraph')
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                .map((el: any) => ({
+                    name: stripHtml(el.name),
+                    from: el.minX(),
+                    to: el.maxX(),
+                    y: (x: number) => el.Y(x),
+                }));
+        },
     };
 }
 
@@ -79,8 +103,10 @@ export function mafsBoardHandle(
     svg: SVGSVGElement,
     toSvg: (x: number, y: number) => [number, number],
     points: () => ChartPoint[],
+    plots: () => ChartPlot[] = () => [],
 ): ChartBoardHandle {
     return {
+        plots,
         toScreen(x, y) {
             const [px, py] = toSvg(x, y);
             const p = new DOMPoint(px, py).matrixTransform(svg.getScreenCTM() ?? undefined);
