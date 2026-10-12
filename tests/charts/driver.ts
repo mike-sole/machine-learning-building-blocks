@@ -213,3 +213,12 @@ export function trackErrors(page: Page): string[] {
     });
     return errors;
 }
+
+/** Each plotted function on a board: its name, x range, and its values sampled at `samples` evenly spaced x across that range. */
+export async function plotSamples(page: Page, id: string, boardIndex = 0, samples = 25) {
+    return page.evaluate(({ id, boardIndex, samples }) =>
+        (window as unknown as ChartsWindow).__charts[id][boardIndex].plots().map(p => {
+            const xs = Array.from({ length: samples }, (_, i) => p.from + ((p.to - p.from) * i) / (samples - 1));
+            return { name: p.name, from: p.from, to: p.to, samples: xs.map(x => ({ x, y: p.y(x) })) };
+        }), { id, boardIndex, samples });
+}
