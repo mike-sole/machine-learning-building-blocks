@@ -1,0 +1,65 @@
+[
+  {
+    "step": "drag b by (0.2, 0.2)",
+    "whileHeld": {
+      "appeared": [
+        "Not Spam (0.00)",
+        "Not Spam (0.00)",
+        "Spam (4.00)",
+        "w₀ -0.00",
+        "w₀ -0.00"
+      ],
+      "disappeared": [
+        "Not Spam (0.30)",
+        "Not Spam (0.30)",
+        "Spam (4.30)",
+        "w₀ 0.30",
+        "w₀ 0.30"
+      ]
+    },
+    "onRelease": {
+      "appeared": [],
+      "disappeared": []
+    }
+  },
+  {
+    "step": "drag b #1 by (0.2, 0.2)",
+    "whileHeld": {
+      "appeared": [
+        "Not Spam (0.66)",
+        "Not Spam (1.06)",
+        "Spam (4.86)",
+        "w₀ 0.86",
+        "w₀ 0.86"
+      ],
+      "disappeared": [
+        "Not Spam (0.36)",
+        "Not Spam (0.76)",
+        "Spam (4.56)",
+        "w₀ 0.56",
+        "w₀ 0.56"
+      ]
+    },
+    "onRelease": {
+      "appeared": [],
+      "disappeared": []
+    }
+  },
+  {
+    "step": "drag b #2 by (0.2, 0.2)",
+    "whileHeld": {
+      "appeared": [
+        "w₀ -2.84",
+        "w₀ -2.84"
+      ],
+      "disappeared": [
+        "w₀ -2.41",
+        "w₀ -2.41"
+      ]
+    },
+    "onRelease": {
+      "appeared": [],
+      "disappeared": []
+    }
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "step": "drag b to (0.50, 0.87)",
+    "whileHeld": {
+      "appeared": [
+        "20.5°",
+        "48.7°"
+      ],
+      "disappeared": [
+        "33.7°",
+        "35.5°"
+      ]
+    },
+    "onRelease": {
+      "appeared": [],
+      "disappeared": []
+    }
+  },
+  {
+    "step": "drag a to (0.98, 0.17)",
+    "whileHeld": {
+      "appeared": [
+        "50.0°"
+      ],
+      "disappeared": [
+        "48.7°"
+      ]
+    },
+    "onRelease": {
+      "appeared": [],
+      "disappeared": []
+    }
+  },
+  {
+    "step": "drag c to (-0.17, 0.98)",
+    "whileHeld": {
+      "appeared": [
+        "40.0°"
+      ],
+      "disappeared": [
+        "20.5°"
+      ]
+    },
+    "onRelease": {
+      "appeared": [],
+      "disappeared": []
+    }
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "step": "drag Spam (4.00) to (3.00, -3.00)",
+    "whileHeld": {
+      "appeared": [
+        "(3.00, -3.00)",
+        "Spam (-14.00)"
+      ],
+      "disappeared": [
+        "Spam (4.00)"
+      ]
+    },
+    "onRelease": {
+      "appeared": [],
+      "disappeared": [
+        "(3.00, -3.00)"
+      ]
+    }
+  }
+]

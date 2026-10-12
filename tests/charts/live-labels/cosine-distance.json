@@ -1,0 +1,32 @@
+[
+  {
+    "step": "drag a to (-0.50, 0.87)",
+    "whileHeld": {
+      "appeared": [
+        "120.0°"
+      ],
+      "disappeared": [
+        "45.0°"
+      ]
+    },
+    "onRelease": {
+      "appeared": [],
+      "disappeared": []
+    }
+  },
+  {
+    "step": "drag a to (-0.34, -0.94)",
+    "whileHeld": {
+      "appeared": [
+        "250.0°"
+      ],
+      "disappeared": [
+        "120.0°"
+      ]
+    },
+    "onRelease": {
+      "appeared": [],
+      "disappeared": []
+    }
+  }
+]
