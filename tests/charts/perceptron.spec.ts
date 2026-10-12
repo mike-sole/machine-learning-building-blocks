@@ -61,10 +61,7 @@ test.describe('perceptron-classification', () => {
         await expectClassification(page, w, b);
     });
 
-    test('dragging a data point rescores and recolours it', async ({ page }, testInfo) => {
-        // Known bug (#57): on a phone the neighbouring point (-1, 4) is inside JSXGraph's
-        // touch radius, so the finger grabs it instead. Remove once fixed.
-        test.fail(testInfo.project.name === 'mobile', '#57: touch grabs the neighbouring data point on a phone');
+    test('dragging a data point rescores and recolours it', async ({ page }) => {
         await openChart(page, POSTS.perceptronModel, id);
         // Spam point (0, 3) scores 4.00 (correct); dragged to (3, -3) it lands on the wrong side
         await dragPointTo(page, id, 'Spam (4.00)', { x: 3, y: -3 });
