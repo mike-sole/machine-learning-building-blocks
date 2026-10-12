@@ -4,6 +4,7 @@ import { MovieVectorsNormalized, MovieVectorsPopularity } from './mafs/MovieVect
 import { PerceptronClassification } from './mafs/PerceptronClassification';
 import { PerceptronTraining } from './mafs/PerceptronTraining';
 import { MlpArchitecture } from './mafs/MlpArchitecture';
+import { MlpDecisionBoundaries } from './mafs/MlpDecisionBoundaries';
 import { CosineNormalized, CosineDistance, DistanceComparison } from './mafs/UnitCircleCharts';
 import { VectorSimilarityIntro, DotProductGeometric, DotProductComparison, MathNotations } from './mafs/TwoVectorCharts';
 
@@ -23,4 +24,5 @@ export const mafsCharts: Record<string, React.ComponentType<{ id: string }>> = {
     'perceptron-classification': PerceptronClassification,
     'perceptron-training': PerceptronTraining,
     'mlp-architecture': MlpArchitecture,
+    'mlp-decision-boundaries': MlpDecisionBoundaries,
 };

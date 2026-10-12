@@ -79,6 +79,19 @@ test('shows the weights from the post and the resulting activations', async ({ p
     expect(activations.h2.map(m => m[2])).toEqual(['0.00', '4.56', '0.36', '0.76']);
 });
 
+test("while h1's weight vector is dragged, its boundary point keeps its projection from where the drag began", async ({ page }) => {
+    // h1 starts with w = (1, 1), b = 0.3: boundary point (-0.15, -0.15), tip (0.85, 0.85), in h1's own coordinates.
+    // Dragging the tip by (0.4, -0.3) on the board moves it by (0.3, -0.225) in h1's graph (4 board units per 3).
+    const c = await openChart(page, POSTS.mlp, id);
+    await dragPointBy(page, id, 'w', { x: 0.4, y: -0.3 }, 0);
+    const tip = { x: 1.15, y: 0.625 };
+    const t = (-0.15 * tip.x - 0.15 * tip.y) / (tip.x ** 2 + tip.y ** 2);
+    const anchor = { x: t * tip.x, y: t * tip.y };
+    const w = { x: tip.x - anchor.x, y: tip.y - anchor.y };
+    const b = -(anchor.x * w.x + anchor.y * w.y);
+    await expect.poll(async () => asText((await readNetwork(c)).neurons.h1)).toEqual([f(w.x), f(w.y), f(b)]);
+});
+
 for (const [occurrence, name] of NEURONS.entries()) {
     test(`dragging ${name}'s weight vector updates only ${name}, everywhere it is shown`, async ({ page }) => {
         const c = await openChart(page, POSTS.mlp, id);

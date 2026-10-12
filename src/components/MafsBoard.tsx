@@ -28,6 +28,8 @@ interface MafsBoardProps {
     aspect?: number;
     /** Draw the grid and axes (on by default) */
     grid?: boolean;
+    /** No border around the board */
+    frameless?: boolean;
     /** For charts with several boards: this board's position, and how many there are */
     boardIndex?: number;
     boardCount?: number;
@@ -47,7 +49,7 @@ interface MafsBoardProps {
 }
 
 /** A responsive Mafs board (square unless given a height or aspect) with a grid and labelled axes, styled like the site's charts. */
-export const MafsBoard: React.FC<MafsBoardProps> = ({ chartId, points = NO_POINTS, plots = NO_PLOTS, height, stretch, aspect = 1, grid = true, boardIndex = 0, boardCount = 1, sideBySide, xAxis, yAxis, x = [-5, 5], y = [-5, 5], maxWidth = 700, narrow, panel, children }) => {
+export const MafsBoard: React.FC<MafsBoardProps> = ({ chartId, points = NO_POINTS, plots = NO_PLOTS, height, stretch, aspect = 1, grid = true, frameless, boardIndex = 0, boardCount = 1, sideBySide, xAxis, yAxis, x = [-5, 5], y = [-5, 5], maxWidth = 700, narrow, panel, children }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [size, setSize] = useState(0);
 
@@ -68,7 +70,7 @@ export const MafsBoard: React.FC<MafsBoardProps> = ({ chartId, points = NO_POINT
             <div
                 ref={containerRef}
                 data-chart-board
-                style={{ width: '100%', ...(height ? { height } : { aspectRatio: `${aspect}` }), border: '1px solid #eee', borderRadius: '8px', overflow: 'hidden' }}
+                style={{ width: '100%', ...(height ? { height } : { aspectRatio: `${aspect}` }), border: frameless ? 'none' : '1px solid #eee', borderRadius: '8px', overflow: 'hidden' }}
             >
                 {/* A figure, not a div: the chart tests read each HTML label that is a direct div child of a board */}
                 <figure style={{ margin: 0 }}>
