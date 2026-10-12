@@ -1,5 +1,4 @@
 import JXG from 'jsxgraph';
-import { UnitCircleChart } from './UnitCircleCharts';
 import { PerceptronChart } from './PerceptronChart';
 import { PerceptronTrainingChart } from './PerceptronTrainingChart';
 import { MultiLayerPerceptronChart } from './MultiLayerPerceptronChart';
@@ -31,65 +30,7 @@ const registry: Record<string, GraphInitializer | GraphConfig> = {
     // 'cosine-function' is a Mafs chart: see mafsCharts.ts
     // 'dot-product-geometric' and 'dot-product-comparison' are Mafs charts: see mafsCharts.ts
 
-    // 5. Cosine Normalized (Unit Circle)
-    'cosine-normalized': {
-        isMultiBoard: true,
-        boardAttributes: {
-            boundingbox: [-1.2, 1.2, 1.2, -1.2],
-            defaultAxes: {
-                x: { ticks: { insertTicks: false, ticksDistance: 0.2 } },
-                y: { ticks: { insertTicks: false, ticksDistance: 0.2 } }
-            }
-        },
-        boardAttributes2: {
-            boundingbox: [-1, 2.5, 7, -2.5],
-            keepaspectratio: false
-        },
-        initializer: (boards: JXG.Board[]) => {
-            new UnitCircleChart(boards[0], boards[1]).withCosineSimilarityMeasure(false);
-        }
-    } as GraphConfig,
-
-    // 6. Cosine Distance
-    'cosine-distance': {
-        isMultiBoard: true,
-        boardAttributes: {
-            boundingbox: [-1.2, 1.2, 1.2, -1.2],
-            defaultAxes: {
-                x: { ticks: { insertTicks: false, ticksDistance: 0.2 } },
-                y: { ticks: { insertTicks: false, ticksDistance: 0.2 } }
-            }
-        },
-        boardAttributes2: {
-            boundingbox: [-1, 2.5, 7, -2.5],
-            keepaspectratio: false
-        },
-        initializer: (boards: JXG.Board[]) => {
-            new UnitCircleChart(boards[0], boards[1]).withCosineSimilarityMeasure(true);
-        }
-    } as GraphConfig,
-
-    // 7. Distance Comparison (Graph)
-    'distance-comparison': {
-        isMultiBoard: true,
-        boardAttributes: {
-            boundingbox: [-1.2, 1.2, 1.2, -1.2],
-            defaultAxes: {
-                x: { ticks: { insertTicks: false, ticksDistance: 0.2 } },
-                y: { ticks: { insertTicks: false, ticksDistance: 0.2 } }
-            }
-        },
-        boardAttributes2: {
-            boundingbox: [-1, 2.5, 7, -2.5],
-            keepaspectratio: false
-        },
-        initializer: (boards: JXG.Board[]) => {
-            new UnitCircleChart(boards[0], boards[1])
-                .withEuclideanDistanceMetric()
-                .withCosineSimilarityMeasure(true);
-        }
-    } as GraphConfig,
-
+    // 'cosine-normalized', 'cosine-distance' and 'distance-comparison' are Mafs charts: see mafsCharts.ts
     // 'movie-vectors-normalized' and 'movie-vectors-popularity' are Mafs charts: see mafsCharts.ts
 
     // 'math-notations' is a Mafs chart: see mafsCharts.ts
