@@ -20,9 +20,10 @@ export const VectorName: React.FC<{ at: Vec2; name: string }> = ({ at, name }) =
     const { viewTransform } = useTransformContext();
     const [px, py] = vec.transform(at, viewTransform);
     return (
-        <text x={px + 10} y={py - 10} style={{ fill: '#000000', fontSize: 16, fontStyle: 'italic', fontFamily: "'Times New Roman', serif" }}>
-            {name}{'⃗'}
-        </text>
+        <g transform={`translate(${px + 14} ${py - 10})`} style={{ fill: '#000000' }}>
+            <text textAnchor="middle" style={{ fontSize: 16, fontStyle: 'italic', fontFamily: "'Times New Roman', serif" }}>{name}</text>
+            <text y={-11} textAnchor="middle" style={{ fontSize: 11 }}>→</text>
+        </g>
     );
 };
 

@@ -38,7 +38,7 @@ export const MafsBoard: React.FC<MafsBoardProps> = ({ chartId, points, x = [-5, 
         >
             {size > 0 && (
                 <Mafs height={size} pan={false} zoom={false} viewBox={{ x, y, padding: 0 }}>
-                    <Coordinates.Cartesian />
+                    <Coordinates.Cartesian xAxis={{ labels: edgeless(x) }} yAxis={{ labels: edgeless(y) }} />
                     {children}
                     <TestHook chartId={chartId} points={points} container={containerRef} />
                 </Mafs>
@@ -46,6 +46,9 @@ export const MafsBoard: React.FC<MafsBoardProps> = ({ chartId, points, x = [-5, 
         </div>
     );
 };
+
+/** Axis labels, leaving out the two at the very edges of the board (they would be cut in half). */
+const edgeless = ([min, max]: [number, number]) => (n: number) => (n <= min || n >= max ? '' : String(n));
 
 /** Registers the board with the dev-only chart test hook (see chartTestHook.ts). */
 const TestHook: React.FC<{ chartId: string; points: ChartPoint[]; container: React.RefObject<HTMLDivElement | null> }> = ({ chartId, points, container }) => {
