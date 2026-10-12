@@ -31,19 +31,22 @@ function useMovieVectors(start: (v: Vec2) => Vec2) {
     return { tips, move, points };
 }
 
-const MovieVector: React.FC<{ index: number; tip: Vec2; onMove: (p: Vec2) => void; showLength: boolean }> = ({ index, tip, onMove, showLength }) => {
+const MovieVector: React.FC<{ index: number; tip: Vec2; onMove: (p: Vec2) => void; showLength: boolean; constrain?: (p: Vec2) => Vec2 }> = ({ index, tip, onMove, showLength, constrain }) => {
     const movie = MOVIES[index];
     return (
         <>
             <Vector tip={tip} color={movie.color} weight={3} />
             {showLength && <SegmentLabel from={ORIGIN} to={tip} text={vectorLength(tip).toFixed(2)} background={movie.lengthLabel} />}
             <VectorName at={tip} name={movie.name} color={movie.color} />
-            <MovablePoint point={tip} onMove={onMove} color={movie.color} />
+            <MovablePoint point={tip} onMove={onMove} color={movie.color} constrain={constrain} />
         </>
     );
 };
 
-/** The movie vectors scaled to length 1 on the unit circle: each length is 1.00, so only the angles between them remain. */
+/**
+ * The movie vectors scaled to length 1 on the unit circle: each length is 1.00, so only the angles between them
+ * remain. Dragging a vector turns it; it stays on the circle.
+ */
 export const MovieVectorsNormalized: React.FC<{ id: string }> = ({ id }) => {
     const { tips: [a, b, c], move, points } = useMovieVectors(normalise);
     return (
@@ -51,7 +54,7 @@ export const MovieVectorsNormalized: React.FC<{ id: string }> = ({ id }) => {
             <Circle center={ORIGIN} radius={1} color="#cccccc" strokeStyle="dashed" fillOpacity={0} />
             <AngleMark from={a} to={b} radius={0.5} />
             <AngleMark from={b} to={c} radius={0.4} />
-            {[a, b, c].map((tip, i) => <MovieVector key={i} index={i} tip={tip} onMove={move(i)} showLength />)}
+            {[a, b, c].map((tip, i) => <MovieVector key={i} index={i} tip={tip} onMove={move(i)} showLength constrain={normalise} />)}
         </MafsBoard>
     );
 };

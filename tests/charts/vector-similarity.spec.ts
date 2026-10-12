@@ -173,6 +173,18 @@ test.describe('movie vectors', () => {
         await expect.poll(async () => (await chartTexts(c)).filter(t => t === '1.00').length, { message: 'three 1.00 length labels' }).toBe(3);
     });
 
+    test('a normalised vector stays on the unit circle when dragged inside it', async ({ page }) => {
+        const id = 'movie-vectors-normalized';
+        const c = await openChart(page, POSTS.vectorSimilarity, id);
+        // Drag b halfway to the centre, in the 60° direction: it turns to 60° but keeps length 1
+        const half = onUnitCircle(60);
+        await dragPointTo(page, id, 'b', { x: half.x / 2, y: half.y / 2 });
+        const b = await plottedPoint(page, id, 'b');
+        expect(length(b)).toBeCloseTo(1, 2);
+        expect(angleDeg({ x: 1, y: 0 }, b)).toBeCloseTo(60, 0);
+        await expect.poll(async () => (await chartTexts(c)).filter(t => t === '1.00').length).toBe(3);
+    });
+
     const popularity = (a: Vec, b: Vec, cv: Vec) => [
         angleLabel(a, b), angleLabel(b, cv),
         f(length(a)), f(length(b)), f(length(cv)),
