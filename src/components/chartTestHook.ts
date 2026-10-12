@@ -70,3 +70,22 @@ export function jsxGraphBoardHandle(board: JXG.Board): ChartBoardHandle {
         },
     };
 }
+
+/**
+ * Test handle for a Mafs board. `viewTransform` maps chart coordinates to the SVG's own
+ * pixel space (Mafs' useTransformContext); the SVG's screen matrix then maps that to the viewport.
+ */
+export function mafsBoardHandle(
+    svg: SVGSVGElement,
+    toSvg: (x: number, y: number) => [number, number],
+    points: () => ChartPoint[],
+): ChartBoardHandle {
+    return {
+        toScreen(x, y) {
+            const [px, py] = toSvg(x, y);
+            const p = new DOMPoint(px, py).matrixTransform(svg.getScreenCTM() ?? undefined);
+            return { x: p.x, y: p.y };
+        },
+        points,
+    };
+}
