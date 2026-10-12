@@ -1,5 +1,4 @@
 import JXG from 'jsxgraph';
-import { PerceptronTrainingChart } from './PerceptronTrainingChart';
 import { MultiLayerPerceptronChart } from './MultiLayerPerceptronChart';
 import { MLPDecisionBoundariesChart } from './MLPDecisionBoundariesChart';
 import { initSigmoid } from './ActivationFunctionsChart';
@@ -36,33 +35,7 @@ const registry: Record<string, GraphInitializer | GraphConfig> = {
 
     // 'perceptron-classification' is a Mafs chart: see mafsCharts.ts
 
-    'perceptron-training': {
-        boardAttributes: {
-            boundingbox: [-6, 6, 6, -6],
-            axis: true,
-            showCopyright: false,
-            navigation: {
-                button: false // Disable the default zoom/pan buttons to keep it clean
-            }
-        },
-        initializer: (
-            board: JXG.Board,
-            onLogUpdate?: (logs: string[]) => void,
-            onRegisterActions?: (actions: Record<string, () => void>) => void
-        ) => {
-            const data = [
-                { x: 4.0, y: 5.0, label: "spam", class: 1 },
-                { x: 5.0, y: 4.0, label: "spam", class: 1 },
-                { x: 3.0, y: 5.5, label: "spam", class: 1 },
-
-                { x: 2.0, y: 1.0, label: "not spam", class: 0 },
-                { x: 3.0, y: 0.5, label: "not spam", class: 0 },
-                { x: 1.0, y: 2.0, label: "not spam", class: 0 },
-            ];
-
-            new PerceptronTrainingChart(board, data, onLogUpdate, onRegisterActions);
-        }
-    } as GraphConfig,
+    // 'perceptron-training' is a Mafs chart: see mafsCharts.ts
 
     'mlp-architecture': {
         containerStyle: { width: '100%', aspectRatio: '5/3', margin: '0 auto' },
