@@ -8,7 +8,7 @@ import { MlpDecisionBoundaries } from './mafs/MlpDecisionBoundaries';
 import { CosineNormalized, CosineDistance, DistanceComparison } from './mafs/UnitCircleCharts';
 import { VectorSimilarityIntro, DotProductGeometric, DotProductComparison, MathNotations } from './mafs/TwoVectorCharts';
 
-/** Charts built with Mafs (React components). Every other chart id is a JSXGraph chart in registry.ts. */
+/** Every chart a post can show in a ```graph block, by id. Each is a React component built with Mafs. */
 export const mafsCharts: Record<string, React.ComponentType<{ id: string }>> = {
     'vector-similarity-intro': VectorSimilarityIntro,
     'dot-product-geometric': DotProductGeometric,

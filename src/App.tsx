@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { Home } from './pages/Home';
 
-// Posts pull in KaTeX, JSXGraph and the syntax highlighter, so load them only when a post is opened
+// Posts pull in KaTeX, Mafs and the syntax highlighter, so load them only when a post is opened
 const Post = lazy(() => import('./pages/Post').then(m => ({ default: m.Post })));
 
 function App() {
