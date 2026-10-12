@@ -128,6 +128,10 @@ export class PerceptronChart {
     }
 
     updatePointClassifications() {
+        // Settle dependent geometry first: the bias glider re-projects onto the weight
+        // direction during the board update, and the scores must use its new position
+        this.board.update();
+
         this.classOnePoints.forEach((pt) => {
             const dotProduct =
                 this.weightVector.X() * (pt.X() - this.bias.X()) +

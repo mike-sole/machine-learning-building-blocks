@@ -154,7 +154,16 @@ export const InteractiveGraph: React.FC<InteractiveGraphProps> = ({ id }) => {
             });
         }
 
+        // Test hook (dev builds only): lets the Playwright chart driver map chart coordinates to the screen
+        if (import.meta.env.DEV) {
+            const w = window as unknown as { __charts?: Record<string, JXG.Board[]> };
+            w.__charts = { ...w.__charts, [id]: board2Ref.current ? [board, board2Ref.current] : [board] };
+        }
+
         return () => {
+            if (import.meta.env.DEV) {
+                delete (window as unknown as { __charts?: Record<string, JXG.Board[]> }).__charts?.[id];
+            }
             if (boardRef.current) {
                 JXG.JSXGraph.freeBoard(boardRef.current);
             }
@@ -172,13 +181,12 @@ export const InteractiveGraph: React.FC<InteractiveGraphProps> = ({ id }) => {
     const containerStyle = (graphEntry && typeof graphEntry === 'object' && 'containerStyle' in graphEntry) ? graphEntry.containerStyle : {};
 
     return (
-        <div style={{
+        <div className="sm:px-4" style={{
             width: '100%',
             margin: '32px 0',
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
-            padding: '0 16px'
+            alignItems: 'center'
         }}>
             {/* Actions (Buttons) */}
             {Object.keys(actions).length > 0 && (
@@ -210,7 +218,7 @@ export const InteractiveGraph: React.FC<InteractiveGraphProps> = ({ id }) => {
 
             {/* Logs */}
             {logs.length > 0 && (
-                <div style={{
+                <div data-chart-log style={{
                     width: '100%',
                     maxWidth: '700px',
                     marginBottom: '32px',
@@ -233,6 +241,7 @@ export const InteractiveGraph: React.FC<InteractiveGraphProps> = ({ id }) => {
                 <div style={{
                     display: 'flex',
                     flexDirection: 'row',
+                    flexWrap: 'wrap',
                     gap: '24px',
                     width: '100%',
                     maxWidth: '1040px',
@@ -242,12 +251,12 @@ export const InteractiveGraph: React.FC<InteractiveGraphProps> = ({ id }) => {
                     <div
                         ref={containerRef}
                         className="jxgbox"
-                        style={{ flex: '1 1 0', minWidth: '300px', maxWidth: '500px', aspectRatio: '1 / 1', border: '1px solid #eee', borderRadius: '8px' }}
+                        style={{ flex: '1 1 0', minWidth: 'min(300px, 100%)', maxWidth: '500px', aspectRatio: '1 / 1', border: '1px solid #eee', borderRadius: '8px' }}
                     />
                     <div
                         ref={container2Ref}
                         className="jxgbox"
-                        style={{ flex: '1 1 0', minWidth: '300px', maxWidth: '500px', aspectRatio: '1 / 1', border: '1px solid #eee', borderRadius: '8px' }}
+                        style={{ flex: '1 1 0', minWidth: 'min(300px, 100%)', maxWidth: '500px', aspectRatio: '1 / 1', border: '1px solid #eee', borderRadius: '8px' }}
                     />
                 </div>
             ) : (
