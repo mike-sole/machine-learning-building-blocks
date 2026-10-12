@@ -1,14 +1,29 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Mafs, Coordinates, useTransformContext, vec } from 'mafs';
+import { Mafs, Coordinates, Plot, useTransformContext, vec } from 'mafs';
 import 'mafs/core.css';
 import './mafs-theme.css';
-import { registerChartForTests, mafsBoardHandle, type ChartPoint } from './chartTestHook';
+import { registerChartForTests, mafsBoardHandle, type ChartPoint, type ChartPlot } from './chartTestHook';
+
+/** Grid line spacing and label text for one axis */
+interface AxisStyle {
+    lines?: number;
+    labels?: (value: number) => string;
+}
+
+/** A function y = f(x) drawn on the board (and reported to the chart tests) */
+export type BoardPlot = ChartPlot & { color: string; weight?: number };
 
 interface MafsBoardProps {
     /** Chart id, as used in the blog post (registers the board for the chart tests) */
     chartId: string;
     /** The board's points, as reported to the chart tests */
-    points: ChartPoint[];
+    points?: ChartPoint[];
+    /** Functions to plot */
+    plots?: BoardPlot[];
+    /** Fixed height in pixels, stretching the axes to fill it; square when left out */
+    height?: number;
+    xAxis?: AxisStyle;
+    yAxis?: AxisStyle;
     /** Visible range of the axes */
     x?: [number, number];
     y?: [number, number];
@@ -20,12 +35,12 @@ interface MafsBoardProps {
     children: React.ReactNode;
 }
 
-/** A square, responsive Mafs board with a grid and labelled axes, styled like the site's charts. */
-export const MafsBoard: React.FC<MafsBoardProps> = ({ chartId, points, x = [-5, 5], y = [-5, 5], maxWidth = 700, narrow, panel, children }) => {
+/** A responsive Mafs board (square unless given a height) with a grid and labelled axes, styled like the site's charts. */
+export const MafsBoard: React.FC<MafsBoardProps> = ({ chartId, points = NO_POINTS, plots = NO_PLOTS, height, xAxis, yAxis, x = [-5, 5], y = [-5, 5], maxWidth = 700, narrow, panel, children }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [size, setSize] = useState(0);
 
-    // Mafs needs a height in pixels: keep the board square at whatever width the page allows
+    // Mafs needs a height in pixels: unless given one, keep the board square at whatever width the page allows
     useEffect(() => {
         const el = containerRef.current;
         if (!el) return;
@@ -42,15 +57,19 @@ export const MafsBoard: React.FC<MafsBoardProps> = ({ chartId, points, x = [-5, 
             <div
                 ref={containerRef}
                 data-chart-board
-                style={{ width: '100%', aspectRatio: '1 / 1', border: '1px solid #eee', borderRadius: '8px', overflow: 'hidden' }}
+                style={{ width: '100%', ...(height ? { height } : { aspectRatio: '1 / 1' }), border: '1px solid #eee', borderRadius: '8px', overflow: 'hidden' }}
             >
                 {/* A figure, not a div: the chart tests read each HTML label that is a direct div child of a board */}
                 <figure style={{ margin: 0 }}>
                     {size > 0 && (
-                        <Mafs height={size} pan={false} zoom={false} viewBox={{ ...range, padding: 0 }}>
-                            <Coordinates.Cartesian xAxis={{ labels: edgeless(range.x) }} yAxis={{ labels: edgeless(range.y) }} />
+                        <Mafs height={height ?? size} pan={false} zoom={false} viewBox={{ ...range, padding: 0 }} preserveAspectRatio={height ? false : 'contain'}>
+                            <Coordinates.Cartesian
+                                xAxis={{ lines: xAxis?.lines ?? 1, labels: edgeless(range.x, xAxis?.labels) }}
+                                yAxis={{ lines: yAxis?.lines ?? 1, labels: edgeless(range.y, yAxis?.labels) }}
+                            />
+                            {plots.map((p, i) => <Plot.OfX key={i} y={p.y} domain={[p.from, p.to]} color={p.color} weight={p.weight ?? 2} />)}
                             {children}
-                            <TestHook chartId={chartId} points={points} container={containerRef} />
+                            <TestHook chartId={chartId} points={points} plots={plots} container={containerRef} />
                         </Mafs>
                     )}
                 </figure>
@@ -60,22 +79,28 @@ export const MafsBoard: React.FC<MafsBoardProps> = ({ chartId, points, x = [-5, 
     );
 };
 
+const NO_POINTS: ChartPoint[] = [];
+const NO_PLOTS: BoardPlot[] = [];
+
 /** Axis labels, leaving out the two at the very edges of the board (they would be cut in half). */
-const edgeless = ([min, max]: [number, number]) => (n: number) => (n <= min || n >= max ? '' : String(n));
+const edgeless = ([min, max]: [number, number], label: (n: number) => string = String) =>
+    (n: number) => (n <= min + 1e-9 || n >= max - 1e-9 ? '' : label(n));
 
 /** Registers the board with the dev-only chart test hook (see chartTestHook.ts). */
-const TestHook: React.FC<{ chartId: string; points: ChartPoint[]; container: React.RefObject<HTMLDivElement | null> }> = ({ chartId, points, container }) => {
+const TestHook: React.FC<{ chartId: string; points: ChartPoint[]; plots: ChartPlot[]; container: React.RefObject<HTMLDivElement | null> }> = ({ chartId, points, plots, container }) => {
     const { viewTransform } = useTransformContext();
     const pointsRef = useRef(points);
+    const plotsRef = useRef(plots);
     useEffect(() => {
         pointsRef.current = points;
-    }, [points]);
+        plotsRef.current = plots;
+    }, [points, plots]);
 
     useEffect(() => {
         const svg = container.current?.querySelector('svg');
         if (!svg) return;
         return registerChartForTests(chartId, [
-            mafsBoardHandle(svg, (px, py) => vec.transform([px, py], viewTransform), () => pointsRef.current),
+            mafsBoardHandle(svg, (px, py) => vec.transform([px, py], viewTransform), () => pointsRef.current, () => plotsRef.current),
         ]);
     }, [chartId, container, viewTransform]);
 

@@ -35,3 +35,10 @@ export const CentredText: React.FC<{ at: Vec2; text: string; color: string }> = 
         <text x={px} y={py} textAnchor="middle" dominantBaseline="central" style={{ fill: color, fontSize: 14 }}>{text}</text>
     );
 };
+
+/** Text starting at a chart position, sitting on it like a line of writing. */
+export const TextAt: React.FC<{ at: Vec2; text: string; color?: string; size?: number }> = ({ at, text, color = '#000000', size = 16 }) => {
+    const { viewTransform } = useTransformContext();
+    const [px, py] = vec.transform(at, viewTransform);
+    return <text x={px} y={py} style={{ fill: color, fontSize: size }}>{text}</text>;
+};

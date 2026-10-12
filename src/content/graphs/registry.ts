@@ -4,7 +4,7 @@ import { PerceptronChart } from './PerceptronChart';
 import { PerceptronTrainingChart } from './PerceptronTrainingChart';
 import { MultiLayerPerceptronChart } from './MultiLayerPerceptronChart';
 import { MLPDecisionBoundariesChart } from './MLPDecisionBoundariesChart';
-import { initSigmoid, initRelu } from './ActivationFunctionsChart';
+import { initSigmoid } from './ActivationFunctionsChart';
 import * as h from './helpers';
 
 export type GraphInitializer = (
@@ -29,37 +29,7 @@ export interface GraphConfig {
 
 const registry: Record<string, GraphInitializer | GraphConfig> = {
     // 'vector-similarity-intro' is a Mafs chart: see mafsCharts.ts
-    // 2. Cosine Function
-    'cosine-function': {
-        containerStyle: { maxWidth: '525px', aspectRatio: 'auto', height: '300px' },
-        boardAttributes: { keepaspectratio: false },
-        initializer: (board: JXG.Board) => {
-            board.setBoundingBox([-1, 1.5, 7, -1.5]);
-
-            const xAxis = board.defaultAxes.x as any;
-            const xTicks = xAxis.ticks[0] as any;
-            xTicks.setAttribute({
-                scale: Math.PI,
-                scaleSymbol: '°',
-                ticksDistance: 0.5,
-                insertTicks: false,
-                minorTicks: 0
-            });
-            xTicks.generateLabelText = function (tick: any) {
-                const tickValue = (180 / Math.PI) * tick.usrCoords[1];
-                return this.formatLabelText(tickValue.toFixed(1));
-            };
-
-            const yAxis = board.defaultAxes.y as any;
-            const yTicks = yAxis.ticks[0] as any;
-            yTicks.setAttribute({
-                ticksDistance: 0.5
-            });
-
-            board.create('functiongraph', [Math.cos, 0, 2 * Math.PI], { strokeWidth: 2, strokeColor: '#1a73e8' });
-        }
-    },
-
+    // 'cosine-function' is a Mafs chart: see mafsCharts.ts
     // 'dot-product-geometric' and 'dot-product-comparison' are Mafs charts: see mafsCharts.ts
 
     // 5. Cosine Normalized (Unit Circle)
@@ -289,18 +259,7 @@ const registry: Record<string, GraphInitializer | GraphConfig> = {
         },
         initializer: initSigmoid
     } as GraphConfig,
-    'relu-function': {
-        containerStyle: { maxWidth: '500px', height: '300px', margin: '0 auto' },
-        boardAttributes: {
-            axis: true,
-            showCopyright: false,
-            showNavigation: false,
-            pan: { enabled: false } as any,
-            zoom: { enabled: false } as any,
-            keepaspectratio: false
-        },
-        initializer: initRelu
-    } as GraphConfig
+    // 'relu-function' is a Mafs chart: see mafsCharts.ts
 };
 
 export default registry;
