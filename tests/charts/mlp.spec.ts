@@ -1,5 +1,5 @@
-import { test, expect, type Locator } from '@playwright/test';
-import { POSTS, openChart, dragPointBy, chartTexts } from './driver';
+import { test, expect, type Locator, type Page } from '@playwright/test';
+import { POSTS, openChart, dragPointBy, chartTexts, plottedPoints } from './driver';
 import { f, relu } from './maths';
 
 const id = 'mlp-decision-boundaries';
@@ -90,6 +90,33 @@ test("while h1's weight vector is dragged, its boundary point keeps its projecti
     const w = { x: tip.x - anchor.x, y: tip.y - anchor.y };
     const b = -(anchor.x * w.x + anchor.y * w.y);
     await expect.poll(async () => asText((await readNetwork(c)).neurons.h1)).toEqual([f(w.x), f(w.y), f(b)]);
+});
+
+/**
+ * The output neuron's graph plots each data point at (h1, h2): its activations in the two hidden neurons.
+ * The graph is centred at (10.5, 5.5) on the board, 0.8 board units per unit.
+ */
+async function expectOutputPoints(page: Page, neurons: Record<(typeof NEURONS)[number], Neuron>) {
+    const act = (n: Neuron, p: { x: number; y: number }) => relu(n.b + n.w1 * p.x + n.w2 * p.y);
+    for (const label of ['Spam', 'Not Spam']) {
+        const expected = data.filter(p => p.label === label).map(p => ({ x: 10.5 + 0.8 * act(neurons.h1, p), y: 5.5 + 0.8 * act(neurons.h2, p) }));
+        const actual = await plottedPoints(page, id, label);
+        expect(actual, `${label} output points`).toHaveLength(expected.length);
+        expected.forEach((e, i) => {
+            // Weights are read from 2dp labels, so allow for their rounding
+            expect(actual[i].x, `${label} #${i} at h1`).toBeCloseTo(e.x, 1);
+            expect(actual[i].y, `${label} #${i} at h2`).toBeCloseTo(e.y, 1);
+        });
+    }
+}
+
+test('the output graph plots each data point at its hidden activations (h1, h2)', async ({ page }) => {
+    const c = await openChart(page, POSTS.mlp, id);
+    await expectOutputPoints(page, INITIAL);
+    // h1's weights change, so the points move along h1
+    await dragPointBy(page, id, 'w', { x: 0.4, y: -0.3 }, 0);
+    await expect.poll(async () => asText((await readNetwork(c)).neurons.h1)).not.toEqual(asText(INITIAL.h1));
+    await expectOutputPoints(page, (await readNetwork(c)).neurons);
 });
 
 for (const [occurrence, name] of NEURONS.entries()) {
