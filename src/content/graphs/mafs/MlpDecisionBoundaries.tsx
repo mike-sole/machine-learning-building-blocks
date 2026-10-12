@@ -3,6 +3,7 @@ import { Circle, Line, MovablePointDisplay, Vector, useMovable, useTransformCont
 import { MafsBoard } from '../../../components/MafsBoard';
 import type { ChartPoint } from '../../../components/chartTestHook';
 import { dot, type Vec2 } from './geometry';
+import { handlesFor, weightsOf, dragTip, dragAnchor, activation as neuronActivation, type Handles } from './neuronHandles';
 import { BoardText } from './labels';
 
 /**
@@ -24,7 +25,6 @@ const GREEN = '#22c55e';
 const ORANGE = '#D35400';
 const W1 = '#1A5276';
 const W2 = '#196F3D';
-const relu = (z: number) => Math.max(0, z);
 const n = (v: number) => v.toFixed(2);
 
 // ---- Layout (board units) ----
@@ -47,32 +47,11 @@ const scale = (v: View) => R_NEURON / v.half;
 const toBoard = (v: View, [x, y]: Vec2): Vec2 => [v.centre[0] + x * scale(v), v.centre[1] + y * scale(v)];
 const toLocal = (v: View, [x, y]: Vec2): Vec2 => [(x - v.centre[0]) / scale(v), (y - v.centre[1]) / scale(v)];
 
-/**
- * A neuron's weights and bias, kept as the two handles the reader drags (in the neuron's own coordinates):
- * the anchor (the boundary point nearest the origin, −b w / |w|²) and the tip, anchor + w.
- */
-interface Handles { anchor: Vec2; tip: Vec2 }
-const fromWeights = (w: Vec2, b: number): Handles => {
-    const k = -b / dot(w, w);
-    const anchor: Vec2 = [k * w[0], k * w[1]];
-    return { anchor, tip: [anchor[0] + w[0], anchor[1] + w[1]] };
-};
-const weightsOf = ({ anchor, tip }: Handles) => {
-    const w: Vec2 = [tip[0] - anchor[0], tip[1] - anchor[1]];
-    return { w, b: -dot(anchor, w) };
-};
-
-/** Project p onto the line through the origin and `through`. */
-const projectOnto = (p: Vec2, through: Vec2): Vec2 => {
-    const t = dot(p, through) / dot(through, through);
-    return [t * through[0], t * through[1]];
-};
-
 // Weights from the post's Python code
 const INITIAL = {
-    h1: fromWeights([1, 1], 0.3),
-    h2: fromWeights([-0.95, -1.05], 0.56),
-    out: fromWeights([0.84, 0.86], -2.41),
+    h1: handlesFor([1, 1], 0.3),
+    h2: handlesFor([-0.95, -1.05], 0.56),
+    out: handlesFor([0.84, 0.86], -2.41),
 };
 type NeuronName = keyof typeof INITIAL;
 const NEURONS: { name: NeuronName; view: View; title: string }[] = [
@@ -93,19 +72,14 @@ export const MlpDecisionBoundaries: React.FC<{ id: string }> = ({ id }) => {
         h2: weightsOf(handles.h2),
         out: weightsOf(handles.out),
     };
-    const activation = (name: 'h1' | 'h2', at: Vec2) => relu(dot(weights[name].w, at) + weights[name].b);
+    const activation = (name: 'h1' | 'h2', at: Vec2) => neuronActivation(weights[name], at);
 
-    /** Dragging w: the tip follows the pointer, and b is where it was when the drag began, projected onto the new direction. */
-    const moveTip = (name: NeuronName, view: View) => (p: Vec2) => {
-        const tip = toLocal(view, p);
-        setHandles(h => ({ ...h, [name]: { tip, anchor: projectOnto(dragStart.current[name].anchor, tip) } }));
-    };
+    /** Dragging w: the tip follows the pointer, and b keeps its projection from where the drag began (path-independent). */
+    const moveTip = (name: NeuronName, view: View) => (p: Vec2) =>
+        setHandles(h => ({ ...h, [name]: dragTip(dragStart.current[name], toLocal(view, p)) }));
     /** Dragging b: it slides along the line through the origin and w, carrying w with it (so w stays the same). */
-    const moveAnchor = (name: NeuronName, view: View) => (p: Vec2) => setHandles(h => {
-        const start = dragStart.current[name];
-        const anchor = projectOnto(toLocal(view, p), start.tip);
-        return { ...h, [name]: { anchor, tip: [start.tip[0] + anchor[0] - start.anchor[0], start.tip[1] + anchor[1] - start.anchor[1]] } };
-    });
+    const moveAnchor = (name: NeuronName, view: View) => (p: Vec2) =>
+        setHandles(h => ({ ...h, [name]: dragAnchor(dragStart.current[name], toLocal(view, p)) }));
 
     const outputs = DATA.map(d => ({ ...d, at: toBoard(OUT_VIEW, [activation('h1', d.at), activation('h2', d.at)]) }));
 
