@@ -10,7 +10,7 @@ View the live site [here](https://mike-sole.github.io/machine-learning-building-
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
 - **Styling**: [TailwindCSS](https://tailwindcss.com/)
 - **Math Rendering**: [KaTeX](https://katex.org/)
-- **Interactive Graphs**: [JSXGraph](https://jsxgraph.org/)
+- **Interactive Graphs**: [Mafs](https://mafs.dev/)
 - **Testing**: [Playwright](https://playwright.dev/)
 
 ## Local Development

@@ -20,8 +20,6 @@ export default defineConfig([
       globals: globals.browser,
     },
     rules: {
-      // JSXGraph's type definitions are incomplete, so the chart code relies on `any` casts
-      '@typescript-eslint/no-explicit-any': 'warn',
       // Allow `({ node, ...props })` to strip props before spreading
       '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true }],
     },
