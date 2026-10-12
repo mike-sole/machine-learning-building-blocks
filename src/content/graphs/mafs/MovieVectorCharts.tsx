@@ -43,7 +43,7 @@ const MovieVector: React.FC<{ index: number; tip: Vec2; onMove: (p: Vec2) => voi
     );
 };
 
-/** The movie vectors scaled to length 1 on the unit circle: only the angles between them remain. */
+/** The movie vectors scaled to length 1 on the unit circle: each length is 1.00, so only the angles between them remain. */
 export const MovieVectorsNormalized: React.FC<{ id: string }> = ({ id }) => {
     const { tips: [a, b, c], move, points } = useMovieVectors(normalise);
     return (
@@ -51,7 +51,7 @@ export const MovieVectorsNormalized: React.FC<{ id: string }> = ({ id }) => {
             <Circle center={ORIGIN} radius={1} color="#cccccc" strokeStyle="dashed" fillOpacity={0} />
             <AngleMark from={a} to={b} radius={0.5} />
             <AngleMark from={b} to={c} radius={0.4} />
-            {[a, b, c].map((tip, i) => <MovieVector key={i} index={i} tip={tip} onMove={move(i)} showLength={false} />)}
+            {[a, b, c].map((tip, i) => <MovieVector key={i} index={i} tip={tip} onMove={move(i)} showLength />)}
         </MafsBoard>
     );
 };
