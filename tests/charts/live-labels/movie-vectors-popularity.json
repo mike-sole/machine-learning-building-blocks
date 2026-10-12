@@ -1,0 +1,67 @@
+[
+  {
+    "step": "drag a to (7.00, 2.00)",
+    "whileHeld": {
+      "appeared": [
+        "29.1°",
+        "6.58",
+        "7.28",
+        "7.28"
+      ],
+      "disappeared": [
+        "33.7°",
+        "4.92",
+        "5.10",
+        "8.94"
+      ]
+    },
+    "onRelease": {
+      "appeared": [],
+      "disappeared": []
+    }
+  },
+  {
+    "step": "drag b to (6.00, 8.00)",
+    "whileHeld": {
+      "appeared": [
+        "10.00",
+        "27.4°",
+        "37.2°",
+        "6.08",
+        "7.43"
+      ],
+      "disappeared": [
+        "10.40",
+        "12.73",
+        "29.1°",
+        "35.5°",
+        "7.28"
+      ]
+    },
+    "onRelease": {
+      "appeared": [],
+      "disappeared": []
+    }
+  },
+  {
+    "step": "drag c to (2.00, 5.00)",
+    "whileHeld": {
+      "appeared": [
+        "15.1°",
+        "5.00",
+        "5.39",
+        "5.83"
+      ],
+      "disappeared": [
+        "27.4°",
+        "3.04",
+        "6.58",
+        "7.43"
+      ]
+    },
+    "onRelease": {
+      "appeared": [],
+      "disappeared": []
+    }
+  }
+]
