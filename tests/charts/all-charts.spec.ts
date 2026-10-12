@@ -65,10 +65,10 @@ for (const post of posts) {
                 // Each board, and every label on it, lies within the visible width
                 const outside = await c.evaluate((el, width) => {
                     const out: string[] = [];
-                    for (const board of el.querySelectorAll('.jxgbox')) {
+                    for (const board of el.querySelectorAll('[data-chart-board]')) {
                         const b = board.getBoundingClientRect();
                         if (b.left < 0 || b.right > width) out.push(`board at ${Math.round(b.left)}..${Math.round(b.right)}`);
-                        for (const label of board.querySelectorAll(':scope > div')) {
+                        for (const label of board.querySelectorAll(':scope > div, [data-chart-label]')) {
                             const l = label.getBoundingClientRect();
                             if (l.width > 0 && (l.left < b.left - 1 || l.right > b.right + 1)) out.push(`label "${(label as HTMLElement).innerText.trim()}" sticks out`);
                         }

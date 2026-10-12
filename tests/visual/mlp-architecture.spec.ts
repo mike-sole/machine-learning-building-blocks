@@ -6,7 +6,7 @@ test('MLP Architecture Chart Renders', async ({ page }) => {
     await page.waitForLoadState('networkidle');
 
     // Wait for the chart
-    const chart = page.locator('#jxgbox-mlp-architecture');
+    const chart = page.locator('[data-chart="mlp-architecture"] [data-chart-board]');
     await expect(chart).toBeVisible();
 
     // Take snapshot (this verifies padding is removed if we inspect result)

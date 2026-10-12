@@ -8,9 +8,14 @@ import { expect, type Locator, type Page } from '@playwright/test';
  * to another library (e.g. Mafs) should only require reimplementing these
  * functions for it; the expectations in the specs stay the same.
  *
- * The JSXGraph implementation relies on the dev-only `window.__charts` hook
- * registered by src/components/InteractiveGraph.tsx.
+ * It talks to the charts only through the dev-only, library-neutral `window.__charts`
+ * hook (src/components/chartTestHook.ts) and two DOM attributes: `data-chart-board` on
+ * each board container and, for labels that aren't direct children of a board,
+ * `data-chart-label`. A chart built with any library passes these tests by providing them.
  */
+
+type Handle = import('../../src/components/chartTestHook').ChartBoardHandle;
+type ChartsWindow = Window & { __charts: Record<string, Handle[]> };
 
 export const POSTS = {
     vectorSimilarity: '/machine-learning-building-blocks/post/vector-similarity-measures',
@@ -50,62 +55,38 @@ async function waitForStableLayout(locator: Locator): Promise<void> {
 
 /** Convert chart coordinates on board `boardIndex` of chart `id` to page (viewport) coordinates. */
 export async function toScreen(page: Page, id: string, x: number, y: number, boardIndex = 0): Promise<ScreenPoint> {
-    return page.evaluate(({ id, x, y, boardIndex }) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const board = (window as any).__charts[id][boardIndex];
-        const container = board.containerObj as HTMLElement;
-        const rect = container.getBoundingClientRect();
-        return {
-            x: rect.left + container.clientLeft + board.origin.scrCoords[1] + x * board.unitX,
-            y: rect.top + container.clientTop + board.origin.scrCoords[2] - y * board.unitY,
-        };
-    }, { id, x, y, boardIndex });
+    return page.evaluate(({ id, x, y, boardIndex }) =>
+        (window as unknown as ChartsWindow).__charts[id][boardIndex].toScreen(x, y), { id, x, y, boardIndex });
+}
+
+/** Every point on a board, as reported by the chart's test hook. */
+async function points(page: Page, id: string, boardIndex: number) {
+    return page.evaluate(({ id, boardIndex }) =>
+        (window as unknown as ChartsWindow).__charts[id][boardIndex].points(), { id, boardIndex });
 }
 
 /**
- * Chart coordinates of a draggable point, found by its visible name (HTML stripped).
+ * Chart coordinates of a draggable point, found by its visible name.
  * `occurrence` picks between points sharing a name (in creation order).
  */
 export async function pointPosition(page: Page, id: string, name: string, occurrence = 0, boardIndex = 0): Promise<{ x: number; y: number }> {
-    return page.evaluate(({ id, name, occurrence, boardIndex }) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const board = (window as any).__charts[id][boardIndex];
-        const strip = (s: unknown) => String(typeof s === 'function' ? s() : s ?? '').replace(/<[^>]*>/g, '').trim();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const matches = board.objectsList.filter((el: any) => el.elType === 'point' || el.elType === 'glider')
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            .filter((el: any) => strip(el.name) === name && el.visProp.visible !== false && !el.visProp.fixed);
-        const el = matches[occurrence];
-        if (!el) throw new Error(`No draggable point named "${name}" (#${occurrence}) in chart ${id}`);
-        return { x: el.X(), y: el.Y() };
-    }, { id, name, occurrence, boardIndex });
+    const el = (await points(page, id, boardIndex)).filter(p => p.name === name && p.visible && p.draggable)[occurrence];
+    if (!el) throw new Error(`No draggable point named "${name}" (#${occurrence}) in chart ${id}`);
+    return { x: el.x, y: el.y };
 }
 
 /** Chart coordinates of any point (draggable or computed), found by its visible name. */
 export async function plottedPoint(page: Page, id: string, name: string, boardIndex = 0): Promise<{ x: number; y: number }> {
-    return page.evaluate(({ id, name, boardIndex }) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const board = (window as any).__charts[id][boardIndex];
-        const strip = (s: unknown) => String(typeof s === 'function' ? s() : s ?? '').replace(/<[^>]*>/g, '').trim();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const el = board.objectsList.find((e: any) => (e.elType === 'point' || e.elType === 'glider') && strip(e.name) === name);
-        if (!el) throw new Error(`No point named "${name}" in chart ${id}`);
-        return { x: el.X(), y: el.Y() };
-    }, { id, name, boardIndex });
+    const el = (await points(page, id, boardIndex)).find(p => p.name === name);
+    if (!el) throw new Error(`No point named "${name}" in chart ${id}`);
+    return { x: el.x, y: el.y };
 }
 
 /** Name and fill colour of every visible, named point (e.g. to check correct/incorrect colouring). */
 export async function pointStyles(page: Page, id: string, boardIndex = 0): Promise<{ name: string; color: string }[]> {
-    return page.evaluate(({ id, boardIndex }) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const board = (window as any).__charts[id][boardIndex];
-        const strip = (s: unknown) => String(typeof s === 'function' ? s() : s ?? '').replace(/<[^>]*>/g, '').trim();
-        return board.objectsList
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            .filter((e: any) => (e.elType === 'point' || e.elType === 'glider') && e.visProp.visible !== false && strip(e.name))
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            .map((e: any) => ({ name: strip(e.name), color: String(e.visProp.fillcolor).toLowerCase() }));
-    }, { id, boardIndex });
+    return (await points(page, id, boardIndex))
+        .filter(p => p.visible && p.name)
+        .map(p => ({ name: p.name, color: p.color ?? '' }));
 }
 
 /** Drag from one page position to another with a real pointer: a finger on touch devices, otherwise the mouse. */
@@ -121,7 +102,7 @@ export async function dragScreen(page: Page, from: ScreenPoint, to: ScreenPoint)
     if (await page.evaluate(() => navigator.maxTouchPoints > 0)) {
         // Playwright's touchscreen API only taps, so send the touch drag through the DevTools protocol (Chromium)
         const cdp = await page.context().newCDPSession(page);
-        const touch = (type: string, p?: ScreenPoint) =>
+        const touch = (type: 'touchStart' | 'touchMove' | 'touchEnd', p?: ScreenPoint) =>
             cdp.send('Input.dispatchTouchEvent', { type, touchPoints: p ? [{ x: p.x, y: p.y }] : [] });
         await touch('touchStart', from);
         for (const p of path) {
@@ -172,8 +153,8 @@ export async function dragPointBy(page: Page, id: string, name: string, delta: {
 /** All visible text inside a chart, one entry per text element, whitespace-normalised. */
 export async function chartTexts(locator: Locator): Promise<string[]> {
     return locator.evaluate((el) => {
-        // HTML texts are positioned directly inside the board container; axis labels etc. are SVG text
-        const nodes = el.querySelectorAll('.jxgbox > div, .jxgbox text, button, [data-chart-log] > div');
+        // HTML labels sit directly inside a board (or are marked data-chart-label); axis labels etc. are SVG text
+        const nodes = el.querySelectorAll('[data-chart-board] > div, [data-chart-label], [data-chart-board] text, button, [data-chart-log] > div');
         return Array.from(nodes)
             .map((n) => ((n as HTMLElement).innerText ?? n.textContent ?? '').replace(/\s+/g, ' ').trim())
             .filter(Boolean);
