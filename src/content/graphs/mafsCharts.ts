@@ -3,6 +3,7 @@ import { CosineFunction, ReluFunction } from './mafs/FunctionCharts';
 import { MovieVectorsNormalized, MovieVectorsPopularity } from './mafs/MovieVectorCharts';
 import { PerceptronClassification } from './mafs/PerceptronClassification';
 import { PerceptronTraining } from './mafs/PerceptronTraining';
+import { MlpArchitecture } from './mafs/MlpArchitecture';
 import { CosineNormalized, CosineDistance, DistanceComparison } from './mafs/UnitCircleCharts';
 import { VectorSimilarityIntro, DotProductGeometric, DotProductComparison, MathNotations } from './mafs/TwoVectorCharts';
 
@@ -21,4 +22,5 @@ export const mafsCharts: Record<string, React.ComponentType<{ id: string }>> = {
     'distance-comparison': DistanceComparison,
     'perceptron-classification': PerceptronClassification,
     'perceptron-training': PerceptronTraining,
+    'mlp-architecture': MlpArchitecture,
 };

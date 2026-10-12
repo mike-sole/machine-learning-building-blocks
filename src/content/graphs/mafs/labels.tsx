@@ -49,3 +49,29 @@ export const PointName: React.FC<{ at: Vec2; text: string; color?: string; dx?: 
     const [px, py] = vec.transform(at, viewTransform);
     return <text x={px + dx} y={py + dy} style={{ fill: color, fontSize: 12 }}>{text}</text>;
 };
+
+/**
+ * Text at a chart position with full control of its alignment: `anchor` sets which end (or the middle)
+ * sits on the position, `baseline` whether the text hangs below it, sits on it or is centred on it,
+ * and `dx`/`dy` shift it in pixels.
+ */
+export const BoardText: React.FC<{
+    at: Vec2;
+    children: React.ReactNode;
+    anchor?: 'start' | 'middle' | 'end';
+    baseline?: 'hanging' | 'central' | 'auto';
+    dx?: number;
+    dy?: number;
+    size?: number;
+    color?: string;
+    bold?: boolean;
+}> = ({ at, children, anchor = 'start', baseline = 'auto', dx = 0, dy = 0, size = 12, color = '#000000', bold }) => {
+    const { viewTransform } = useTransformContext();
+    const [px, py] = vec.transform(at, viewTransform);
+    return (
+        <text x={px + dx} y={py + dy} textAnchor={anchor} dominantBaseline={baseline}
+            style={{ fill: color, fontSize: size, fontWeight: bold ? 'bold' : undefined }}>
+            {children}
+        </text>
+    );
+};
