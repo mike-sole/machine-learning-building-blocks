@@ -1,5 +1,4 @@
 import JXG from 'jsxgraph';
-import { PerceptronChart } from './PerceptronChart';
 import { PerceptronTrainingChart } from './PerceptronTrainingChart';
 import { MultiLayerPerceptronChart } from './MultiLayerPerceptronChart';
 import { MLPDecisionBoundariesChart } from './MLPDecisionBoundariesChart';
@@ -35,33 +34,7 @@ const registry: Record<string, GraphInitializer | GraphConfig> = {
 
     // 'math-notations' is a Mafs chart: see mafsCharts.ts
 
-    'perceptron-classification': {
-        boardAttributes: {
-            boundingbox: [-6, 6, 6, -6],
-            axis: true,
-            showCopyright: false
-        },
-        initializer: (board: JXG.Board) => {
-            const classOnePoints = [
-                { x: 4, y: 5, label: "spam" },
-                { x: 2, y: 4, label: "spam" },
-                { x: 0, y: 3, label: "spam" },
-                { x: -4, y: 1, label: "spam" },
-                { x: -1, y: 4, label: "spam" },
-            ];
-
-            const classTwoPoints = [
-                { x: 4, y: 3, label: "not spam" },
-                { x: 2, y: 2, label: "not spam" },
-                { x: 0, y: 1, label: "not spam" },
-                { x: -2, y: 0, label: "not spam" },
-                { x: -4, y: -1, label: "not spam" },
-                { x: 1, y: -1, label: "not spam" },
-            ];
-
-            new PerceptronChart(board, 1, classOnePoints, classTwoPoints, true);
-        }
-    } as GraphConfig,
+    // 'perceptron-classification' is a Mafs chart: see mafsCharts.ts
 
     'perceptron-training': {
         boardAttributes: {

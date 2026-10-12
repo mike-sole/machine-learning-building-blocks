@@ -77,6 +77,15 @@ test.describe('perceptron-classification', () => {
         });
     });
 
+    test('while w is dragged, b is where it started, projected onto the new weight direction', async ({ page }) => {
+        await openChart(page, POSTS.perceptronModel, id);
+        const b0 = { x: -0.5, y: 0.5 };
+        const w = { x: -3, y: 2 };
+        await dragPointTo(page, id, 'w', w);
+        const t = (b0.x * w.x + b0.y * w.y) / (w.x * w.x + w.y * w.y);
+        await landed(page, w, { x: t * w.x, y: t * w.y });
+    });
+
     test('rotating the weight vector keeps every score consistent', async ({ page }) => {
         await openChart(page, POSTS.perceptronModel, id);
         await dragPointTo(page, id, 'w', { x: 2.5, y: 3.5 });
