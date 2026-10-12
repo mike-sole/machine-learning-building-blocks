@@ -103,8 +103,16 @@ export async function pointStyles(page: Page, id: string, boardIndex = 0): Promi
         .map(p => ({ name: p.name, color: p.color ?? '' }));
 }
 
-/** Drag from one page position to another with a real pointer: a finger on touch devices, otherwise the mouse. */
-export async function dragScreen(page: Page, from: ScreenPoint, to: ScreenPoint): Promise<void> {
+/** A drag in progress: the pointer is still pressed. */
+export interface HeldDrag {
+    release(): Promise<void>;
+}
+
+/**
+ * Press at one page position and move to another with a real pointer (a finger on touch
+ * devices, otherwise the mouse), without letting go.
+ */
+export async function pressAndMove(page: Page, from: ScreenPoint, to: ScreenPoint): Promise<HeldDrag> {
     // Move at human speed: chart libraries may drop pointer moves that arrive faster
     // than their frame rate (JSXGraph's maxFrameRate), which would lose the final position.
     const steps = 10;
@@ -125,9 +133,12 @@ export async function dragScreen(page: Page, from: ScreenPoint, to: ScreenPoint)
         }
         await page.waitForTimeout(50);
         await touch('touchMove', to);
-        await touch('touchEnd');
-        await cdp.detach();
-        return;
+        return {
+            async release() {
+                await touch('touchEnd');
+                await cdp.detach();
+            },
+        };
     }
 
     await page.mouse.move(from.x, from.y);
@@ -138,24 +149,37 @@ export async function dragScreen(page: Page, from: ScreenPoint, to: ScreenPoint)
     }
     await page.waitForTimeout(50);
     await page.mouse.move(to.x, to.y);
-    await page.mouse.up();
+    return { release: () => page.mouse.up() };
 }
 
-/** Drag the named point to the given chart coordinates. */
-export async function dragPointTo(page: Page, id: string, name: string, target: { x: number; y: number }, occurrence = 0, boardIndex = 0): Promise<void> {
+/** Drag from one page position to another with a real pointer: a finger on touch devices, otherwise the mouse. */
+export async function dragScreen(page: Page, from: ScreenPoint, to: ScreenPoint): Promise<void> {
+    await (await pressAndMove(page, from, to)).release();
+}
+
+/** Drag the named point to the given chart coordinates and keep holding it there. */
+export async function holdPointAt(page: Page, id: string, name: string, target: { x: number; y: number }, occurrence = 0, boardIndex = 0): Promise<HeldDrag> {
     const start = await pointPosition(page, id, name, occurrence, boardIndex);
 
-    // Tall charts can put the handle outside the viewport: centre it first
+    // Tall charts can put the handle, or where it is dragged to, outside the viewport, where the
+    // pointer can't reach: centre the drag first
     const first = await toScreen(page, id, start.x, start.y, boardIndex);
+    const last = await toScreen(page, id, target.x, target.y, boardIndex);
     const viewport = page.viewportSize();
-    if (viewport && (first.y < 0 || first.y > viewport.height)) {
-        await page.evaluate((dy) => window.scrollBy(0, dy), first.y - viewport.height / 2);
+    const margin = 20;
+    if (viewport && [first.y, last.y].some(y => y < margin || y > viewport.height - margin)) {
+        await page.evaluate((dy) => window.scrollBy(0, dy), (first.y + last.y) / 2 - viewport.height / 2);
         await waitForStableLayout(chart(page, id));
     }
 
     const from = await toScreen(page, id, start.x, start.y, boardIndex);
     const to = await toScreen(page, id, target.x, target.y, boardIndex);
-    await dragScreen(page, from, to);
+    return pressAndMove(page, from, to);
+}
+
+/** Drag the named point to the given chart coordinates. */
+export async function dragPointTo(page: Page, id: string, name: string, target: { x: number; y: number }, occurrence = 0, boardIndex = 0): Promise<void> {
+    await (await holdPointAt(page, id, name, target, occurrence, boardIndex)).release();
 }
 
 /** Drag the named point by a delta in chart coordinates. */
