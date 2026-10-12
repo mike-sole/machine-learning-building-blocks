@@ -137,7 +137,8 @@ test.describe('perceptron-training', () => {
         const c = await openChart(page, POSTS.trainingPerceptron, id);
         const steps = train();
 
-        for (let i = 0; i < 12; i++) {
+        // 24 steps: 4 passes over the data, reaching step 19, the first whose score is just below 0
+        for (let i = 0; i < 24; i++) {
             const s = steps.next().value!;
             await c.getByRole('button', { name: 'Train Step' }).click();
 
@@ -159,6 +160,12 @@ test.describe('perceptron-training', () => {
             await expectText(c, f(s.w.x));
             await expectText(c, f(s.w.y));
             await expectText(c, f(s.distance));
+
+            // b marks the point of the boundary w · x + b = 0 nearest the origin: (-b / |w|²) w
+            const k = -s.b / (s.w.x ** 2 + s.w.y ** 2);
+            const anchor = await plottedPoint(page, id, 'b');
+            expect(anchor.x, 'b.x').toBeCloseTo(k * s.w.x, 5);
+            expect(anchor.y, 'b.y').toBeCloseTo(k * s.w.y, 5);
         }
     });
 
