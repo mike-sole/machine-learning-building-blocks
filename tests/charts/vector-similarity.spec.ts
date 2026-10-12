@@ -168,15 +168,35 @@ test.describe('movie vectors', () => {
         await expectTexts(c, ['33.7°', '35.5°']);
     });
 
+    const popularity = (a: Vec, b: Vec, cv: Vec) => [
+        angleLabel(a, b), angleLabel(b, cv),
+        f(length(a)), f(length(b)), f(length(cv)),
+        f(distance(a, b)), f(distance(a, cv)), f(distance(b, cv)),
+    ];
+    const MOVIES = { a: { x: 5, y: 1 }, b: { x: 9, y: 9 }, c: { x: 0.5, y: 3 } };
+
     test('popularity vectors show the lengths, angles and distances from the post', async ({ page }) => {
         const c = await openChart(page, POSTS.vectorSimilarity, 'movie-vectors-popularity');
-        const a = { x: 5, y: 1 }, b = { x: 9, y: 9 }, cv = { x: 0.5, y: 3 };
-        await expectTexts(c, [
-            angleLabel(a, b), angleLabel(b, cv),
-            f(length(a)), f(length(b)), f(length(cv)),
-            f(distance(a, b)), f(distance(a, cv)), f(distance(b, cv)),
-        ]);
+        await expectTexts(c, popularity(MOVIES.a, MOVIES.b, MOVIES.c));
         await expectTexts(c, ['5.10', '12.73', '3.04', '8.94', '4.92', '10.40']);
+    });
+
+    test('dragging a popularity vector updates its length, angle and distances', async ({ page }) => {
+        const id = 'movie-vectors-popularity';
+        const c = await openChart(page, POSTS.vectorSimilarity, id);
+        const a = { x: 7, y: 2 };
+        await dragPointTo(page, id, 'a', a);
+        await expectTexts(c, popularity(a, MOVIES.b, MOVIES.c));
+    });
+
+    test('dragging a normalised vector updates the angles', async ({ page }) => {
+        const id = 'movie-vectors-normalized';
+        const c = await openChart(page, POSTS.vectorSimilarity, id);
+        const b = onUnitCircle(60);
+        await dragPointTo(page, id, 'b', b);
+        const a = onUnitCircle(angleDeg({ x: 1, y: 0 }, MOVIES.a));
+        const cv = onUnitCircle(angleDeg({ x: 1, y: 0 }, MOVIES.c));
+        await expectTexts(c, [angleLabel(a, b), angleLabel(b, cv)]);
     });
 });
 

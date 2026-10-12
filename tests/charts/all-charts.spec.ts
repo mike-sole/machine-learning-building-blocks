@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { chart, chartTexts, trackErrors } from './driver';
+import { chart, chartTexts, trackErrors, draggablePoints } from './driver';
 
 /**
  * Every chart referenced by a published post, discovered from the posts themselves,
@@ -18,6 +18,30 @@ const posts = published.map(module => {
     const charts = [...markdown.matchAll(/```graph\s*\n\s*([\w-]+)\s*\n```/g)].map(m => m[1]);
     return { id, charts };
 }).filter(p => p.charts.length > 0);
+
+/**
+ * The points a reader can drag, per chart and board (names without the score in brackets).
+ * Every chart must be listed, so a new chart has to declare its interactions here.
+ */
+const DRAGGABLE: Record<string, string[][]> = {
+    'vector-similarity-intro': [['a', 'b']],
+    'cosine-function': [[]],
+    'dot-product-geometric': [['a', 'b']],
+    'dot-product-comparison': [['a', 'b']],
+    'cosine-normalized': [['a'], []],
+    'cosine-distance': [['a'], []],
+    'distance-comparison': [['a'], []],
+    'movie-vectors-normalized': [['a', 'b', 'c']],
+    'movie-vectors-popularity': [['a', 'b', 'c']],
+    'math-notations': [['a', 'b']],
+    // w, b and every data point (to see how a point's score and colour change)
+    'perceptron-classification': [[...Array(6).fill('Not Spam'), ...Array(5).fill('Spam'), 'b', 'w']],
+    'perceptron-training': [[]],
+    'mlp-architecture': [[]],
+    'relu-function': [[]],
+    // w and b for each of h1, h2 and the output neuron
+    'mlp-decision-boundaries': [['b', 'b', 'b', 'w', 'w', 'w']],
+};
 
 test('chart discovery found the posts with charts', () => {
     expect(readdirSync(blogDir).length).toBeGreaterThan(0);
@@ -48,6 +72,15 @@ for (const post of posts) {
             }
 
             expect(errors).toEqual([]);
+        });
+
+        test('the reader can drag exactly the intended points', async ({ page }) => {
+            await page.goto(`/machine-learning-building-blocks/post/${post.id}`);
+            for (const id of new Set(post.charts)) {
+                expect(DRAGGABLE, `${id} is listed in DRAGGABLE`).toHaveProperty([id]);
+                await expect.poll(() => draggablePoints(page, id), { timeout: 20_000, message: `${id} draggable points` })
+                    .toEqual(DRAGGABLE[id]);
+            }
         });
 
         test('every chart fits the screen without sideways scrolling', async ({ page }) => {

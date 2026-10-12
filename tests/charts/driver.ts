@@ -82,6 +82,20 @@ export async function plottedPoint(page: Page, id: string, name: string, boardIn
     return { x: el.x, y: el.y };
 }
 
+/**
+ * Names of the visible points a reader can drag on each board, sorted, with any trailing
+ * score in brackets removed ("Spam (4.00)" → "Spam"). Empty list per board when the chart is not ready.
+ */
+export async function draggablePoints(page: Page, id: string): Promise<string[][]> {
+    return page.evaluate((id) => {
+        const boards = (window as unknown as Partial<ChartsWindow>).__charts?.[id] ?? [];
+        return boards.map(b => b.points()
+            .filter(p => p.visible && p.draggable)
+            .map(p => p.name.replace(/\s*\([^)]*\)$/, ''))
+            .sort());
+    }, id);
+}
+
 /** Name and fill colour of every visible, named point (e.g. to check correct/incorrect colouring). */
 export async function pointStyles(page: Page, id: string, boardIndex = 0): Promise<{ name: string; color: string }[]> {
     return (await points(page, id, boardIndex))
