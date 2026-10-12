@@ -7,17 +7,17 @@ test.describe('MLP Decision Boundaries Chart', () => {
         await page.waitForLoadState('networkidle');
 
         // Wait for the chart to be visible
-        await expect(page.locator('#jxgbox-mlp-decision-boundaries')).toBeVisible();
+        await expect(page.locator('[data-chart="mlp-decision-boundaries"] [data-chart-board]')).toBeVisible();
     });
 
     test('initial render matches snapshot', async ({ page }) => {
-        const chart = page.locator('#jxgbox-mlp-decision-boundaries');
+        const chart = page.locator('[data-chart="mlp-decision-boundaries"] [data-chart-board]');
         // Initial screenshot
         await expect(chart).toHaveScreenshot('mlp-initial-render.png');
     });
 
     test('updates diagram when interacting with Hidden Node 1 weights', async ({ page }) => {
-        const chart = page.locator('#jxgbox-mlp-decision-boundaries');
+        const chart = page.locator('[data-chart="mlp-decision-boundaries"] [data-chart-board]');
 
         await expect(page.getByText(/Hidden Node 1/)).toBeVisible();
         await expect(chart.getByText('w₁ 1.00, w₂ 1.00')).toBeVisible();

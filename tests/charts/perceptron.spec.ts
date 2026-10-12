@@ -13,7 +13,8 @@ test.describe('perceptron-classification', () => {
     // position (w) relative to the bias point (b): score = w · (point - b).
     const score = (w: Vec, b: Vec, p: Vec) => w.x * (p.x - b.x) + w.y * (p.y - b.y);
 
-    async function expectClassification(page: Page, w: Vec, b: Vec) {
+    async function expectClassification(page: Page, w: Vec, b: Vec, data = { spam, notSpam }) {
+        const { spam, notSpam } = data;
         const c = chart(page, id);
         const expected = [
             ...spam.map(p => ({ label: `Spam (${f(score(w, b, p))})`, correct: score(w, b, p) >= 0 })),
@@ -58,6 +59,22 @@ test.describe('perceptron-classification', () => {
         // w keeps its offset from b: (-3, 3) - (-0.5, 0.5) + (0.5, -0.5) = (-2, 2)
         const { w, b } = await landed(page, { x: -2, y: 2 }, { x: 0.5, y: -0.5 });
         await expectClassification(page, w, b);
+    });
+
+    test('dragging a data point rescores and recolours it', async ({ page }, testInfo) => {
+        // Known bug (#57): on a phone the neighbouring point (-1, 4) is inside JSXGraph's
+        // touch radius, so the finger grabs it instead. Remove once fixed.
+        test.fail(testInfo.project.name === 'mobile', '#57: touch grabs the neighbouring data point on a phone');
+        await openChart(page, POSTS.perceptronModel, id);
+        // Spam point (0, 3) scores 4.00 (correct); dragged to (3, -3) it lands on the wrong side
+        await dragPointTo(page, id, 'Spam (4.00)', { x: 3, y: -3 });
+        const moved = await plottedPoint(page, id, 'Spam (-14.00)');
+        expect(moved.x).toBeCloseTo(3, 3);
+        expect(moved.y).toBeCloseTo(-3, 3);
+        await expectClassification(page, { x: -2, y: 2 }, { x: -0.5, y: 0.5 }, {
+            spam: spam.map(p => (p.x === 0 && p.y === 3 ? moved : p)),
+            notSpam,
+        });
     });
 
     test('rotating the weight vector keeps every score consistent', async ({ page }) => {

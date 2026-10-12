@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import JXG from 'jsxgraph';
 import registry from '../content/graphs/registry';
 import type { GraphConfig } from '../content/graphs/registry';
+import { registerChartForTests, jsxGraphBoardHandle } from './chartTestHook';
 
 // Import JSXGraph CSS
 import '../jsxgraph.css';
@@ -117,16 +118,14 @@ export const InteractiveGraph: React.FC<InteractiveGraphProps> = ({ id }) => {
             (initGraph as any)(board, setLogs, setActions);
         }
 
-        // Test hook (dev builds only): lets the Playwright chart driver map chart coordinates to the screen
-        if (import.meta.env.DEV) {
-            const w = window as unknown as { __charts?: Record<string, JXG.Board[]> };
-            w.__charts = { ...w.__charts, [id]: board2Ref.current ? [board, board2Ref.current] : [board] };
-        }
+        // Test hook (dev builds only): lets the Playwright chart driver find and drag points
+        const unregisterForTests = registerChartForTests(
+            id,
+            (board2Ref.current ? [board, board2Ref.current] : [board]).map(jsxGraphBoardHandle),
+        );
 
         return () => {
-            if (import.meta.env.DEV) {
-                delete (window as unknown as { __charts?: Record<string, JXG.Board[]> }).__charts?.[id];
-            }
+            unregisterForTests();
             if (boardRef.current) {
                 JXG.JSXGraph.freeBoard(boardRef.current);
             }
@@ -214,11 +213,13 @@ export const InteractiveGraph: React.FC<InteractiveGraphProps> = ({ id }) => {
                     <div
                         ref={containerRef}
                         className="jxgbox"
+                        data-chart-board
                         style={{ flex: '1 1 0', minWidth: 'min(300px, 100%)', maxWidth: '500px', aspectRatio: '1 / 1', border: '1px solid #eee', borderRadius: '8px' }}
                     />
                     <div
                         ref={container2Ref}
                         className="jxgbox"
+                        data-chart-board
                         style={{ flex: '1 1 0', minWidth: 'min(300px, 100%)', maxWidth: '500px', aspectRatio: '1 / 1', border: '1px solid #eee', borderRadius: '8px' }}
                     />
                 </div>
@@ -226,6 +227,7 @@ export const InteractiveGraph: React.FC<InteractiveGraphProps> = ({ id }) => {
                 <div
                     ref={containerRef}
                     className="jxgbox"
+                    data-chart-board
                     style={{ width: '100%', maxWidth: '700px', aspectRatio: '1 / 1', border: '1px solid #eee', borderRadius: '8px', ...containerStyle }}
                 />
             )}
