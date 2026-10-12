@@ -5,7 +5,6 @@ import { PerceptronTrainingChart } from './PerceptronTrainingChart';
 import { MultiLayerPerceptronChart } from './MultiLayerPerceptronChart';
 import { MLPDecisionBoundariesChart } from './MLPDecisionBoundariesChart';
 import { initSigmoid } from './ActivationFunctionsChart';
-import * as h from './helpers';
 
 export type GraphInitializer = (
     board: JXG.Board,
@@ -91,74 +90,7 @@ const registry: Record<string, GraphInitializer | GraphConfig> = {
         }
     } as GraphConfig,
 
-    // 8. Movie Vectors (Normalized)
-    'movie-vectors-normalized': {
-        boardAttributes: {
-            boundingbox: [-1.4, 1.4, 1.4, -1.4],
-            defaultAxes: {
-                x: { ticks: { insertTicks: false, ticksDistance: 0.2 } },
-                y: { ticks: { insertTicks: false, ticksDistance: 0.2 } }
-            },
-            showCopyright: false
-        },
-        initializer: (board: JXG.Board) => {
-            const coordsA = [5, 1];
-            const coordsB = [4, 4];
-            const coordsC = [0.5, 3];
-
-            const normalize = (v: number[]) => {
-                const mag = Math.sqrt(v[0] * v[0] + v[1] * v[1]);
-                return [v[0] / mag, v[1] / mag];
-            };
-
-            const nA = normalize(coordsA);
-            const nB = normalize(coordsB);
-            const nC = normalize(coordsC);
-
-            board.create('circle', [[0, 0], [1, 0]], { dash: 2, fixed: true, strokeColor: '#ccc' });
-            const o = h.createOrigin(board);
-
-            const pA = h.createVector(board, o, board.create('point', nA, { visible: false }), '#1a73e8', 'smart-label-circle-vector-a');
-            pA.point2.setAttribute({ name: `<span class="vector-label" style="color:#1a73e8">a</span>`, visible: true, size: 0, withLabel: true, useMathJax: false });
-
-            const pB = h.createVector(board, o, board.create('point', nB, { visible: false }), '#ea4335', 'smart-label-circle-vector-b');
-            pB.point2.setAttribute({ name: `<span class="vector-label" style="color:#ea4335">b</span>`, visible: true, size: 0, withLabel: true, useMathJax: false });
-
-            const pC = h.createVector(board, o, board.create('point', nC, { visible: false }), '#157845', 'smart-label-circle-vector-c');
-            pC.point2.setAttribute({ name: `<span class="vector-label" style="color:#157845">c</span>`, visible: true, size: 0, withLabel: true, useMathJax: false });
-
-            h.createAngleLabel(board, pA.point2, o, pB.point2, '#feae02', 0.5);
-            h.createAngleLabel(board, pB.point2, o, pC.point2, '#feae02', 0.4);
-        }
-    } as GraphConfig,
-
-    // 9. Movie Vectors (Popularity/Magnitude)
-    'movie-vectors-popularity': {
-        boardAttributes: {
-            boundingbox: [-1, 10, 10, -1],
-            axis: true,
-            showCopyright: false
-        },
-        initializer: (board: JXG.Board) => {
-            const o = h.createOrigin(board);
-
-            const pA = h.createVector(board, o, board.create('point', [5, 1], { visible: false }), '#1a73e8', 'smart-label-circle-vector-a');
-            pA.point2.setAttribute({ name: `<span class="vector-label" style="color:#1a73e8">a</span>`, visible: true, size: 0, withLabel: true });
-
-            const pB = h.createVector(board, o, board.create('point', [9, 9], { visible: false }), '#ea4335', 'smart-label-circle-vector-b');
-            pB.point2.setAttribute({ name: `<span class="vector-label" style="color:#ea4335">b</span>`, visible: true, size: 0, withLabel: true });
-
-            const pC = h.createVector(board, o, board.create('point', [0.5, 3], { visible: false }), '#157845', 'smart-label-circle-vector-c');
-            pC.point2.setAttribute({ name: `<span class="vector-label" style="color:#157845">c</span>`, visible: true, size: 0, withLabel: true });
-
-            h.createAngleLabel(board, pA.point2, o, pB.point2, '#feae02', 1);
-            h.createAngleLabel(board, pB.point2, o, pC.point2, '#feae02', 0.75);
-
-            h.createMeasurementLine(board, pA.point2, pB.point2);
-            h.createMeasurementLine(board, pA.point2, pC.point2);
-            h.createMeasurementLine(board, pB.point2, pC.point2);
-        }
-    } as GraphConfig,
+    // 'movie-vectors-normalized' and 'movie-vectors-popularity' are Mafs charts: see mafsCharts.ts
 
     // 'math-notations' is a Mafs chart: see mafsCharts.ts
 

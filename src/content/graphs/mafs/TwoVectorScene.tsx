@@ -1,8 +1,9 @@
 import React from 'react';
-import { MovablePoint, Polygon, Vector, Line } from 'mafs';
+import { MovablePoint, Vector, Line } from 'mafs';
 import { SIMILARITY_COLORS as C } from '../colors';
-import { vectorLength, distance, ccwAngleDeg, angleSector, angleLabelPosition, type Vec2 } from './geometry';
-import { SegmentLabel, VectorName, CentredText } from './labels';
+import { vectorLength, distance, type Vec2 } from './geometry';
+import { SegmentLabel, VectorName } from './labels';
+import { AngleMark } from './AngleMark';
 
 const ORIGIN: Vec2 = [0, 0];
 
@@ -19,8 +20,7 @@ interface TwoVectorSceneProps {
  */
 export const TwoVectorScene: React.FC<TwoVectorSceneProps> = ({ a, b, onMoveA, onMoveB }) => (
     <>
-        <Polygon points={angleSector(a, b, 1)} color={C.angle} fillOpacity={0.3} weight={1} />
-        <CentredText at={angleLabelPosition(a, b, 1.4)} text={`${ccwAngleDeg(a, b).toFixed(1)}°`} color={C.vector} />
+        <AngleMark from={a} to={b} />
 
         <Line.Segment point1={a} point2={b} color={C.vector} style="dashed" weight={2} />
         <Vector tip={a} color={C.vector} weight={3} />
