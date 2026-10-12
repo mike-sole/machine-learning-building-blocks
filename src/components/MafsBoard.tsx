@@ -12,12 +12,16 @@ interface MafsBoardProps {
     /** Visible range of the axes */
     x?: [number, number];
     y?: [number, number];
+    /** Visible range on phones, when the panel sits below the board instead of over it */
+    narrow?: { x: [number, number]; y: [number, number] };
     maxWidth?: number;
+    /** Live calculations: over the board's top-left corner on wider screens, below it on phones */
+    panel?: React.ReactNode;
     children: React.ReactNode;
 }
 
 /** A square, responsive Mafs board with a grid and labelled axes, styled like the site's charts. */
-export const MafsBoard: React.FC<MafsBoardProps> = ({ chartId, points, x = [-5, 5], y = [-5, 5], maxWidth = 700, children }) => {
+export const MafsBoard: React.FC<MafsBoardProps> = ({ chartId, points, x = [-5, 5], y = [-5, 5], maxWidth = 700, narrow, panel, children }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [size, setSize] = useState(0);
 
@@ -30,19 +34,28 @@ export const MafsBoard: React.FC<MafsBoardProps> = ({ chartId, points, x = [-5, 
         return () => observer.disconnect();
     }, []);
 
+    // Matches the 640px breakpoint in mafs-theme.css, where the panel moves below the board
+    const range = narrow && size > 0 && size < 600 ? narrow : { x, y };
+
     return (
-        <div
-            ref={containerRef}
-            data-chart-board
-            style={{ width: '100%', maxWidth: `${maxWidth}px`, aspectRatio: '1 / 1', border: '1px solid #eee', borderRadius: '8px', overflow: 'hidden' }}
-        >
-            {size > 0 && (
-                <Mafs height={size} pan={false} zoom={false} viewBox={{ x, y, padding: 0 }}>
-                    <Coordinates.Cartesian xAxis={{ labels: edgeless(x) }} yAxis={{ labels: edgeless(y) }} />
-                    {children}
-                    <TestHook chartId={chartId} points={points} container={containerRef} />
-                </Mafs>
-            )}
+        <div style={{ position: 'relative', width: '100%', maxWidth: `${maxWidth}px` }}>
+            <div
+                ref={containerRef}
+                data-chart-board
+                style={{ width: '100%', aspectRatio: '1 / 1', border: '1px solid #eee', borderRadius: '8px', overflow: 'hidden' }}
+            >
+                {/* A figure, not a div: the chart tests read each HTML label that is a direct div child of a board */}
+                <figure style={{ margin: 0 }}>
+                    {size > 0 && (
+                        <Mafs height={size} pan={false} zoom={false} viewBox={{ ...range, padding: 0 }}>
+                            <Coordinates.Cartesian xAxis={{ labels: edgeless(range.x) }} yAxis={{ labels: edgeless(range.y) }} />
+                            {children}
+                            <TestHook chartId={chartId} points={points} container={containerRef} />
+                        </Mafs>
+                    )}
+                </figure>
+            </div>
+            {panel && <div className="mafs-panel">{panel}</div>}
         </div>
     );
 };

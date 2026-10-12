@@ -8,3 +8,43 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
 }
+
+/* Live calculations shown with a chart: below the board on phones, over its top-left corner on wider screens */
+.mafs-panel {
+    margin-top: 12px;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1.7;
+    color: #000000;
+}
+
+@media (min-width: 640px) {
+    .mafs-panel {
+        position: absolute;
+        top: 10px;
+        left: 12px;
+        margin-top: 0;
+        pointer-events: none;
+    }
+}
+
+/* A vector's name: italic, with an arrow above it */
+.vector-label {
+    position: relative;
+    display: inline-block;
+    font-style: italic;
+    font-family: 'Times New Roman', serif;
+    line-height: 1;
+}
+
+.vector-label::after {
+    content: "→";
+    position: absolute;
+    top: -0.4em;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 0.8em;
+    font-family: sans-serif;
+    font-weight: normal;
+}

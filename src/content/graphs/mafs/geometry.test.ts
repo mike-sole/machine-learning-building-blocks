@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
-    vectorLength, distance, midpoint, directionDeg, ccwAngleDeg, polar,
+    vectorLength, distance, midpoint, dot, cosineSimilarity, directionDeg, ccwAngleDeg, polar,
     angleSector, angleLabelPosition, readableRotationDeg, type Vec2,
 } from './geometry';
 
@@ -115,5 +115,23 @@ describe('readableRotationDeg', () => {
 
     it('is the same whichever end the segment starts from', () => {
         expect(readableRotationDeg([2, 4], [3.5, 1])).toBeCloseTo(readableRotationDeg([3.5, 1], [2, 4]));
+    });
+});
+
+describe('dot and cosineSimilarity', () => {
+    it('match the blog example (a = [3.5, 1], b = [2, 4])', () => {
+        expect(dot([3.5, 1], [2, 4])).toBe(11);
+        expect(cosineSimilarity([3.5, 1], [2, 4]).toFixed(2)).toBe('0.68');
+    });
+
+    it('is 1 for the same direction, 0 for perpendicular and -1 for opposite', () => {
+        expect(cosineSimilarity([2, 2], [5, 5])).toBeCloseTo(1);
+        expect(cosineSimilarity([1, 0], [0, 3])).toBeCloseTo(0);
+        expect(cosineSimilarity([1, 2], [-2, -4])).toBeCloseTo(-1);
+    });
+
+    it('is 0, not NaN, when a vector has no length', () => {
+        expect(cosineSimilarity([0, 0], [1, 2])).toBe(0);
+        expect(dot([0, 0], [1, 2])).toBe(0);
     });
 });

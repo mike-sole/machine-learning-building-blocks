@@ -49,3 +49,11 @@ export const readableRotationDeg = (p: Vec2, q: Vec2): number => {
     if (deg <= -90) deg += 180;
     return deg;
 };
+
+export const dot = (a: Vec2, b: Vec2): number => a[0] * b[0] + a[1] * b[1];
+
+/** Cosine of the angle between the vectors; 0 when either has no length. */
+export const cosineSimilarity = (a: Vec2, b: Vec2): number => {
+    const lengths = vectorLength(a) * vectorLength(b);
+    return lengths === 0 ? 0 : dot(a, b) / lengths;
+};
