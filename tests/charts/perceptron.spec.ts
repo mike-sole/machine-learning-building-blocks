@@ -61,10 +61,7 @@ test.describe('perceptron-classification', () => {
         await expectClassification(page, w, b);
     });
 
-    test('dragging a data point rescores and recolours it', async ({ page }, testInfo) => {
-        // Known bug (#57): on a phone the neighbouring point (-1, 4) is inside JSXGraph's
-        // touch radius, so the finger grabs it instead. Remove once fixed.
-        test.fail(testInfo.project.name === 'mobile', '#57: touch grabs the neighbouring data point on a phone');
+    test('dragging a data point rescores and recolours it', async ({ page }) => {
         await openChart(page, POSTS.perceptronModel, id);
         // Spam point (0, 3) scores 4.00 (correct); dragged to (3, -3) it lands on the wrong side
         await dragPointTo(page, id, 'Spam (4.00)', { x: 3, y: -3 });
@@ -75,6 +72,15 @@ test.describe('perceptron-classification', () => {
             spam: spam.map(p => (p.x === 0 && p.y === 3 ? moved : p)),
             notSpam,
         });
+    });
+
+    test('while w is dragged, b is where it started, projected onto the new weight direction', async ({ page }) => {
+        await openChart(page, POSTS.perceptronModel, id);
+        const b0 = { x: -0.5, y: 0.5 };
+        const w = { x: -3, y: 2 };
+        await dragPointTo(page, id, 'w', w);
+        const t = (b0.x * w.x + b0.y * w.y) / (w.x * w.x + w.y * w.y);
+        await landed(page, w, { x: t * w.x, y: t * w.y });
     });
 
     test('rotating the weight vector keeps every score consistent', async ({ page }) => {
@@ -131,7 +137,8 @@ test.describe('perceptron-training', () => {
         const c = await openChart(page, POSTS.trainingPerceptron, id);
         const steps = train();
 
-        for (let i = 0; i < 12; i++) {
+        // 24 steps: 4 passes over the data, reaching step 19, the first whose score is just below 0
+        for (let i = 0; i < 24; i++) {
             const s = steps.next().value!;
             await c.getByRole('button', { name: 'Train Step' }).click();
 
@@ -153,6 +160,12 @@ test.describe('perceptron-training', () => {
             await expectText(c, f(s.w.x));
             await expectText(c, f(s.w.y));
             await expectText(c, f(s.distance));
+
+            // b marks the point of the boundary w · x + b = 0 nearest the origin: (-b / |w|²) w
+            const k = -s.b / (s.w.x ** 2 + s.w.y ** 2);
+            const anchor = await plottedPoint(page, id, 'b');
+            expect(anchor.x, 'b.x').toBeCloseTo(k * s.w.x, 5);
+            expect(anchor.y, 'b.y').toBeCloseTo(k * s.w.y, 5);
         }
     });
 

@@ -48,3 +48,21 @@
     font-family: sans-serif;
     font-weight: normal;
 }
+
+/* Buttons above a chart, as on the JSXGraph charts */
+.chart-button {
+    padding: 8px 24px;
+    background-color: #2563eb;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 600;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    transition: background-color 0.2s;
+}
+
+.chart-button:hover {
+    background-color: #1d4ed8;
+}
