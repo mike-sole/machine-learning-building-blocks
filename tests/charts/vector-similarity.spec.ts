@@ -1,5 +1,5 @@
 import { test, expect, type Locator } from '@playwright/test';
-import { POSTS, openChart, dragPointTo, plottedPoint, expectText } from './driver';
+import { POSTS, openChart, dragPointTo, plottedPoint, expectText, chartTexts } from './driver';
 import { type Vec, f, length, dot, distance, cosine, angleDeg, onUnitCircle } from './maths';
 
 const A0: Vec = { x: 3.5, y: 1 };
@@ -166,6 +166,23 @@ test.describe('movie vectors', () => {
     test('normalised movie vectors show the expected angles', async ({ page }) => {
         const c = await openChart(page, POSTS.vectorSimilarity, 'movie-vectors-normalized');
         await expectTexts(c, ['33.7°', '35.5°']);
+    });
+
+    test('normalised movie vectors each show length 1.00', async ({ page }) => {
+        const c = await openChart(page, POSTS.vectorSimilarity, 'movie-vectors-normalized');
+        await expect.poll(async () => (await chartTexts(c)).filter(t => t === '1.00').length, { message: 'three 1.00 length labels' }).toBe(3);
+    });
+
+    test('a normalised vector stays on the unit circle when dragged inside it', async ({ page }) => {
+        const id = 'movie-vectors-normalized';
+        const c = await openChart(page, POSTS.vectorSimilarity, id);
+        // Drag b halfway to the centre, in the 60° direction: it turns to 60° but keeps length 1
+        const half = onUnitCircle(60);
+        await dragPointTo(page, id, 'b', { x: half.x / 2, y: half.y / 2 });
+        const b = await plottedPoint(page, id, 'b');
+        expect(length(b)).toBeCloseTo(1, 2);
+        expect(angleDeg({ x: 1, y: 0 }, b)).toBeCloseTo(60, 0);
+        await expect.poll(async () => (await chartTexts(c)).filter(t => t === '1.00').length).toBe(3);
     });
 
     const popularity = (a: Vec, b: Vec, cv: Vec) => [

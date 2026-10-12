@@ -16,11 +16,11 @@ export const SegmentLabel: React.FC<{ from: Vec2; to: Vec2; text: string; backgr
 };
 
 /** A vector's name in italics with an arrow above it, just above and to the right of its tip. */
-export const VectorName: React.FC<{ at: Vec2; name: string }> = ({ at, name }) => {
+export const VectorName: React.FC<{ at: Vec2; name: string; color?: string }> = ({ at, name, color = '#000000' }) => {
     const { viewTransform } = useTransformContext();
     const [px, py] = vec.transform(at, viewTransform);
     return (
-        <g transform={`translate(${px + 14} ${py - 10})`} style={{ fill: '#000000' }}>
+        <g transform={`translate(${px + 14} ${py - 10})`} style={{ fill: color }}>
             <text textAnchor="middle" style={{ fontSize: 16, fontStyle: 'italic', fontFamily: "'Times New Roman', serif" }}>{name}</text>
             <text y={-11} textAnchor="middle" style={{ fontSize: 11 }}>→</text>
         </g>
