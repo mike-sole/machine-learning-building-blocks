@@ -24,6 +24,12 @@ interface MafsBoardProps {
     height?: number;
     /** Stretch the axes to fill a square board instead of keeping x and y units equal */
     stretch?: boolean;
+    /** Width / height of the board when it has no fixed height (1: square) */
+    aspect?: number;
+    /** Draw the grid and axes (on by default) */
+    grid?: boolean;
+    /** No border around the board */
+    frameless?: boolean;
     /** For charts with several boards: this board's position, and how many there are */
     boardIndex?: number;
     boardCount?: number;
@@ -42,8 +48,8 @@ interface MafsBoardProps {
     children: React.ReactNode;
 }
 
-/** A responsive Mafs board (square unless given a height) with a grid and labelled axes, styled like the site's charts. */
-export const MafsBoard: React.FC<MafsBoardProps> = ({ chartId, points = NO_POINTS, plots = NO_PLOTS, height, stretch, boardIndex = 0, boardCount = 1, sideBySide, xAxis, yAxis, x = [-5, 5], y = [-5, 5], maxWidth = 700, narrow, panel, children }) => {
+/** A responsive Mafs board (square unless given a height or aspect) with a grid and labelled axes, styled like the site's charts. */
+export const MafsBoard: React.FC<MafsBoardProps> = ({ chartId, points = NO_POINTS, plots = NO_PLOTS, height, stretch, aspect = 1, grid = true, frameless, boardIndex = 0, boardCount = 1, sideBySide, xAxis, yAxis, x = [-5, 5], y = [-5, 5], maxWidth = 700, narrow, panel, children }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [size, setSize] = useState(0);
 
@@ -64,16 +70,18 @@ export const MafsBoard: React.FC<MafsBoardProps> = ({ chartId, points = NO_POINT
             <div
                 ref={containerRef}
                 data-chart-board
-                style={{ width: '100%', ...(height ? { height } : { aspectRatio: '1 / 1' }), border: '1px solid #eee', borderRadius: '8px', overflow: 'hidden' }}
+                style={{ width: '100%', ...(height ? { height } : { aspectRatio: `${aspect}` }), border: frameless ? 'none' : '1px solid #eee', borderRadius: '8px', overflow: 'hidden' }}
             >
                 {/* A figure, not a div: the chart tests read each HTML label that is a direct div child of a board */}
                 <figure style={{ margin: 0 }}>
                     {size > 0 && (
-                        <Mafs height={height ?? size} pan={false} zoom={false} viewBox={{ ...range, padding: 0 }} preserveAspectRatio={height || stretch ? false : 'contain'}>
-                            <Coordinates.Cartesian
-                                xAxis={{ lines: xAxis?.lines ?? 1, labels: edgeless(range.x, xAxis?.labels) }}
-                                yAxis={{ lines: yAxis?.lines ?? 1, labels: edgeless(range.y, yAxis?.labels) }}
-                            />
+                        <Mafs height={height ?? Math.round(size / aspect)} pan={false} zoom={false} viewBox={{ ...range, padding: 0 }} preserveAspectRatio={height || stretch ? false : 'contain'}>
+                            {grid && (
+                                <Coordinates.Cartesian
+                                    xAxis={{ lines: xAxis?.lines ?? 1, labels: edgeless(range.x, xAxis?.labels) }}
+                                    yAxis={{ lines: yAxis?.lines ?? 1, labels: edgeless(range.y, yAxis?.labels) }}
+                                />
+                            )}
                             {plots.map((p, i) => <Plot.OfX key={i} y={p.y} domain={[p.from, p.to]} color={p.color} weight={p.weight ?? 2} />)}
                             {children}
                             <TestHook chartId={chartId} boardIndex={boardIndex} boardCount={boardCount} points={points} plots={plots} container={containerRef} />

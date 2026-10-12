@@ -222,3 +222,8 @@ export async function plotSamples(page: Page, id: string, boardIndex = 0, sample
             return { name: p.name, from: p.from, to: p.to, samples: xs.map(x => ({ x, y: p.y(x) })) };
         }), { id, boardIndex, samples });
 }
+
+/** Chart coordinates of every point with the given visible name, in creation order. */
+export async function plottedPoints(page: Page, id: string, name: string, boardIndex = 0): Promise<{ x: number; y: number }[]> {
+    return (await points(page, id, boardIndex)).filter(p => p.name === name).map(p => ({ x: p.x, y: p.y }));
+}

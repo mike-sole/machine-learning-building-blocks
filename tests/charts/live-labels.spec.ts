@@ -78,8 +78,10 @@ const CASES: Case[] = [
     },
     {
         name: 'mlp-decision-boundaries-boundaries', id: 'mlp-decision-boundaries', post: POSTS.mlp,
-        steps: [0, 1, 2].map(occurrence => ({ drag: 'b', occurrence, by: { x: 0.2, y: 0.2 } })),
-        mobileBug: '#45: the boundary handle is too close to the weight handle to touch on a phone',
+        // Chosen so that every bias and activation comes out at exactly 2 decimal places (biases -0.18, 1.04, -3.09), far
+        // from a rounding boundary. Other drags hit one: (0.2, 0.2) puts h1's bias at exactly 0, shown as 0.00 or -0.00, and
+        // (0.36, 0.36) the output's at -3.175, so a sub-pixel difference in where the drag lands flips the last digit.
+        steps: [0, 1, 2].map(occurrence => ({ drag: 'b', occurrence, by: { x: 0.32, y: 0.32 } })),
     },
 ];
 
