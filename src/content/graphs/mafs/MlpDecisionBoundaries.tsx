@@ -5,6 +5,7 @@ import type { ChartPoint } from '../../../components/chartTestHook';
 import { dot, type Vec2 } from './geometry';
 import { handlesFor, weightsOf, dragTip, dragAnchor, activation as neuronActivation, type Handles } from './neuronHandles';
 import { BoardText } from './labels';
+import { HALO } from './halo';
 
 /**
  * The XOR network from The Multi-Layered Perceptron, drawn on one board in board units. On wider screens
@@ -230,6 +231,9 @@ const InputNode: React.FC<{ at: Vec2; title: string }> = ({ at, title }) => (
 
 /** A neuron's graph: circle, title, grid, axes and tick labels at every whole number inside the circle. */
 const NeuronView: React.FC<{ view: View; title: string }> = ({ view, title }) => {
+    const { viewTransform } = useTransformContext();
+    // Ticks closer than 22px (the output graph on a phone) are numbered every other one, so the numbers have room
+    const numberEvery = Math.abs(viewTransform[0]) * scale(view) < 22 ? 2 : 1;
     const [cx, cy] = view.centre;
     const r = R_NEURON;
     const tick = 0.05 * r;
@@ -255,9 +259,13 @@ const NeuronView: React.FC<{ view: View; title: string }> = ({ view, title }) =>
                 return (
                     <React.Fragment key={v}>
                         <Line.Segment point1={[cx + offset, cy - tick]} point2={[cx + offset, cy + tick]} color="#6b7280" weight={1.5} />
-                        <BoardText at={[cx + offset, cy - tick - 0.2]} anchor="middle" baseline="hanging" size={9} color="#6b7280">{v}</BoardText>
                         <Line.Segment point1={[cx - tick, cy + offset]} point2={[cx + tick, cy + offset]} color="#6b7280" weight={1.5} />
-                        <BoardText at={[cx - tick - 0.2, cy + offset]} anchor="end" baseline="central" size={9} color="#6b7280">{v}</BoardText>
+                        {v % numberEvery === 0 && (
+                            <>
+                                <BoardText at={[cx + offset, cy - tick - 0.2]} anchor="middle" baseline="hanging" size={9} color="#6b7280" axisLabel>{v}</BoardText>
+                                <BoardText at={[cx - tick - 0.2, cy + offset]} anchor="end" baseline="central" size={9} color="#6b7280" axisLabel>{v}</BoardText>
+                            </>
+                        )}
                     </React.Fragment>
                 );
             })}
@@ -287,7 +295,7 @@ const OutputLabels: React.FC<{ points: { at: Vec2; cls: number }[] }> = ({ point
         <>
             {placed.map((l, i) => (
                 <text key={i} x={l.x} y={l.y} textAnchor="end" dominantBaseline="central"
-                    style={{ fill: '#000000', fontSize: 10, stroke: '#ffffff', strokeWidth: 3, strokeLinejoin: 'round', paintOrder: 'stroke' }}>{l.text}</text>
+                    style={{ fill: '#000000', fontSize: 10, ...HALO }}>{l.text}</text>
             ))}
         </>
     );

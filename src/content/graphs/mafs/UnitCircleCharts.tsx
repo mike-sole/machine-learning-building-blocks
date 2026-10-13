@@ -65,13 +65,14 @@ const UnitCircleChart: React.FC<{ id: string; measures: Measure[]; showDistance?
                 {showDistance && (
                     <>
                         <Line.Segment point1={a} point2={B} color={C.vector} style="dashed" weight={2} />
-                        <SegmentLabel from={a} to={B} text={distance(a, B).toFixed(2)} background="#ffffff" />
+                        {/* Nearer b than a, clear of the angle label just outside the circle */}
+                        <SegmentLabel from={a} to={B} text={distance(a, B).toFixed(2)} background="#ffffff" position={0.75} />
                     </>
                 )}
                 <Vector tip={a} color={C.vector} weight={3} />
                 <Vector tip={B} color={C.vector} weight={3} />
-                <SegmentLabel from={ORIGIN} to={a} text={vectorLength(a).toFixed(2)} background={C.aMag} />
-                <SegmentLabel from={ORIGIN} to={B} text={vectorLength(B).toFixed(2)} background={C.bMag} />
+                <SegmentLabel from={ORIGIN} to={a} text={vectorLength(a).toFixed(2)} background={C.aMag} position={0.45} />
+                <SegmentLabel from={ORIGIN} to={B} text={vectorLength(B).toFixed(2)} background={C.bMag} position={0.45} />
                 <VectorName at={a} name="a" />
                 <VectorName at={B} name="b" />
                 <MovablePoint point={a} onMove={setA} constrain={onCircle} color={C.aMag} />

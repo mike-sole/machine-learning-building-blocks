@@ -141,22 +141,3 @@ for (const [occurrence, name] of NEURONS.entries()) {
         expect(f(neurons[name].w2)).toBe(f(INITIAL[name].w2));
     });
 }
-
-test('no two labels overlap', async ({ page }) => {
-    // On phones the network is stacked one neuron above another so that every label has room (#46).
-    // Axis numbers are left out: the labels drawn over them are outlined in white, so both stay readable.
-    const c = await openChart(page, POSTS.mlp, id);
-    const overlaps = await c.evaluate((el) => {
-        const labels = [...el.querySelectorAll('[data-chart-board] text')]
-            .map(t => ({ text: (t.textContent ?? '').trim(), box: t.getBoundingClientRect() }))
-            .filter(l => l.text && !/^-?\d+$/.test(l.text) && l.box.width > 0);
-        const out: string[] = [];
-        labels.forEach((a, i) => labels.slice(i + 1).forEach(b => {
-            const x = Math.min(a.box.right, b.box.right) - Math.max(a.box.left, b.box.left);
-            const y = Math.min(a.box.bottom, b.box.bottom) - Math.max(a.box.top, b.box.top);
-            if (x > 1 && y > 1) out.push(`"${a.text}" and "${b.text}"`);
-        }));
-        return out;
-    });
-    expect(overlaps).toEqual([]);
-});

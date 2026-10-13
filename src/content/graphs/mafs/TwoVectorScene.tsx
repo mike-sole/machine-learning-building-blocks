@@ -6,6 +6,7 @@ import { SegmentLabel, VectorName } from './labels';
 import { AngleMark } from './AngleMark';
 
 const ORIGIN: Vec2 = [0, 0];
+const LENGTH_AT = 0.65;
 
 interface TwoVectorSceneProps {
     a: Vec2;
@@ -26,8 +27,9 @@ export const TwoVectorScene: React.FC<TwoVectorSceneProps> = ({ a, b, onMoveA, o
         <Vector tip={a} color={C.vector} weight={3} />
         <Vector tip={b} color={C.vector} weight={3} />
 
-        <SegmentLabel from={ORIGIN} to={a} text={vectorLength(a).toFixed(2)} background={C.aMag} />
-        <SegmentLabel from={ORIGIN} to={b} text={vectorLength(b).toFixed(2)} background={C.bMag} />
+        {/* Lengths past the middle of each vector, clear of the angle label near the origin */}
+        <SegmentLabel from={ORIGIN} to={a} text={vectorLength(a).toFixed(2)} background={C.aMag} position={LENGTH_AT} />
+        <SegmentLabel from={ORIGIN} to={b} text={vectorLength(b).toFixed(2)} background={C.bMag} position={LENGTH_AT} />
         <SegmentLabel from={a} to={b} text={distance(a, b).toFixed(2)} background="#ffffff" />
 
         <VectorName at={a} name="a" />
