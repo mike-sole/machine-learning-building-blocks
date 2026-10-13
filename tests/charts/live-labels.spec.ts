@@ -30,6 +30,8 @@ interface Case {
     steps: Step[];
     /** Known touch-screen bug: the case is expected to fail on the mobile project */
     mobileBug?: string;
+    /** Only for this project, where a chart's layout differs between desktop and phones */
+    project?: 'chromium' | 'mobile';
 }
 
 const A1 = { x: -3, y: 1 };
@@ -73,14 +75,24 @@ const CASES: Case[] = [
         steps: [{ click: 'Train Step' }, { click: 'Train Step' }, { click: 'Train Step' }, { click: 'Reset' }, { click: 'Train Step' }],
     },
     {
-        name: 'mlp-decision-boundaries-weights', id: 'mlp-decision-boundaries', post: POSTS.mlp,
+        name: 'mlp-decision-boundaries-weights', id: 'mlp-decision-boundaries', post: POSTS.mlp, project: 'chromium',
         steps: [0, 1, 2].map(occurrence => ({ drag: 'w', occurrence, by: { x: 0.4, y: -0.3 } })),
     },
     {
-        name: 'mlp-decision-boundaries-boundaries', id: 'mlp-decision-boundaries', post: POSTS.mlp,
+        name: 'mlp-decision-boundaries-boundaries', id: 'mlp-decision-boundaries', post: POSTS.mlp, project: 'chromium',
         // Chosen so that every bias and activation comes out at exactly 2 decimal places (biases -0.18, 1.04, -3.09), far
         // from a rounding boundary. Other drags hit one: (0.2, 0.2) puts h1's bias at exactly 0, shown as 0.00 or -0.00, and
         // (0.36, 0.36) the output's at -3.175, so a sub-pixel difference in where the drag lands flips the last digit.
+        steps: [0, 1, 2].map(occurrence => ({ drag: 'b', occurrence, by: { x: 0.32, y: 0.32 } })),
+    },
+    // Phones draw the hidden graphs a little smaller (#72), so the same drags change their weights by more. Recorded from
+    // that layout rather than from JSXGraph.
+    {
+        name: 'mlp-decision-boundaries-weights-phone', id: 'mlp-decision-boundaries', post: POSTS.mlp, project: 'mobile',
+        steps: [0, 1, 2].map(occurrence => ({ drag: 'w', occurrence, by: { x: 0.4, y: -0.3 } })),
+    },
+    {
+        name: 'mlp-decision-boundaries-boundaries-phone', id: 'mlp-decision-boundaries', post: POSTS.mlp, project: 'mobile',
         steps: [0, 1, 2].map(occurrence => ({ drag: 'b', occurrence, by: { x: 0.32, y: 0.32 } })),
     },
 ];
@@ -119,6 +131,7 @@ const recordingDir = join(process.cwd(), 'tests/charts/live-labels');
 
 for (const c of CASES) {
     test(`${c.name}: labels and text change as they did with JSXGraph`, async ({ page }, testInfo) => {
+        test.skip(!!c.project && testInfo.project.name !== c.project, `${c.project} only`);
         test.fail(!!c.mobileBug && testInfo.project.name === 'mobile', c.mobileBug);
         const chart = await openChart(page, c.post, c.id);
         let texts = await settledTexts(page, chart);

@@ -1,0 +1,83 @@
+[
+  {
+    "step": "drag w by (0.4, -0.3)",
+    "whileHeld": {
+      "appeared": [
+        "Not Spam (0.00)",
+        "Not Spam (1.65)",
+        "Spam (4.42)",
+        "w₀ 0.31",
+        "w₀ 0.31",
+        "w₁ 1.36",
+        "w₁ 1.36, w₂ 0.69",
+        "w₂ 0.69"
+      ],
+      "disappeared": [
+        "Not Spam (0.30)",
+        "Not Spam (0.30)",
+        "Spam (4.30)",
+        "w₀ 0.30",
+        "w₀ 0.30",
+        "w₁ 1.00",
+        "w₁ 1.00, w₂ 1.00",
+        "w₂ 1.00"
+      ]
+    },
+    "onRelease": {
+      "appeared": [],
+      "disappeared": []
+    }
+  },
+  {
+    "step": "drag w #1 by (0.4, -0.3)",
+    "whileHeld": {
+      "appeared": [
+        "Not Spam (0.00)",
+        "Not Spam (2.28)",
+        "Spam (4.17)",
+        "w₀ 0.52",
+        "w₀ 0.52",
+        "w₁ -0.47",
+        "w₁ -0.47, w₂ -1.35",
+        "w₂ -1.35"
+      ],
+      "disappeared": [
+        "Not Spam (0.36)",
+        "Not Spam (0.76)",
+        "Spam (4.56)",
+        "w₀ 0.56",
+        "w₀ 0.56",
+        "w₁ -0.95",
+        "w₁ -0.95, w₂ -1.05",
+        "w₂ -1.05"
+      ]
+    },
+    "onRelease": {
+      "appeared": [],
+      "disappeared": []
+    }
+  },
+  {
+    "step": "drag w #2 by (0.4, -0.3)",
+    "whileHeld": {
+      "appeared": [
+        "w₀ -2.71",
+        "w₀ -2.71",
+        "w₁ 1.13",
+        "w₁ 1.13, w₂ 0.79",
+        "w₂ 0.79"
+      ],
+      "disappeared": [
+        "w₀ -2.41",
+        "w₀ -2.41",
+        "w₁ 0.84",
+        "w₁ 0.84, w₂ 0.86",
+        "w₂ 0.86"
+      ]
+    },
+    "onRelease": {
+      "appeared": [],
+      "disappeared": []
+    }
+  }
+]

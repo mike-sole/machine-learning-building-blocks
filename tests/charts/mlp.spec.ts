@@ -1,5 +1,5 @@
 import { test, expect, type Locator, type Page } from '@playwright/test';
-import { POSTS, openChart, dragPointBy, chartTexts, plottedPoints } from './driver';
+import { POSTS, openChart, dragPointBy, chartTexts, plottedPoints, pointPosition } from './driver';
 import { f, relu } from './maths';
 
 const id = 'mlp-decision-boundaries';
@@ -79,12 +79,14 @@ test('shows the weights from the post and the resulting activations', async ({ p
     expect(activations.h2.map(m => m[2])).toEqual(['0.00', '4.56', '0.36', '0.76']);
 });
 
-test("while h1's weight vector is dragged, its boundary point keeps its projection from where the drag began", async ({ page }) => {
+test("while h1's weight vector is dragged, its boundary point keeps its projection from where the drag began", async ({ page, isMobile }) => {
     // h1 starts with w = (1, 1), b = 0.3: boundary point (-0.15, -0.15), tip (0.85, 0.85), in h1's own coordinates.
-    // Dragging the tip by (0.4, -0.3) on the board moves it by (0.3, -0.225) in h1's graph (4 board units per 3).
+    // Dragging the tip by (0.4, -0.3) on the board moves it by (0.3, -0.225) in h1's graph (4 board units per 3), or
+    // on phones, where the hidden graphs are a little smaller, by (1/3, -0.25) (3.6 board units per 3).
     const c = await openChart(page, POSTS.mlp, id);
     await dragPointBy(page, id, 'w', { x: 0.4, y: -0.3 }, 0);
-    const tip = { x: 1.15, y: 0.625 };
+    const perUnit = isMobile ? 1.2 : 4 / 3;
+    const tip = { x: 0.85 + 0.4 / perUnit, y: 0.85 - 0.3 / perUnit };
     const t = (-0.15 * tip.x - 0.15 * tip.y) / (tip.x ** 2 + tip.y ** 2);
     const anchor = { x: t * tip.x, y: t * tip.y };
     const w = { x: tip.x - anchor.x, y: tip.y - anchor.y };
@@ -141,3 +143,21 @@ for (const [occurrence, name] of NEURONS.entries()) {
         expect(f(neurons[name].w2)).toBe(f(INITIAL[name].w2));
     });
 }
+
+/**
+ * Phones show the same network as wider screens, one layer per row (#72): the inputs, then h1 and h2 side by side,
+ * then the output, so it stays clear which inputs feed which neuron and that h1 and h2 feed the output.
+ */
+test('the network is drawn one layer per row, with every connection, on every screen', async ({ page, isMobile }) => {
+    const c = await openChart(page, POSTS.mlp, id);
+    const [h1, h2, out] = await Promise.all(NEURONS.map((_, i) => pointPosition(page, id, 'b', i)));
+    // The hidden graphs are side by side, both above the output graph
+    expect(Math.abs(h1.y - h2.y), 'h1 and h2 in one row').toBeLessThan(3);
+    expect(h2.x - h1.x, 'h1 left of h2').toBeGreaterThan(6);
+    expect(out.y, 'output below the hidden row').toBeLessThan(Math.min(h1.y, h2.y) - 6);
+    // A labelled arrow for each of the nine weights (the three biases are also shown on their boundaries)
+    const texts = await chartTexts(c);
+    expect(texts.filter(t => /^w[₀₁₂] -?\d+\.\d\d$/.test(t)), 'a label on every connection').toHaveLength(9 + 3);
+    // On a phone the whole network, from the inputs' titles to the bottom of the output graph, fits on the screen
+    if (isMobile) expect((await c.boundingBox())!.height, 'whole network on one screen').toBeLessThanOrEqual(page.viewportSize()!.height);
+});
