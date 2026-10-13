@@ -50,8 +50,8 @@ function trainStep(m: Model): Model {
     const error = p.cls - prediction;
     const point = <>(<B color={K.pointX}>{n(x)}</B>, <B color={K.pointY}>{n(y)}</B>)</>;
     const header = [
-        <>Randomly selected data point: {point}</>,
-        `Actual = ${p.cls}, Expected = ${prediction}`,
+        <>Next data point ({m.next + 1} of {DATA.length}): {point}</>,
+        `Target = ${p.cls}, Prediction = ${prediction}`,
     ];
     const next = (m.next + 1) % DATA.length;
 
@@ -82,7 +82,7 @@ function trainStep(m: Model): Model {
         w, b, next, current: m.next,
         log: [
             ...header,
-            <>Error = (Actual - Expected) = {e}</>,
+            <>Error = (Target - Prediction) = {e}</>,
             '',
             <>Weights old: {old}</>,
             'Weights Update (Δw) = learning rate * error * selected data point',

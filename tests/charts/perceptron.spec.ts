@@ -152,10 +152,10 @@ test.describe('perceptron-training', () => {
             await c.getByRole('button', { name: 'Train Step' }).click();
 
             const lines = log(page);
-            await expect(lines).toContainText(`(${f(s.p.x)}, ${f(s.p.y)})`);
-            await expect(lines).toContainText(`Actual = ${s.p.cls}, Expected = ${s.prediction}`);
+            await expect(lines).toContainText(`Next data point (${(i % data.length) + 1} of ${data.length}): (${f(s.p.x)}, ${f(s.p.y)})`);
+            await expect(lines).toContainText(`Target = ${s.p.cls}, Prediction = ${s.prediction}`);
             if (s.error !== 0) {
-                await expect(lines).toContainText(`Error = (Actual - Expected) = ${s.error}`);
+                await expect(lines).toContainText(`Error = (Target - Prediction) = ${s.error}`);
                 await expect(lines).toContainText(`Weights new = [${f(s.w.x)}, ${f(s.w.y)}]`);
                 await expect(lines).toContainText(`Bias new = bias old + Δb = ${f(s.old.b)} + ${f(learningRate * s.error)} = ${f(s.b)}`);
             } else {

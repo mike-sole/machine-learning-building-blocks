@@ -10,7 +10,7 @@ The **Perceptron Learning Algorithm** is an iterative feedback loop. It works by
 
 ## Interactive Training
 
-This interactive chart shows exactly how a **Perceptron** learns to separate data. When you click **"Train Step"**, it picks one data point and tries to predict which category it belongs to:
+This interactive chart shows exactly how a **Perceptron** learns to separate data. When you click **"Train Step"**, it takes the next data point (in order, looping back to the first after the last) and tries to predict which category it belongs to:
 
 - **If it guesses right**: The model is already correct for the current data point, so nothing changes.
 - **If it guesses wrong**: The model updates its weights to correct the mistake. You will see the decision boundary (the line) rotate or shift to better classify this point next time. The size of this shift is controlled by the **Learning Rate** ($\eta$)
