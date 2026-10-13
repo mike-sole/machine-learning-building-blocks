@@ -4,7 +4,8 @@ import { MafsBoard } from '../../../components/MafsBoard';
 import type { ChartPoint } from '../../../components/chartTestHook';
 import { SIMILARITY_COLORS } from '../colors';
 import { type Vec2 } from './geometry';
-import { PointName, TextAt } from './labels';
+import { PointName } from './labels';
+import { HALO } from './halo';
 import { ChartButtons, ChartLog } from './ChartControls';
 
 interface Sample { at: Vec2; label: string; cls: 0 | 1 }
@@ -50,8 +51,8 @@ function trainStep(m: Model): Model {
     const error = p.cls - prediction;
     const point = <>(<B color={K.pointX}>{n(x)}</B>, <B color={K.pointY}>{n(y)}</B>)</>;
     const header = [
-        <>Randomly selected data point: {point}</>,
-        `Actual = ${p.cls}, Expected = ${prediction}`,
+        <>Next data point ({m.next + 1} of {DATA.length}): {point}</>,
+        `Target = ${p.cls}, Prediction = ${prediction}`,
     ];
     const next = (m.next + 1) % DATA.length;
 
@@ -82,7 +83,7 @@ function trainStep(m: Model): Model {
         w, b, next, current: m.next,
         log: [
             ...header,
-            <>Error = (Actual - Expected) = {e}</>,
+            <>Error = (Target - Prediction) = {e}</>,
             '',
             <>Weights old: {old}</>,
             'Weights Update (Δw) = learning rate * error * selected data point',
@@ -130,13 +131,10 @@ export const PerceptronTraining: React.FC<{ id: string }> = ({ id }) => {
                 {/* Decision boundary: w · x + b = 0 */}
                 <Line.ThroughPoints point1={anchor} point2={[anchor[0] - w[1], anchor[1] + w[0]]} color="#000000" style="dashed" weight={2} />
                 <Line.Segment point1={[0, 0]} point2={anchor} color={K.distance} style="dashed" weight={1} />
-                <TextAt at={[anchor[0] / 2 - 0.2, anchor[1] / 2]} text={n(boundaryDistance(w, b))} color={K.distance} size={10} />
                 <Line.Segment point1={anchor} point2={corner} color={K.wNewX} style="dashed" weight={1} />
                 <Line.Segment point1={corner} point2={tip} color={K.wNewY} style="dashed" weight={1} />
-                <TextAt at={[(anchor[0] + corner[0]) / 2, anchor[1] - 0.2]} text={n(w[0])} color={K.wNewX} size={10} />
-                <TextAt at={[corner[0] + 0.1, (corner[1] + tip[1]) / 2]} text={n(w[1])} color={K.wNewY} size={10} />
                 <Vector tail={anchor} tip={tip} color={SIMILARITY_COLORS.vector} weight={3} />
-                <WeightLabel at={[tip[0] + 0.15, tip[1] + 0.15]} w={w} />
+                <VectorLabels anchor={anchor} w={w} distance={boundaryDistance(w, b)} />
                 {DATA.map((d, i) => (
                     <React.Fragment key={i}>
                         {d.cls === 1 ? <Cross at={d.at} /> : <Point x={d.at[0]} y={d.at[1]} color="green" />}
@@ -145,7 +143,6 @@ export const PerceptronTraining: React.FC<{ id: string }> = ({ id }) => {
                 ))}
                 {model.current !== null && <Circle center={DATA[model.current].at} radius={0.25} color="orange" fillOpacity={0} weight={2} />}
                 <Point x={anchor[0]} y={anchor[1]} color="purple" />
-                <PointName at={anchor} text="b" dx={5} dy={-5} />
             </MafsBoard>
         </>
     );
@@ -162,12 +159,43 @@ const Cross: React.FC<{ at: Vec2 }> = ({ at: [x, y] }) => {
     );
 };
 
-/** "w (x, y)" beside the weight vector's tip, with each component in its colour. */
-const WeightLabel: React.FC<{ at: Vec2; w: Vec2 }> = ({ at, w }) => {
+/**
+ * The labels around the weight vector, placed in pixels from the geometry so they stay apart however
+ * short the vector is on screen: "b" behind the boundary point (away from w), the boundary distance
+ * beside the line from the origin (away from w's components), w's components outside the right-angled
+ * triangle they form, and "w (x, y)" beyond the tip.
+ */
+const VectorLabels: React.FC<{ anchor: Vec2; w: Vec2; distance: number }> = ({ anchor, w, distance }) => {
     const { viewTransform } = useTransformContext();
-    const [px, py] = vec.transform(at, viewTransform);
+    const toPx = (p: Vec2) => vec.transform(p, viewTransform);
+    const [ax, ay] = toPx(anchor);
+    const [tx, ty] = toPx([anchor[0] + w[0], anchor[1] + w[1]]);
+    const [ox, oy] = toPx([0, 0]);
+    // w's direction on screen (y down)
+    const length = Math.hypot(tx - ax, ty - ay) || 1;
+    const [ux, uy] = [(tx - ax) / length, (ty - ay) / length];
+    // The side of the line through the origin and b away from the triangle: the perpendicular pointing away from w's x component
+    const side = -Math.sign(ux * -uy) || 1;
+    const [px, py] = [-uy * side, ux * side];
+    // "b" goes behind the boundary point and to the other side from the distance label
+    const [bx, by] = [(-ux - px) / Math.SQRT2, (-uy - py) / Math.SQRT2];
+    const right = tx >= ax;
+    const down = ty >= ay;
     return (
-        <text x={px} y={py} style={{ fill: SIMILARITY_COLORS.vector, fontSize: 12 }}>
+        <>
+            <text x={ax + bx * 14} y={ay + by * 14} textAnchor="middle" dominantBaseline="central" style={{ fill: '#000000', fontSize: 12, ...HALO }}>b</text>
+            <text x={(ox + ax) / 2 + px * 16} y={(oy + ay) / 2 + py * 16} textAnchor="middle" dominantBaseline="central" style={{ fill: K.distance, fontSize: 10, ...HALO }}>{n(distance)}</text>
+            <text x={(ax + tx) / 2} y={ay + (down ? -5 : 5)} textAnchor="middle" dominantBaseline={down ? 'auto' : 'hanging'} style={{ fill: K.wNewX, fontSize: 10, ...HALO }}>{n(w[0])}</text>
+            <text x={tx + (right ? 5 : -5)} y={(ay + ty) / 2} textAnchor={right ? 'start' : 'end'} dominantBaseline="central" style={{ fill: K.wNewY, fontSize: 10, ...HALO }}>{n(w[1])}</text>
+            <WeightLabel x={tx + (right ? 6 : -6)} y={ty + (down ? 8 : -8)} anchor={right ? 'start' : 'end'} baseline={down ? 'hanging' : 'auto'} w={w} />
+        </>
+    );
+};
+
+/** "w (x, y)" beside the weight vector's tip, with each component in its colour. */
+const WeightLabel: React.FC<{ x: number; y: number; anchor: 'start' | 'end'; baseline: 'hanging' | 'auto'; w: Vec2 }> = ({ x, y, anchor, baseline, w }) => {
+    return (
+        <text x={x} y={y} textAnchor={anchor} dominantBaseline={baseline} style={{ fill: SIMILARITY_COLORS.vector, fontSize: 12, ...HALO }}>
             <tspan style={{ fontStyle: 'italic', fontFamily: "'Times New Roman', serif" }}>w</tspan>
             {' ('}<tspan style={{ fill: K.wNewX, fontWeight: 'bold' }}>{n(w[0])}</tspan>
             {', '}<tspan style={{ fill: K.wNewY, fontWeight: 'bold' }}>{n(w[1])}</tspan>{')'}

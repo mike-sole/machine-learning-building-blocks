@@ -112,6 +112,15 @@ for (const post of posts) {
             }
         });
 
+        test('labels never overlap each other and stay inside their chart', async ({ page }) => {
+            await page.goto(`/machine-learning-building-blocks/post/${post.id}`);
+            for (const id of new Set(post.charts)) {
+                const c = chart(page, id);
+                await c.scrollIntoViewIfNeeded();
+                await expect.poll(() => c.evaluate(labelProblems), { timeout: 20_000, message: `${id} labels` }).toEqual([]);
+            }
+        });
+
         for (const id of post.charts) {
             test(`${id} matches its screenshot`, async ({ page }) => {
                 await page.goto(`/machine-learning-building-blocks/post/${post.id}`);
@@ -122,4 +131,48 @@ for (const post of posts) {
             });
         }
     });
+}
+
+/**
+ * Every place a chart's text labels get in each other's way: two labels overlapping, a label drawn over an
+ * axis number without a white outline or a filled background to keep both readable, or a label running
+ * off its board. Runs in the page.
+ */
+function labelProblems(chartElement: Element): string[] {
+    const problems: string[] = [];
+    for (const board of chartElement.querySelectorAll('[data-chart-board]')) {
+        const edges = board.getBoundingClientRect();
+        const seen = new Set<string>();
+        const labels = [...board.querySelectorAll('text')].map(t => {
+            const style = getComputedStyle(t);
+            return {
+                text: (t.textContent ?? '').trim(),
+                box: t.getBoundingClientRect(),
+                axis: !!t.closest('.mafs-axis') || t.hasAttribute('data-axis-label'),
+                // Readable over an axis number: outlined in white, or on a filled label (a rounded rectangle behind it)
+                readable: (style.paintOrder.startsWith('stroke') && parseFloat(style.strokeWidth) > 0 && style.stroke !== 'none')
+                    || !!t.parentElement?.querySelector(':scope > rect'),
+            };
+        }).filter(l => {
+            // Mafs draws an axis number twice where two tiles of its axis meet; the reader sees one
+            const key = `${l.text}@${Math.round(l.box.x)},${Math.round(l.box.y)}`;
+            if (!l.text || l.box.width === 0 || seen.has(key)) return false;
+            seen.add(key);
+            return true;
+        });
+
+        for (const l of labels) {
+            if (l.box.left < edges.left - 1 || l.box.right > edges.right + 1 || l.box.top < edges.top - 1 || l.box.bottom > edges.bottom + 1) {
+                problems.push(`"${l.text}" runs off the chart`);
+            }
+        }
+        labels.forEach((a, i) => labels.slice(i + 1).forEach(b => {
+            const x = Math.min(a.box.right, b.box.right) - Math.max(a.box.left, b.box.left);
+            const y = Math.min(a.box.bottom, b.box.bottom) - Math.max(a.box.top, b.box.top);
+            if (x <= 1 || y <= 1) return;
+            if (a.axis !== b.axis && (a.axis ? b : a).readable) return;
+            problems.push(`"${a.text}" overlaps "${b.text}"`);
+        }));
+    }
+    return problems;
 }

@@ -9,9 +9,9 @@ test.describe('perceptron-classification', () => {
     const spam: Vec[] = [{ x: 4, y: 5 }, { x: 2, y: 4 }, { x: 0, y: 3 }, { x: -4, y: 1 }, { x: -1, y: 4 }];
     const notSpam: Vec[] = [{ x: 4, y: 3 }, { x: 2, y: 2 }, { x: 0, y: 1 }, { x: -2, y: 0 }, { x: -4, y: -1 }, { x: 1, y: -1 }];
 
-    // Score shown next to each point. Note: the chart scores with the weight vector's tip
-    // position (w) relative to the bias point (b): score = w · (point - b).
-    const score = (w: Vec, b: Vec, p: Vec) => w.x * (p.x - b.x) + w.y * (p.y - b.y);
+    // Score shown next to each point, using the weight vector as drawn, from the bias point (b)
+    // to the tip (w): score = (w - b) · (point - b).
+    const score = (w: Vec, b: Vec, p: Vec) => (w.x - b.x) * (p.x - b.x) + (w.y - b.y) * (p.y - b.y);
 
     async function expectClassification(page: Page, w: Vec, b: Vec, data = { spam, notSpam }) {
         const { spam, notSpam } = data;
@@ -61,11 +61,20 @@ test.describe('perceptron-classification', () => {
         await expectClassification(page, w, b);
     });
 
+    test('dragging the bias first keeps the weight arrow the same', async ({ page }) => {
+        await openChart(page, POSTS.perceptronModel, id);
+        await dragPointTo(page, id, 'b', { x: 0.5, y: -0.5 });
+        // The arrow w - b keeps its starting value (-2, 2) - (-0.5, 0.5) = (-1.5, 1.5), length 2.12
+        const { w, b } = await landed(page, { x: -1, y: 1 }, { x: 0.5, y: -0.5 });
+        expect(Math.hypot(w.x - b.x, w.y - b.y), 'length of w - b').toBeCloseTo(Math.hypot(1.5, 1.5), 3);
+        await expectClassification(page, w, b);
+    });
+
     test('dragging a data point rescores and recolours it', async ({ page }) => {
         await openChart(page, POSTS.perceptronModel, id);
-        // Spam point (0, 3) scores 4.00 (correct); dragged to (3, -3) it lands on the wrong side
-        await dragPointTo(page, id, 'Spam (4.00)', { x: 3, y: -3 });
-        const moved = await plottedPoint(page, id, 'Spam (-14.00)');
+        // Spam point (0, 3) scores 3.00 (correct); dragged to (3, -3) it lands on the wrong side
+        await dragPointTo(page, id, 'Spam (3.00)', { x: 3, y: -3 });
+        const moved = await plottedPoint(page, id, 'Spam (-10.50)');
         expect(moved.x).toBeCloseTo(3, 3);
         expect(moved.y).toBeCloseTo(-3, 3);
         await expectClassification(page, { x: -2, y: 2 }, { x: -0.5, y: 0.5 }, {
@@ -143,10 +152,10 @@ test.describe('perceptron-training', () => {
             await c.getByRole('button', { name: 'Train Step' }).click();
 
             const lines = log(page);
-            await expect(lines).toContainText(`(${f(s.p.x)}, ${f(s.p.y)})`);
-            await expect(lines).toContainText(`Actual = ${s.p.cls}, Expected = ${s.prediction}`);
+            await expect(lines).toContainText(`Next data point (${(i % data.length) + 1} of ${data.length}): (${f(s.p.x)}, ${f(s.p.y)})`);
+            await expect(lines).toContainText(`Target = ${s.p.cls}, Prediction = ${s.prediction}`);
             if (s.error !== 0) {
-                await expect(lines).toContainText(`Error = (Actual - Expected) = ${s.error}`);
+                await expect(lines).toContainText(`Error = (Target - Prediction) = ${s.error}`);
                 await expect(lines).toContainText(`Weights new = [${f(s.w.x)}, ${f(s.w.y)}]`);
                 await expect(lines).toContainText(`Bias new = bias old + Δb = ${f(s.old.b)} + ${f(learningRate * s.error)} = ${f(s.b)}`);
             } else {

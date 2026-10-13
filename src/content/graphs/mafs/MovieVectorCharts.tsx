@@ -31,12 +31,13 @@ function useMovieVectors(start: (v: Vec2) => Vec2) {
     return { tips, move, points };
 }
 
-const MovieVector: React.FC<{ index: number; tip: Vec2; onMove: (p: Vec2) => void; showLength: boolean; constrain?: (p: Vec2) => Vec2 }> = ({ index, tip, onMove, showLength, constrain }) => {
+/** `lengthAt`: where the length label sits along the vector, kept clear of the angle labels near the origin */
+const MovieVector: React.FC<{ index: number; tip: Vec2; onMove: (p: Vec2) => void; showLength: boolean; lengthAt: number; constrain?: (p: Vec2) => Vec2 }> = ({ index, tip, onMove, showLength, lengthAt, constrain }) => {
     const movie = MOVIES[index];
     return (
         <>
             <Vector tip={tip} color={movie.color} weight={3} />
-            {showLength && <SegmentLabel from={ORIGIN} to={tip} text={vectorLength(tip).toFixed(2)} background={movie.lengthLabel} />}
+            {showLength && <SegmentLabel from={ORIGIN} to={tip} text={vectorLength(tip).toFixed(2)} background={movie.lengthLabel} position={lengthAt} />}
             <VectorName at={tip} name={movie.name} color={movie.color} />
             <MovablePoint point={tip} onMove={onMove} color={movie.color} constrain={constrain} />
         </>
@@ -54,7 +55,7 @@ export const MovieVectorsNormalized: React.FC<{ id: string }> = ({ id }) => {
             <Circle center={ORIGIN} radius={1} color="#cccccc" strokeStyle="dashed" fillOpacity={0} />
             <AngleMark from={a} to={b} radius={0.5} />
             <AngleMark from={b} to={c} radius={0.4} />
-            {[a, b, c].map((tip, i) => <MovieVector key={i} index={i} tip={tip} onMove={move(i)} showLength constrain={normalise} />)}
+            {[a, b, c].map((tip, i) => <MovieVector key={i} index={i} tip={tip} onMove={move(i)} showLength lengthAt={0.8} constrain={normalise} />)}
         </MafsBoard>
     );
 };
@@ -65,14 +66,14 @@ export const MovieVectorsPopularity: React.FC<{ id: string }> = ({ id }) => {
     return (
         <MafsBoard chartId={id} points={points} x={[-1, 10]} y={[-1, 10]}>
             <AngleMark from={a} to={b} radius={1} />
-            <AngleMark from={b} to={c} radius={0.75} />
+            <AngleMark from={b} to={c} radius={2} />
             {[[a, b], [a, c], [b, c]].map(([p, q], i) => (
                 <React.Fragment key={i}>
                     <Line.Segment point1={p} point2={q} color={C.vector} style="dashed" weight={2} />
                     <SegmentLabel from={p} to={q} text={distance(p, q).toFixed(2)} background="#ffffff" />
                 </React.Fragment>
             ))}
-            {[a, b, c].map((tip, i) => <MovieVector key={i} index={i} tip={tip} onMove={move(i)} showLength />)}
+            {[a, b, c].map((tip, i) => <MovieVector key={i} index={i} tip={tip} onMove={move(i)} showLength lengthAt={0.5} />)}
         </MafsBoard>
     );
 };

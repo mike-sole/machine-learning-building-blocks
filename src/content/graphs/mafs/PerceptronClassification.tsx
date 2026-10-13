@@ -24,10 +24,10 @@ const projectOnto = (p: Vec2, w: Vec2): Vec2 => {
 };
 
 /**
- * The chart's score for a point: w · (point − b), using the weight vector's tip position w
- * (the same as the JSXGraph version; see #48). Spam is correct when the score is ≥ 0.
+ * The chart's score for a point: (w − b) · (point − b), using the weight vector as drawn, from
+ * the bias point b to the tip w. Spam is correct when the score is ≥ 0.
  */
-const score = (w: Vec2, b: Vec2, p: Vec2) => w[0] * (p[0] - b[0]) + w[1] * (p[1] - b[1]);
+const score = (w: Vec2, b: Vec2, p: Vec2) => (w[0] - b[0]) * (p[0] - b[0]) + (w[1] - b[1]) * (p[1] - b[1]);
 const isCorrect = (label: Label, s: number) => (label === 'Spam' ? s >= 0 : s < 0);
 
 /** A draggable point drawn as a dot; while it is held, its coordinates show next to it. */
@@ -57,9 +57,8 @@ export const PerceptronClassification: React.FC<{ id: string }> = ({ id }) => {
     const [state, setState] = useState(() => ({
         w: [-2, 2] as Vec2,
         b: [-0.5, 0.5] as Vec2,
-        // Where w sits relative to b, kept when b moves. Starts at w itself rather than w − b,
-        // as in the JSXGraph version, so w jumps on the first bias drag (#49).
-        offset: [-2, 2] as Vec2,
+        // Where w sits relative to b (w − b), kept when b moves
+        offset: [-1.5, 1.5] as Vec2,
         // w and b when the current drag of w or b started
         start: { w: [-2, 2] as Vec2, b: [-0.5, 0.5] as Vec2 },
         data: DATA.map(d => d.at),
