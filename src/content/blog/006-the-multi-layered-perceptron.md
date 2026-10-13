@@ -26,7 +26,7 @@ relu-function
 
 ## Exploring MLP decision boundaries for XOR
 
-The following interactive graph demonstrates how a 2-Hidden-Layer MLP transforms the non-linear XOR input space into a linearly separable space. More specifically, we define:
+The following interactive graph demonstrates how an MLP with a single hidden layer of 2 neurons transforms the non-linear XOR input space into a linearly separable space. More specifically, we define:
 * points (2, 2) and (-2, -2) as spam
 * points (2, -2) and (-2, 2) as non-spam
 
@@ -37,7 +37,7 @@ This interactive graph is unique: rather than showing a single pass of data e.g.
 *   **Hidden Neurons ($h_1, h_2$)**: These graphs plot the original Input Space ($x_1, x_2$). Using the same style of graph as [The Perceptron Model](/post/the-perceptron-model), the dashed line is the decision boundary formed by that neuron's weights. The weight vector and bias related points are interactive, allowing you to adjust them to see how they affect the decision boundary.
     *   Spam and non-spam points are highlighted in red and green respectively, their activation values are shown below their labels. Note that these are the **weighted sum values** when >= 0, **otherwise they are 0 following the ReLU activation function**.
 
-*   **Output Neuron ($\hat{y}$)**: This graph plots the **Tranformed Feature Space** ($h_1, h_2$). Its axes are the *outputs* of the hidden neurons - its x and y axis correspond to the outputs of $h_1$ and $h_2$ respectively. If the hidden layer successfully disentangles the XOR pattern, the points in this space will be linearly separable, allowing the output neuron to draw a final clean boundary.
+*   **Output Neuron ($\hat{y}$)**: This graph plots the **Transformed Feature Space** ($h_1, h_2$). Its axes are the *outputs* of the hidden neurons - its x and y axis correspond to the outputs of $h_1$ and $h_2$ respectively. If the hidden layer successfully disentangles the XOR pattern, the points in this space will be linearly separable, allowing the output neuron to draw a final clean boundary.
 
 **Try it:** Adjust the weights of the hidden neurons by dragging the weight vector and bias related points to see how they affect the decision boundary.
 
