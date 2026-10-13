@@ -50,6 +50,8 @@ export const PointName: React.FC<{ at: Vec2; text: string; color?: string; dx?: 
     return <text x={px + dx} y={py + dy} style={{ fill: color, fontSize: 12 }}>{text}</text>;
 };
 
+const HALO: React.CSSProperties = { stroke: '#ffffff', strokeWidth: 3, strokeLinejoin: 'round', paintOrder: 'stroke' };
+
 /**
  * Text at a chart position with full control of its alignment: `anchor` sets which end (or the middle)
  * sits on the position, `baseline` whether the text hangs below it, sits on it or is centred on it,
@@ -65,12 +67,14 @@ export const BoardText: React.FC<{
     size?: number;
     color?: string;
     bold?: boolean;
-}> = ({ at, children, anchor = 'start', baseline = 'auto', dx = 0, dy = 0, size = 12, color = '#000000', bold }) => {
+    /** Outline the text in white, so it stays readable over grid lines and axis numbers */
+    halo?: boolean;
+}> = ({ at, children, anchor = 'start', baseline = 'auto', dx = 0, dy = 0, size = 12, color = '#000000', bold, halo }) => {
     const { viewTransform } = useTransformContext();
     const [px, py] = vec.transform(at, viewTransform);
     return (
         <text x={px + dx} y={py + dy} textAnchor={anchor} dominantBaseline={baseline}
-            style={{ fill: color, fontSize: size, fontWeight: bold ? 'bold' : undefined }}>
+            style={{ fill: color, fontSize: size, fontWeight: bold ? 'bold' : undefined, ...(halo && HALO) }}>
             {children}
         </text>
     );
