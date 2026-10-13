@@ -1,13 +1,13 @@
 [
   {
-    "step": "drag Spam (4.00) to (3.00, -3.00)",
+    "step": "drag Spam (3.00) to (3.00, -3.00)",
     "whileHeld": {
       "appeared": [
         "(3.00, -3.00)",
-        "Spam (-14.00)"
+        "Spam (-10.50)"
       ],
       "disappeared": [
-        "Spam (4.00)"
+        "Spam (3.00)"
       ]
     },
     "onRelease": {

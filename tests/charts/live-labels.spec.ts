@@ -66,7 +66,7 @@ const CASES: Case[] = [
     },
     {
         name: 'perceptron-classification-data-point', id: 'perceptron-classification', post: POSTS.perceptronModel,
-        steps: [{ drag: 'Spam (4.00)', to: { x: 3, y: -3 } }],
+        steps: [{ drag: 'Spam (3.00)', to: { x: 3, y: -3 } }],
     },
     {
         name: 'perceptron-training', id: 'perceptron-training', post: POSTS.trainingPerceptron,

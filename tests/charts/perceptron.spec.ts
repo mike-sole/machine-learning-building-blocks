@@ -9,9 +9,9 @@ test.describe('perceptron-classification', () => {
     const spam: Vec[] = [{ x: 4, y: 5 }, { x: 2, y: 4 }, { x: 0, y: 3 }, { x: -4, y: 1 }, { x: -1, y: 4 }];
     const notSpam: Vec[] = [{ x: 4, y: 3 }, { x: 2, y: 2 }, { x: 0, y: 1 }, { x: -2, y: 0 }, { x: -4, y: -1 }, { x: 1, y: -1 }];
 
-    // Score shown next to each point. Note: the chart scores with the weight vector's tip
-    // position (w) relative to the bias point (b): score = w · (point - b).
-    const score = (w: Vec, b: Vec, p: Vec) => w.x * (p.x - b.x) + w.y * (p.y - b.y);
+    // Score shown next to each point, using the weight vector as drawn, from the bias point (b)
+    // to the tip (w): score = (w - b) · (point - b).
+    const score = (w: Vec, b: Vec, p: Vec) => (w.x - b.x) * (p.x - b.x) + (w.y - b.y) * (p.y - b.y);
 
     async function expectClassification(page: Page, w: Vec, b: Vec, data = { spam, notSpam }) {
         const { spam, notSpam } = data;
@@ -63,9 +63,9 @@ test.describe('perceptron-classification', () => {
 
     test('dragging a data point rescores and recolours it', async ({ page }) => {
         await openChart(page, POSTS.perceptronModel, id);
-        // Spam point (0, 3) scores 4.00 (correct); dragged to (3, -3) it lands on the wrong side
-        await dragPointTo(page, id, 'Spam (4.00)', { x: 3, y: -3 });
-        const moved = await plottedPoint(page, id, 'Spam (-14.00)');
+        // Spam point (0, 3) scores 3.00 (correct); dragged to (3, -3) it lands on the wrong side
+        await dragPointTo(page, id, 'Spam (3.00)', { x: 3, y: -3 });
+        const moved = await plottedPoint(page, id, 'Spam (-10.50)');
         expect(moved.x).toBeCloseTo(3, 3);
         expect(moved.y).toBeCloseTo(-3, 3);
         await expectClassification(page, { x: -2, y: 2 }, { x: -0.5, y: 0.5 }, {
