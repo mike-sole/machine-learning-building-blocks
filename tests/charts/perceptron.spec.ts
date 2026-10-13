@@ -61,6 +61,15 @@ test.describe('perceptron-classification', () => {
         await expectClassification(page, w, b);
     });
 
+    test('dragging the bias first keeps the weight arrow the same', async ({ page }) => {
+        await openChart(page, POSTS.perceptronModel, id);
+        await dragPointTo(page, id, 'b', { x: 0.5, y: -0.5 });
+        // The arrow w - b keeps its starting value (-2, 2) - (-0.5, 0.5) = (-1.5, 1.5), length 2.12
+        const { w, b } = await landed(page, { x: -1, y: 1 }, { x: 0.5, y: -0.5 });
+        expect(Math.hypot(w.x - b.x, w.y - b.y), 'length of w - b').toBeCloseTo(Math.hypot(1.5, 1.5), 3);
+        await expectClassification(page, w, b);
+    });
+
     test('dragging a data point rescores and recolours it', async ({ page }) => {
         await openChart(page, POSTS.perceptronModel, id);
         // Spam point (0, 3) scores 3.00 (correct); dragged to (3, -3) it lands on the wrong side

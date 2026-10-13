@@ -57,9 +57,8 @@ export const PerceptronClassification: React.FC<{ id: string }> = ({ id }) => {
     const [state, setState] = useState(() => ({
         w: [-2, 2] as Vec2,
         b: [-0.5, 0.5] as Vec2,
-        // Where w sits relative to b, kept when b moves. Starts at w itself rather than w − b,
-        // as in the JSXGraph version, so w jumps on the first bias drag (#49).
-        offset: [-2, 2] as Vec2,
+        // Where w sits relative to b (w − b), kept when b moves
+        offset: [-1.5, 1.5] as Vec2,
         // w and b when the current drag of w or b started
         start: { w: [-2, 2] as Vec2, b: [-0.5, 0.5] as Vec2 },
         data: DATA.map(d => d.at),
