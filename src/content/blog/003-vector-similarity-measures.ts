@@ -6,6 +6,6 @@ export const vectorSimilarityPost: BlogPost = {
   title: 'Vector Similarity Measures',
   date: 'Jun 14, 2024',
   description: 'Extending the Weighted Sum, this post explores similarity measures like Cosine Similarity and Euclidean Distance.',
-  thumbnail: "/thumbnails/vector-similarity-detailed.png",
+  thumbnail: "/thumbnails/vector-similarity-detailed.jpg",
   content
 };

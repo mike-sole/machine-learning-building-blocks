@@ -25,7 +25,7 @@ When using the `generate_image` tool, use the following template:
 2.  **Verify**: Ensure the image has no overlapping titles and the concepts match the blog content.
 3.  **Deploy**: 
     - Copy the generated file to `public/thumbnails/`.
-    - Rename it to a readable dash-case name (e.g., `weighted-sum-detailed.png`).
+    - Rename it to a readable dash-case name (e.g., `weighted-sum-detailed.jpg`), with the extension matching its format: the generator writes JPEG.
     - Update `src/content/posts.ts` to reference the new path.
 
 ## 4. Handling Quotas

@@ -5,7 +5,7 @@ export const multiLayeredPerceptronPost: BlogPost = {
     id: 'the-multi-layered-perceptron',
     title: 'The Multi-Layered Perceptron Model',
     date: 'Jan 10, 2026',
-    thumbnail: '/thumbnails/multi-layered-perceptron-detailed.png',
+    thumbnail: '/thumbnails/multi-layered-perceptron-detailed.jpg',
     description: 'Building upon the perceptron model, we explore how adding layers results in non-linear decision boundaries.',
     content
 };

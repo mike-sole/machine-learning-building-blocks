@@ -5,7 +5,7 @@ export const trainingMultiLayeredPerceptronPost: BlogPost = {
     id: 'training-the-multi-layered-perceptron',
     title: 'Training the Multi-Layered Perceptron',
     date: 'Jan 11, 2026',
-    thumbnail: '/thumbnails/training-multi-layered-perceptron-detailed.png',
+    thumbnail: '/thumbnails/training-multi-layered-perceptron-detailed.jpg',
     description: 'Backpropagation - the multi-layered perceptron training algorithm.',
     content
 };
