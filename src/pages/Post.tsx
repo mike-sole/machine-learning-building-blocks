@@ -6,8 +6,9 @@ import { InteractiveGraph } from '../components/InteractiveGraph';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import remarkGfm from 'remark-gfm';
-import rehypeKatex from 'rehype-katex';
 import rehypeRaw from 'rehype-raw';
+import postMath from 'virtual:post-math';
+import rehypePrerenderedMath from '../content/math/rehypePrerenderedMath';
 import 'katex/dist/katex.min.css';
 import { motion } from 'framer-motion';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -50,7 +51,7 @@ export const Post: React.FC = () => {
             <div className="text-[#202124]">
                 <ReactMarkdown
                     remarkPlugins={[remarkMath, remarkGfm]}
-                    rehypePlugins={[rehypeRaw, rehypeKatex]}
+                    rehypePlugins={[rehypeRaw, [rehypePrerenderedMath, postMath]]}
                     components={{
                         pre: ({ children }) => <>{children}</>,
                         p: ({ node, ...props }) => <p className="mb-4 text-base leading-relaxed" {...props} />,
