@@ -108,6 +108,8 @@ jobs:
         with:
           app-id: ${{ vars.SNAPSHOT_BOT_APP_ID }}
           private-key: ${{ secrets.SNAPSHOT_BOT_PRIVATE_KEY }}
+          # Scoped to this repository; ask for nothing beyond pushing commits
+          permission-contents: write
 
       # Check out the tested commit, not the branch tip, so the push contains
       # only the tested code plus the new images
