@@ -56,7 +56,9 @@ npm run test:e2e
 npm run test:ui
 ```
 
-Visual regression screenshots are platform specific. CI compares against the `*-linux.png` baselines, which are generated inside the official Playwright Docker image. To regenerate them:
+Screenshots are taken in two places: `tests/charts/all-charts.spec.ts` screenshots each chart on desktop and phone, and `tests/visual-regression.spec.ts` screenshots the home page and each post with its charts masked, so a chart change only changes that chart's screenshots.
+
+Visual regression screenshots are platform specific. Only the `*-linux.png` baselines are committed: CI compares against them, and they are generated inside the official Playwright Docker image. On another platform, Playwright writes local baselines on the first run; don't commit them. To regenerate the Linux baselines:
 
 1. Open **Actions → CI → Run workflow** and pick the pull request's branch.
 2. Tick **Regenerate the Linux visual snapshots**. Also tick **rewrite every snapshot** if the change might fall within the 1% comparison tolerance; otherwise only the screenshots that fail the comparison are rewritten, and the rest keep their old content.
