@@ -54,3 +54,13 @@ dist-ssr
 playwright-report/
 test-results/
 .vite
+
+# Secrets #
+###########
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx

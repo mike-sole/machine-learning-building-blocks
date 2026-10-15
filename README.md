@@ -17,7 +17,7 @@ View the live site [here](https://mike-sole.github.io/machine-learning-building-
 
 ### Prerequisites
 
-- Node.js (v20+ recommended)
+- Node.js (v24 recommended; CI uses 24)
 - npm
 
 ### Setup
@@ -27,7 +27,9 @@ View the live site [here](https://mike-sole.github.io/machine-learning-building-
 npm install
 ```
 
-`npm install` also turns on the Git hooks in `.githooks/`: `pre-push` runs the linter and unit tests before each push (about 10 seconds). Skip it once with `git push --no-verify`.
+`npm install` also turns on the Git hooks in `.githooks/`:
+- `pre-commit` scans the staged changes for secrets (API keys, tokens, private keys) with [gitleaks](https://github.com/gitleaks/gitleaks#installing), if it's installed. For a false positive, add a `gitleaks:allow` comment to the line.
+- `pre-push` runs the linter and unit tests before each push (about 10 seconds). Skip it once with `git push --no-verify`.
 
 ### Running the Dev Server
 
@@ -71,24 +73,11 @@ Visual regression screenshots are platform specific. Only the `*-linux.png` base
 
 The `.github/workflows/ci.yml` workflow runs on every pull request and on pushes to `main`:
 1. Lint, type check, build and unit tests.
-2. Playwright tests (including visual regression) inside the `mcr.microsoft.com/playwright` image. The HTML report is uploaded as a build artifact.
+2. A secret scan of the whole Git history with gitleaks.
+3. Playwright tests (including visual regression) inside the `mcr.microsoft.com/playwright` image. The HTML report is uploaded as a build artifact.
+
+The workflows' token is read-only unless a job needs more, and third-party actions and the Playwright image are pinned to a commit or digest; Dependabot keeps them, and the npm packages, up to date. `@playwright/test` is left out of Dependabot: update it together with the image in `ci.yml`, then regenerate the snapshots.
 
 ## Deployment
 
-The blog is deployed to **GitHub Pages** using **GitHub Actions**.
-
-### Automated Deployment (Recommended)
-
-Deployment is handled automatically by the `.github/workflows/deploy.yml` workflow.
-1. Push changes to the `main` branch.
-2. The Action builds the project and deploys the `dist` folder to the `gh-pages` branch.
-3. GitHub Pages serves the content from `gh-pages`.
-
-### Manual Deployment (Backup)
-
-You can manually deploy from your local machine if needed:
-
-```bash
-npm run deploy
-```
-This runs the build and uses the `gh-pages` npm package to push the `dist` folder to the `gh-pages` branch.
+The blog is deployed to **GitHub Pages** by the `.github/workflows/deploy.yml` workflow on every push to `main`: one job builds the site with a read-only token, and a second publishes it with `actions/deploy-pages`. In **Settings → Pages**, **Source** must be **GitHub Actions**. To redeploy without a change, run the workflow from **Actions → Deploy to GitHub Pages → Run workflow**.
