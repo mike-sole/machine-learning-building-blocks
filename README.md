@@ -27,6 +27,8 @@ View the live site [here](https://mike-sole.github.io/machine-learning-building-
 npm install
 ```
 
+`npm install` also turns on the Git hooks in `.githooks/`: `pre-push` runs the linter and unit tests before each push (about 10 seconds). Skip it once with `git push --no-verify`.
+
 ### Running the Dev Server
 
 ```bash
