@@ -10,8 +10,13 @@ import rehypeKatex from 'rehype-katex';
 import rehypeRaw from 'rehype-raw';
 import 'katex/dist/katex.min.css';
 import { motion } from 'framer-motion';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import python from 'react-syntax-highlighter/dist/esm/languages/prism/python';
 import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+// The full Prism build bundles every language it supports; posts only highlight Python
+// (```text and unlabelled blocks are shown as plain text)
+SyntaxHighlighter.registerLanguage('python', python);
 
 export const Post: React.FC = () => {
     const { id } = useParams<{ id: string }>();

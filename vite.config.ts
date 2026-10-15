@@ -40,6 +40,19 @@ function postPages(): Plugin {
 export default defineConfig({
   plugins: [react(), postPages()],
   base: '/machine-learning-building-blocks/',
+  build: {
+    rollupOptions: {
+      output: {
+        // Every post renders maths, so KaTeX can't be lazy loaded, but on its own it nearly fills
+        // the 500 kB chunk budget. Give it a chunk of its own: it downloads alongside the post code
+        // and stays cached when that changes.
+        manualChunks(id) {
+          // Scripts only: main.tsx imports KaTeX's CSS, which would drag this chunk into the home page
+          if (id.includes('/node_modules/katex/') && !id.endsWith('.css')) return 'katex'
+        },
+      },
+    },
+  },
   test: {
     include: ['src/**/*.test.ts'],
   },
