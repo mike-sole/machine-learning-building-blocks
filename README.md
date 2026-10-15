@@ -56,7 +56,12 @@ npm run test:e2e
 npm run test:ui
 ```
 
-Visual regression screenshots are platform specific. CI compares against the `*-linux.png` baselines, which are generated inside the official Playwright Docker image. To regenerate them, run the **CI** workflow manually from the Actions tab with **Regenerate the Linux visual snapshots** ticked; it commits the updated images to the selected branch.
+Visual regression screenshots are platform specific. CI compares against the `*-linux.png` baselines, which are generated inside the official Playwright Docker image. To regenerate them:
+
+1. Open **Actions → CI → Run workflow** and pick the pull request's branch.
+2. Tick **Regenerate the Linux visual snapshots**. Also tick **rewrite every snapshot** if the change might fall within the 1% comparison tolerance; otherwise only the screenshots that fail the comparison are rewritten, and the rest keep their old content.
+3. Once the build and the whole suite pass, the run commits the new images to the branch as `github-actions[bot]`. The push is refused if the branch moved during the run; run it again in that case.
+4. **Approve the held run.** GitHub doesn't run CI by itself on commits pushed by a workflow, so the pull request's run for the bot's commit waits with **Approve and run**, and the pull request shows as blocked until then. Open the pull request's **Checks** tab (or the waiting run under **Actions**) and approve it.
 
 ## Continuous Integration
 
