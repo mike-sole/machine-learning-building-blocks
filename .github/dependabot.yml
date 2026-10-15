@@ -4,3 +4,19 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    # Wait a week after a release, so a compromised one is usually caught and pulled first
+    cooldown:
+      default-days: 7
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    cooldown:
+      default-days: 7
+    groups:
+      npm-minor-and-patch:
+        update-types: ["minor", "patch"]
+    ignore:
+      # Must move together with the Playwright image in ci.yml, and its screenshots regenerated
+      - dependency-name: "@playwright/test"
