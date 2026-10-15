@@ -10,6 +10,10 @@ on:
         description: 'Regenerate the Linux visual snapshots and commit them to this branch'
         type: boolean
         default: false
+      rewrite-all-snapshots:
+        description: 'With the above, rewrite every snapshot, not only those that fail the comparison'
+        type: boolean
+        default: false
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -68,7 +72,7 @@ jobs:
 
       - name: Update visual snapshots
         if: ${{ inputs.update-snapshots }}
-        run: npx playwright test --update-snapshots
+        run: npx playwright test --update-snapshots=${{ inputs.rewrite-all-snapshots && 'all' || 'changed' }}
 
       - name: Upload updated snapshots
         if: ${{ inputs.update-snapshots }}
@@ -89,14 +93,29 @@ jobs:
 
   commit-snapshots:
     name: Commit updated snapshots
-    needs: e2e
+    needs: [build, e2e]
     if: ${{ inputs.update-snapshots }}
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
     steps:
+      # Pushes made with GITHUB_TOKEN don't start workflows (on a pull request the
+      # run is held for approval), so push with the snapshot bot app's token
+      # instead and let CI run on the new commit as usual
+      - name: Create app token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.SNAPSHOT_BOT_APP_ID }}
+          private-key: ${{ secrets.SNAPSHOT_BOT_PRIVATE_KEY }}
+
+      # Check out the tested commit, not the branch tip, so the push contains
+      # only the tested code plus the new images
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Download updated snapshots
         uses: actions/download-artifact@v4
@@ -105,9 +124,18 @@ jobs:
           path: tests
 
       - name: Commit and push
+        env:
+          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          user_id=$(gh api "/users/${APP_SLUG}[bot]" --jq .id)
+          git config user.name "${APP_SLUG}[bot]"
+          git config user.email "${user_id}+${APP_SLUG}[bot]@users.noreply.github.com"
           git add tests
-          git diff --cached --quiet || git commit -m 'Update Linux visual snapshots'
-          git push
+          if git diff --cached --quiet; then
+            echo 'No snapshot changes to commit'
+            exit 0
+          fi
+          git commit -m 'Update Linux visual snapshots'
+          # Refused if the branch moved since this run started
+          git push origin "HEAD:refs/heads/${GITHUB_REF_NAME}"
