@@ -1,28 +1,32 @@
-import type React from 'react';
-import { CosineFunction, ReluFunction } from './mafs/FunctionCharts';
-import { MovieVectorsNormalized, MovieVectorsPopularity } from './mafs/MovieVectorCharts';
-import { PerceptronClassification } from './mafs/PerceptronClassification';
-import { PerceptronTraining } from './mafs/PerceptronTraining';
-import { MlpArchitecture } from './mafs/MlpArchitecture';
-import { MlpDecisionBoundaries } from './mafs/MlpDecisionBoundaries';
-import { CosineNormalized, CosineDistance, DistanceComparison } from './mafs/UnitCircleCharts';
-import { VectorSimilarityIntro, DotProductGeometric, DotProductComparison, MathNotations } from './mafs/TwoVectorCharts';
+import { lazy, type ComponentType } from 'react';
+
+type Chart = ComponentType<{ id: string }>;
+
+/** Loads one named chart from a module only when a post shows it, so posts download just the charts they use. */
+function chart<M>(load: () => Promise<M>, name: keyof M): Chart {
+    return lazy(() => load().then(m => ({ default: m[name] as Chart })));
+}
+
+const functionCharts = () => import('./mafs/FunctionCharts');
+const movieVectorCharts = () => import('./mafs/MovieVectorCharts');
+const unitCircleCharts = () => import('./mafs/UnitCircleCharts');
+const twoVectorCharts = () => import('./mafs/TwoVectorCharts');
 
 /** Every chart a post can show in a ```graph block, by id. Each is a React component built with Mafs. */
-export const mafsCharts: Record<string, React.ComponentType<{ id: string }>> = {
-    'vector-similarity-intro': VectorSimilarityIntro,
-    'dot-product-geometric': DotProductGeometric,
-    'dot-product-comparison': DotProductComparison,
-    'math-notations': MathNotations,
-    'cosine-function': CosineFunction,
-    'relu-function': ReluFunction,
-    'movie-vectors-normalized': MovieVectorsNormalized,
-    'movie-vectors-popularity': MovieVectorsPopularity,
-    'cosine-normalized': CosineNormalized,
-    'cosine-distance': CosineDistance,
-    'distance-comparison': DistanceComparison,
-    'perceptron-classification': PerceptronClassification,
-    'perceptron-training': PerceptronTraining,
-    'mlp-architecture': MlpArchitecture,
-    'mlp-decision-boundaries': MlpDecisionBoundaries,
+export const mafsCharts: Record<string, Chart> = {
+    'vector-similarity-intro': chart(twoVectorCharts, 'VectorSimilarityIntro'),
+    'dot-product-geometric': chart(twoVectorCharts, 'DotProductGeometric'),
+    'dot-product-comparison': chart(twoVectorCharts, 'DotProductComparison'),
+    'math-notations': chart(twoVectorCharts, 'MathNotations'),
+    'cosine-function': chart(functionCharts, 'CosineFunction'),
+    'relu-function': chart(functionCharts, 'ReluFunction'),
+    'movie-vectors-normalized': chart(movieVectorCharts, 'MovieVectorsNormalized'),
+    'movie-vectors-popularity': chart(movieVectorCharts, 'MovieVectorsPopularity'),
+    'cosine-normalized': chart(unitCircleCharts, 'CosineNormalized'),
+    'cosine-distance': chart(unitCircleCharts, 'CosineDistance'),
+    'distance-comparison': chart(unitCircleCharts, 'DistanceComparison'),
+    'perceptron-classification': chart(() => import('./mafs/PerceptronClassification'), 'PerceptronClassification'),
+    'perceptron-training': chart(() => import('./mafs/PerceptronTraining'), 'PerceptronTraining'),
+    'mlp-architecture': chart(() => import('./mafs/MlpArchitecture'), 'MlpArchitecture'),
+    'mlp-decision-boundaries': chart(() => import('./mafs/MlpDecisionBoundaries'), 'MlpDecisionBoundaries'),
 };

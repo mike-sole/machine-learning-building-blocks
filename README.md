@@ -9,7 +9,7 @@ View the live site [here](https://mike-sole.github.io/machine-learning-building-
 - **Framework**: [React](https://react.dev/) + [Vite](https://vitejs.dev/)
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
 - **Styling**: [TailwindCSS](https://tailwindcss.com/)
-- **Math Rendering**: [KaTeX](https://katex.org/)
+- **Math Rendering**: [KaTeX](https://katex.org/), at build time (`src/content/math/`), so readers only download its CSS and fonts
 - **Interactive Graphs**: [Mafs](https://mafs.dev/)
 - **Testing**: [Playwright](https://playwright.dev/)
 

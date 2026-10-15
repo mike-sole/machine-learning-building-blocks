@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { mafsCharts } from '../content/graphs/mafsCharts';
 
 interface InteractiveGraphProps {
@@ -14,7 +14,9 @@ export const InteractiveGraph: React.FC<InteractiveGraphProps> = ({ id }) => {
     }
     return (
         <div className="sm:px-4" style={{ width: '100%', margin: '32px 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Chart id={id} />
+            <Suspense>
+                <Chart id={id} />
+            </Suspense>
         </div>
     );
 };
