@@ -1,0 +1,6 @@
+#!/bin/sh
+# Runs the quick checks before a push, so a broken lint or unit test shows up here rather than in CI.
+# Playwright isn't run: its screenshots only match inside CI's Linux image. Skip with `git push --no-verify`.
+set -e
+npm run --silent lint
+npm run --silent test:unit
