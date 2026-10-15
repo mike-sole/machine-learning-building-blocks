@@ -97,27 +97,14 @@ jobs:
     if: ${{ inputs.update-snapshots }}
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
     steps:
-      # Pushes made with GITHUB_TOKEN don't start workflows (on a pull request the
-      # run is held for approval), so push with the snapshot bot app's token
-      # instead and let CI run on the new commit as usual
-      - name: Create app token
-        id: app-token
-        uses: actions/create-github-app-token@v2
-        with:
-          app-id: ${{ vars.SNAPSHOT_BOT_APP_ID }}
-          private-key: ${{ secrets.SNAPSHOT_BOT_PRIVATE_KEY }}
-          # Scoped to this repository; ask for nothing beyond pushing commits
-          permission-contents: write
-
       # Check out the tested commit, not the branch tip, so the push contains
       # only the tested code plus the new images
       - name: Checkout
         uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
-          token: ${{ steps.app-token.outputs.token }}
 
       - name: Download updated snapshots
         uses: actions/download-artifact@v4
@@ -125,14 +112,13 @@ jobs:
           name: linux-snapshots
           path: tests
 
+      # Pushes made with GITHUB_TOKEN don't start CI by themselves: on a pull
+      # request the run for this commit is held until a maintainer approves it
+      # (see the README)
       - name: Commit and push
-        env:
-          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          user_id=$(gh api "/users/${APP_SLUG}[bot]" --jq .id)
-          git config user.name "${APP_SLUG}[bot]"
-          git config user.email "${user_id}+${APP_SLUG}[bot]@users.noreply.github.com"
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
           git add tests
           if git diff --cached --quiet; then
             echo 'No snapshot changes to commit'
