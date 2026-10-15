@@ -1,0 +1,1 @@
+import{j as e}from"./index-BwTsGHQX.js";import{h as r,i,j as l,g,k as c}from"./labels-BHh240UY.js";import{S as a}from"./colors-DZGoDBQH.js";const m=({from:t,to:o,radius:s=1,labelRadius:n=s*1.4})=>e.jsxs(e.Fragment,{children:[e.jsx(r,{points:i(t,o,s),color:a.angle,fillOpacity:.3,weight:1}),e.jsx(l,{at:c(t,o,n),text:`${g(t,o).toFixed(1)}°`,color:a.vector})]});export{m as A};
